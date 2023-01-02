@@ -22,9 +22,6 @@ namespace GluePathReadWrite
         public Pen penGreen = new Pen(Color.Green, 5);
         Graphics graph;
 
-        string[,] strPathData;
-        string[] strPathT;
-
         public double dMultiplyingG = 1;
         public double dMultiplyingP = 1;
 
@@ -33,36 +30,33 @@ namespace GluePathReadWrite
         double dPictureBox1ImageWidth;
         double dPictureBox1ImageHeight;
 
-        private readonly DataGridViewComboBoxCell[] aCellComboBox1 = new DataGridViewComboBoxCell[50];
-        private readonly DataGridViewComboBoxCell[] aCellComboBox2 = new DataGridViewComboBoxCell[50];
-
         double dBShiftPK;
 
         public Form_GluePath()
         {
             InitializeComponent();
-            pictureBox1.MouseWheel += new MouseEventHandler(pbxDrawing_MouseWheel);
-            dataGridView1.AllowUserToAddRows = false;
+            pictureBox.MouseWheel += new MouseEventHandler(pbxDrawing_MouseWheel);
+            dataGridView.AllowUserToAddRows = false;
             //splitContainer1.Panel1.MouseWheel += new MouseEventHandler(pbxDrawing_MouseWheel);
         }
 
         private void Form_GluePath_Load(object sender, EventArgs e)
         {
             Bitmap bmp = ReadImageFile(Application.StartupPath.ToString() + @"\File\Image3.BMP");
-            pictureBox1.Image = bmp;
-            pictureBox1.SizeMode = PictureBoxSizeMode.Zoom;
+            pictureBox.Image = bmp;
+            pictureBox.SizeMode = PictureBoxSizeMode.Zoom;
 
             SetPitureBox();
 
-            dPictureBox1Width = pictureBox1.Width;
-            dPictureBox1Height = pictureBox1.Height;
-            dPictureBox1ImageWidth = pictureBox1.Image.Width;
-            dPictureBox1ImageHeight = pictureBox1.Image.Height;
+            dPictureBox1Width = pictureBox.Width;
+            dPictureBox1Height = pictureBox.Height;
+            dPictureBox1ImageWidth = pictureBox.Image.Width;
+            dPictureBox1ImageHeight = pictureBox.Image.Height;
 
             tbStandardX.Text = "230";
             tbStandardY.Text = "195";
 
-            graph = this.pictureBox1.CreateGraphics();
+            graph = this.pictureBox.CreateGraphics();
 
             tkBGlueWidth.Maximum = 100;
             tkBGlueWidth.Minimum = 1;
@@ -79,11 +73,11 @@ namespace GluePathReadWrite
 
         private void btOpenGluePath_Click(object sender, EventArgs e)
         {
-            string strFilePath = OpenFileDialog(Application.StartupPath.ToString());
+            string strFilePath = OpenFileDialog(Application.StartupPath);
             if (strFilePath != "")
             {
                 tbPath.Text = strFilePath;
-                WriteToDataGridView(ReadFileGluePath(strFilePath));
+                LoadToDataGridView(ReadGluePathFile(strFilePath));
                 CreateGUIPoint();
                 CreateGUILine();
             }
@@ -139,11 +133,11 @@ namespace GluePathReadWrite
                 dMultiplyingG *= dMultiplyingP;
                 //lbM.Text = dMultiplyingG.ToString();
 
-                this.pictureBox1.Width = Convert.ToInt32(dPictureBox1Width * dMultiplyingG);
-                this.pictureBox1.Height = Convert.ToInt32(dPictureBox1Height * dMultiplyingG);
-                this.pictureBox1.Left += Convert.ToInt32(e.X - dMultiplyingP * e.X);
-                this.pictureBox1.Top += Convert.ToInt32(e.Y - dMultiplyingP * e.Y);
-                dBShiftPK = Convert.ToDouble(pictureBox1.Image.Width) / Convert.ToDouble(pictureBox1.Width);
+                this.pictureBox.Width = Convert.ToInt32(dPictureBox1Width * dMultiplyingG);
+                this.pictureBox.Height = Convert.ToInt32(dPictureBox1Height * dMultiplyingG);
+                this.pictureBox.Left += Convert.ToInt32(e.X - dMultiplyingP * e.X);
+                this.pictureBox.Top += Convert.ToInt32(e.Y - dMultiplyingP * e.Y);
+                dBShiftPK = Convert.ToDouble(pictureBox.Image.Width) / Convert.ToDouble(pictureBox.Width);
                 lbK.Text = (1 / dBShiftPK).ToString("0.000");
 
                 CreateGUIPoint();
@@ -171,13 +165,13 @@ namespace GluePathReadWrite
             {
                 if (MoveFlag)
                 {
-                    pictureBox1.Left += Convert.ToInt16(e.X - xPos);
-                    pictureBox1.Top += Convert.ToInt16(e.Y - yPos);
+                    pictureBox.Left += Convert.ToInt16(e.X - xPos);
+                    pictureBox.Top += Convert.ToInt16(e.Y - yPos);
                 }
             }
 
-            lbPX.Text = (dPictureBox1ImageWidth * Convert.ToDouble(e.X) / Convert.ToDouble(pictureBox1.Width)).ToString("0.000");
-            lbPY.Text = (dPictureBox1ImageHeight * Convert.ToDouble(e.Y) / Convert.ToDouble(pictureBox1.Height)).ToString("0.000");
+            lbPX.Text = (dPictureBox1ImageWidth * Convert.ToDouble(e.X) / Convert.ToDouble(pictureBox.Width)).ToString("0.000");
+            lbPY.Text = (dPictureBox1ImageHeight * Convert.ToDouble(e.Y) / Convert.ToDouble(pictureBox.Height)).ToString("0.000");
             //lbBoxX.Text = e.X.ToString();
             //lbBoxY.Text = e.Y.ToString();
         }
@@ -186,7 +180,7 @@ namespace GluePathReadWrite
         {
             if (e.Button == MouseButtons.Middle)
             {
-                this.pictureBox1.Focus();
+                this.pictureBox.Focus();
                 MoveFlag = true;
                 xPos = e.X;
                 yPos = e.Y;
@@ -194,34 +188,34 @@ namespace GluePathReadWrite
 
             else if (e.Button == MouseButtons.Left)
             {
-                for (int i = 0; i < dataGridView1.RowCount; i++) //遍历行
+                for (int i = 0; i < dataGridView.RowCount; i++) //遍历行
                 {
-                    if (dataGridView1.Rows[i].Cells[1].Value != null)
+                    if (dataGridView.Rows[i].Cells[1].Value != null)
                     {
-                        if (dataGridView1.Rows[i].Cells[1].Value.ToString() == "Line")
+                        if (dataGridView.Rows[i].Cells[1].Value.ToString() == "Line")
                         {
-                            dataGridView1.Rows[i].Cells[3].Value = "-";
-                            dataGridView1.Rows[i].Cells[4].Value = "-";
-                            dataGridView1.Rows[i].Cells[3].ReadOnly = true;
-                            dataGridView1.Rows[i].Cells[4].ReadOnly = true;
+                            dataGridView.Rows[i].Cells[3].Value = "-";
+                            dataGridView.Rows[i].Cells[4].Value = "-";
+                            dataGridView.Rows[i].Cells[3].ReadOnly = true;
+                            dataGridView.Rows[i].Cells[4].ReadOnly = true;
                         }
                         else
                         {
-                            dataGridView1.Rows[i].Cells[3].ReadOnly = false;
-                            dataGridView1.Rows[i].Cells[4].ReadOnly = false;
+                            dataGridView.Rows[i].Cells[3].ReadOnly = false;
+                            dataGridView.Rows[i].Cells[4].ReadOnly = false;
                         }
                     }
-                    if (dataGridView1.Rows[i].Cells[6].Selected || dataGridView1.Rows[i].Cells[7].Selected)
+                    if (dataGridView.Rows[i].Cells[6].Selected || dataGridView.Rows[i].Cells[7].Selected)
                     {
-                        dataGridView1.Rows[i].Cells[6].Value = Convert.ToDouble((e.X * dBShiftPK).ToString("0.000")) - Convert.ToDouble(tbStandardX.Text);
-                        dataGridView1.Rows[i].Cells[7].Value = Convert.ToDouble((e.Y * dBShiftPK).ToString("0.000")) - Convert.ToDouble(tbStandardY.Text);
+                        dataGridView.Rows[i].Cells[6].Value = Convert.ToDouble((e.X * dBShiftPK).ToString("0.000")) - Convert.ToDouble(tbStandardX.Text);
+                        dataGridView.Rows[i].Cells[7].Value = Convert.ToDouble((e.Y * dBShiftPK).ToString("0.000")) - Convert.ToDouble(tbStandardY.Text);
                     }
-                    else if (dataGridView1.Rows[i].Cells[3].Selected || dataGridView1.Rows[i].Cells[4].Selected)
+                    else if (dataGridView.Rows[i].Cells[3].Selected || dataGridView.Rows[i].Cells[4].Selected)
                     {
-                        if (dataGridView1.Rows[i].Cells[1].Value.ToString() == "Arc")
+                        if (dataGridView.Rows[i].Cells[1].Value.ToString() == "Arc")
                         {
-                            dataGridView1.Rows[i].Cells[3].Value = Convert.ToDouble((e.X * dBShiftPK).ToString("0.000")) - Convert.ToDouble(tbStandardX.Text);
-                            dataGridView1.Rows[i].Cells[4].Value = Convert.ToDouble((e.Y * dBShiftPK).ToString("0.000")) - Convert.ToDouble(tbStandardY.Text);
+                            dataGridView.Rows[i].Cells[3].Value = Convert.ToDouble((e.X * dBShiftPK).ToString("0.000")) - Convert.ToDouble(tbStandardX.Text);
+                            dataGridView.Rows[i].Cells[4].Value = Convert.ToDouble((e.Y * dBShiftPK).ToString("0.000")) - Convert.ToDouble(tbStandardY.Text);
                         }
                     }
                     CreateGUIPoint();
@@ -241,109 +235,103 @@ namespace GluePathReadWrite
         private void SetPitureBox()
         {
             splitContainer1.Panel1.AutoScroll = false;
-            pictureBox1.Width = pictureBox1.Image.Width;
-            pictureBox1.Height = pictureBox1.Image.Height;
+            pictureBox.Width = pictureBox.Image.Width;
+            pictureBox.Height = pictureBox.Image.Height;
             if ((Convert.ToDouble(splitContainer1.Panel1.Width) / Convert.ToDouble(splitContainer1.Panel1.Height))
-                < (Convert.ToDouble(pictureBox1.Width) / Convert.ToDouble(pictureBox1.Height)))
+                < (Convert.ToDouble(pictureBox.Width) / Convert.ToDouble(pictureBox.Height)))
             {
-                pictureBox1.Width = splitContainer1.Panel1.Width;
-                pictureBox1.Height = Convert.ToInt32(pictureBox1.Width * (Convert.ToDouble(pictureBox1.Image.Height) / Convert.ToDouble(pictureBox1.Image.Width)));
-                this.pictureBox1.Left = 0;
-                this.pictureBox1.Top = (splitContainer1.Panel1.Height - pictureBox1.Height) / 2;
+                pictureBox.Width = splitContainer1.Panel1.Width;
+                pictureBox.Height = Convert.ToInt32(pictureBox.Width * (Convert.ToDouble(pictureBox.Image.Height) / Convert.ToDouble(pictureBox.Image.Width)));
+                this.pictureBox.Left = 0;
+                this.pictureBox.Top = (splitContainer1.Panel1.Height - pictureBox.Height) / 2;
             }
             else
             {
-                pictureBox1.Height = splitContainer1.Panel1.Height;
-                pictureBox1.Width = Convert.ToInt32(pictureBox1.Height * (Convert.ToDouble(pictureBox1.Image.Width) / Convert.ToDouble(pictureBox1.Image.Height)));
-                this.pictureBox1.Left = (splitContainer1.Panel1.Width - pictureBox1.Width) / 2;
-                this.pictureBox1.Top = 0;
+                pictureBox.Height = splitContainer1.Panel1.Height;
+                pictureBox.Width = Convert.ToInt32(pictureBox.Height * (Convert.ToDouble(pictureBox.Image.Width) / Convert.ToDouble(pictureBox.Image.Height)));
+                this.pictureBox.Left = (splitContainer1.Panel1.Width - pictureBox.Width) / 2;
+                this.pictureBox.Top = 0;
             }
 
-            dBShiftPK = Convert.ToDouble(pictureBox1.Image.Width) / Convert.ToDouble(pictureBox1.Width);
+            dBShiftPK = Convert.ToDouble(pictureBox.Image.Width) / Convert.ToDouble(pictureBox.Width);
             lbK.Text = (1 / dBShiftPK).ToString("0.000");
         }
 
-        private void WriteToDataGridView(string[] strTxt)
+        private void LoadToDataGridView(string[] strTxt)
         {
-            dataGridView1.Rows.Clear();
-            dataGridView1.Columns.Clear();
+            dataGridView.Rows.Clear();
+            dataGridView.Columns.Clear();
 
-            string[] str_1 = strTxt[0].Split(',');
-            strPathData = new string[strTxt.Count(), str_1.Count()];
-            strPathT = new string[str_1.Count()];
+            string[] strHead = strTxt[0].Split(',');
+            string[,] strPathData = new string[strTxt.Length, strHead.Length];
 
-            for (int i = 0; i < str_1.Count(); i++)//添加列
+            for (int i = 0; i < strHead.Length; i++)//添加列
             {
-                dataGridView1.Columns.Add("column" + str_1[i].Split(':')[0], str_1[i].Split(':')[0]);
-                dataGridView1.Columns[i].Width = 65;
+                dataGridView.Columns.Add("column" + strHead[i].Split(':')[0], strHead[i].Split(':')[0]);
+                dataGridView.Columns[i].Width = 65;
             }
 
-            string[] str_2;
-            for (int i = 0; i < strTxt.Count(); i++)//添加行
+            string[] strings;
+            for (int i = 0; i < strTxt.Length; i++)//添加行
             {
-                str_2 = strTxt[i].Split(',');
-                this.dataGridView1.Rows.Add();
-                for (int j = 0; j < str_2.Count(); j++)
+                strings = strTxt[i].Split(',');
+                this.dataGridView.Rows.Add();
+                for (int j = 0; j < strings.Length; j++)
                 {
-                    dataGridView1.Rows[i].Cells[j].Value = str_2[j].Split(':')[1];
-                    strPathData[i, j] = str_2[j].Split(':')[1];
-                    if (i == 0)
-                        strPathT[j] = str_2[j].Split(':')[0];
+                    if (j == 1)
+                    {
+                        DataGridViewComboBoxCell dgvComboBoxCellOfType = new DataGridViewComboBoxCell();
+                        dgvComboBoxCellOfType.Items.Add("");
+                        dgvComboBoxCellOfType.Items.Add("Line");
+                        dgvComboBoxCellOfType.Items.Add("Arc");
+                        dataGridView.Rows[i].Cells[1] = (DataGridViewCell)dgvComboBoxCellOfType;
+                        
+                    }
+                    else if (j == 2)
+                    {
+                        DataGridViewComboBoxCell dgvComboBoxCellOfCircleMode = new DataGridViewComboBoxCell();
+                        dgvComboBoxCellOfCircleMode.Items.Add("");
+                        dgvComboBoxCellOfCircleMode.Items.Add("XY");
+                        dgvComboBoxCellOfCircleMode.Items.Add("XYZ");
+                        dataGridView.Rows[i].Cells[2] = (DataGridViewCell)dgvComboBoxCellOfCircleMode;
+                    }
+                    else
+                    {
+                        dataGridView.Rows[i].Cells[j].Value = strings[j].Split(':')[1];
+                    }
+
+                    strPathData[i, j] = strings[j].Split(':')[1];
                 }
-            }
-
-            for (int i = 0; i < strTxt.Count(); i++)
-            {
-                aCellComboBox1[i] = new DataGridViewComboBoxCell();
-                aCellComboBox1[i].Items.Add("");
-                aCellComboBox1[i].Items.Add("Line");
-                aCellComboBox1[i].Items.Add("Arc");
-                dataGridView1.Rows[i].Cells[1] = (DataGridViewCell)aCellComboBox1[i];
-
-                aCellComboBox2[i] = new DataGridViewComboBoxCell();
-                aCellComboBox2[i].Items.Add("");
-                aCellComboBox2[i].Items.Add("XY");
-                aCellComboBox2[i].Items.Add("XYZ");
-                dataGridView1.Rows[i].Cells[2] = (DataGridViewCell)aCellComboBox2[i];
-
                 if (strTxt[i].Split(',')[1].Split(':')[1] == "1")
                 {
-                    dataGridView1.Rows[i].Cells[1].Value = "Arc";
-                    dataGridView1.Rows[i].Cells[2].Value = "XY";
+                    dataGridView.Rows[i].Cells[1].Value = "Arc";
+                    dataGridView.Rows[i].Cells[2].Value = "XY";
                 }
                 else if (strTxt[i].Split(',')[1].Split(':')[1] == "0")
                 {
-                    dataGridView1.Rows[i].Cells[1].Value = "Line";
-                    dataGridView1.Rows[i].Cells[3].ReadOnly = true;
-                    dataGridView1.Rows[i].Cells[4].ReadOnly = true;
+                    dataGridView.Rows[i].Cells[1].Value = "Line";
+                    dataGridView.Rows[i].Cells[3].ReadOnly = true;
+                    dataGridView.Rows[i].Cells[4].ReadOnly = true;
                 }
                 else
                 {
-                    dataGridView1.Rows[i].Cells[1].Value = "";
+                    dataGridView.Rows[i].Cells[1].Value = "";
                 }
             }
-
-
         }
 
-        public string[] ReadFileGluePath(string path)
+        public string[] ReadGluePathFile(string path)
         {
-            string[] strLine1 = new string[100];
             System.IO.StreamReader sr = new System.IO.StreamReader(path, Encoding.Default);
-            String line;
-            int i = 0;
+            List<string> list = new List<string>();
+            string line;
             while ((line = sr.ReadLine()) != null)
             {
-                strLine1[i] = line.ToString();
-                i++;
+                list.Add(line);
             }
-            string[] strLine2 = new string[i];
-            for (int j = 0; j < i; j++)
-            {
-                strLine2[j] = strLine1[j];
-            }
+            sr.Close();
             sr.Dispose();
-            return strLine2;
+            return list.ToArray();
         }
 
         public void CreateGUILine()
@@ -354,22 +342,22 @@ namespace GluePathReadWrite
             Point pS = new Point();
             Point pM = new Point();
             Point pE = new Point();
-            for (int i = 1; i < dataGridView1.RowCount; i++)
+            for (int i = 1; i < dataGridView.RowCount; i++)
             {
                 try
                 {
-                    if (dataGridView1.Rows[i].Cells[1].Value != null)
+                    if (dataGridView.Rows[i].Cells[1].Value != null)
                     {
-                        if (dataGridView1.Rows[i].Cells[1].Value.ToString() == "Line")
+                        if (dataGridView.Rows[i].Cells[1].Value.ToString() == "Line")
                         {
-                            if (IsNumberic(dataGridView1.Rows[i].Cells[6].Value) && IsNumberic(dataGridView1.Rows[i].Cells[7].Value) &&
-                                IsNumberic(dataGridView1.Rows[i - 1].Cells[6].Value) && IsNumberic(dataGridView1.Rows[i - 1].Cells[7].Value))
+                            if (IsNumberic(dataGridView.Rows[i].Cells[6].Value) && IsNumberic(dataGridView.Rows[i].Cells[7].Value) &&
+                                IsNumberic(dataGridView.Rows[i - 1].Cells[6].Value) && IsNumberic(dataGridView.Rows[i - 1].Cells[7].Value))
                             {
-                                pS.X = Convert.ToInt32((Convert.ToDouble(dataGridView1.Rows[i - 1].Cells[6].Value.ToString()) + Convert.ToDouble(tbStandardX.Text)) / dBShiftPK);
-                                pS.Y = Convert.ToInt32((Convert.ToDouble(dataGridView1.Rows[i - 1].Cells[7].Value.ToString()) + Convert.ToDouble(tbStandardY.Text)) / dBShiftPK);
-                                pE.X = Convert.ToInt32((Convert.ToDouble(dataGridView1.Rows[i].Cells[6].Value.ToString()) + Convert.ToDouble(tbStandardX.Text)) / dBShiftPK);
-                                pE.Y = Convert.ToInt32((Convert.ToDouble(dataGridView1.Rows[i].Cells[7].Value.ToString()) + Convert.ToDouble(tbStandardY.Text)) / dBShiftPK);
-                                if (dataGridView1.Rows[i].Cells[6].Selected || dataGridView1.Rows[i].Cells[7].Selected)
+                                pS.X = Convert.ToInt32((Convert.ToDouble(dataGridView.Rows[i - 1].Cells[6].Value.ToString()) + Convert.ToDouble(tbStandardX.Text)) / dBShiftPK);
+                                pS.Y = Convert.ToInt32((Convert.ToDouble(dataGridView.Rows[i - 1].Cells[7].Value.ToString()) + Convert.ToDouble(tbStandardY.Text)) / dBShiftPK);
+                                pE.X = Convert.ToInt32((Convert.ToDouble(dataGridView.Rows[i].Cells[6].Value.ToString()) + Convert.ToDouble(tbStandardX.Text)) / dBShiftPK);
+                                pE.Y = Convert.ToInt32((Convert.ToDouble(dataGridView.Rows[i].Cells[7].Value.ToString()) + Convert.ToDouble(tbStandardY.Text)) / dBShiftPK);
+                                if (dataGridView.Rows[i].Cells[6].Selected || dataGridView.Rows[i].Cells[7].Selected)
                                 {
                                     graph.DrawLine(penBlue, pS, pE);
                                 }
@@ -379,19 +367,19 @@ namespace GluePathReadWrite
                                 }
                             }
                         }
-                        else if (dataGridView1.Rows[i].Cells[1].Value.ToString() == "Arc")
+                        else if (dataGridView.Rows[i].Cells[1].Value.ToString() == "Arc")
                         {
-                            if (IsNumberic(dataGridView1.Rows[i].Cells[3].Value) && IsNumberic(dataGridView1.Rows[i].Cells[4].Value) &&
-                                IsNumberic(dataGridView1.Rows[i].Cells[6].Value) && IsNumberic(dataGridView1.Rows[i].Cells[7].Value) &&
-                                IsNumberic(dataGridView1.Rows[i - 1].Cells[6].Value) && IsNumberic(dataGridView1.Rows[i - 1].Cells[7].Value))
+                            if (IsNumberic(dataGridView.Rows[i].Cells[3].Value) && IsNumberic(dataGridView.Rows[i].Cells[4].Value) &&
+                                IsNumberic(dataGridView.Rows[i].Cells[6].Value) && IsNumberic(dataGridView.Rows[i].Cells[7].Value) &&
+                                IsNumberic(dataGridView.Rows[i - 1].Cells[6].Value) && IsNumberic(dataGridView.Rows[i - 1].Cells[7].Value))
                             {
-                                pS.X = Convert.ToInt32((Convert.ToDouble(dataGridView1.Rows[i - 1].Cells[6].Value.ToString()) + Convert.ToDouble(tbStandardX.Text)) / dBShiftPK);
-                                pS.Y = Convert.ToInt32((Convert.ToDouble(dataGridView1.Rows[i - 1].Cells[7].Value.ToString()) + Convert.ToDouble(tbStandardY.Text)) / dBShiftPK);
-                                pM.X = Convert.ToInt32((Convert.ToDouble(dataGridView1.Rows[i].Cells[3].Value.ToString()) + Convert.ToDouble(tbStandardX.Text)) / dBShiftPK);
-                                pM.Y = Convert.ToInt32((Convert.ToDouble(dataGridView1.Rows[i].Cells[4].Value.ToString()) + Convert.ToDouble(tbStandardY.Text)) / dBShiftPK);
-                                pE.X = Convert.ToInt32((Convert.ToDouble(dataGridView1.Rows[i].Cells[6].Value.ToString()) + Convert.ToDouble(tbStandardX.Text)) / dBShiftPK);
-                                pE.Y = Convert.ToInt32((Convert.ToDouble(dataGridView1.Rows[i].Cells[7].Value.ToString()) + Convert.ToDouble(tbStandardY.Text)) / dBShiftPK);
-                                if (dataGridView1.Rows[i].Cells[3].Selected || dataGridView1.Rows[i].Cells[4].Selected || dataGridView1.Rows[i].Cells[6].Selected || dataGridView1.Rows[i].Cells[7].Selected)
+                                pS.X = Convert.ToInt32((Convert.ToDouble(dataGridView.Rows[i - 1].Cells[6].Value.ToString()) + Convert.ToDouble(tbStandardX.Text)) / dBShiftPK);
+                                pS.Y = Convert.ToInt32((Convert.ToDouble(dataGridView.Rows[i - 1].Cells[7].Value.ToString()) + Convert.ToDouble(tbStandardY.Text)) / dBShiftPK);
+                                pM.X = Convert.ToInt32((Convert.ToDouble(dataGridView.Rows[i].Cells[3].Value.ToString()) + Convert.ToDouble(tbStandardX.Text)) / dBShiftPK);
+                                pM.Y = Convert.ToInt32((Convert.ToDouble(dataGridView.Rows[i].Cells[4].Value.ToString()) + Convert.ToDouble(tbStandardY.Text)) / dBShiftPK);
+                                pE.X = Convert.ToInt32((Convert.ToDouble(dataGridView.Rows[i].Cells[6].Value.ToString()) + Convert.ToDouble(tbStandardX.Text)) / dBShiftPK);
+                                pE.Y = Convert.ToInt32((Convert.ToDouble(dataGridView.Rows[i].Cells[7].Value.ToString()) + Convert.ToDouble(tbStandardY.Text)) / dBShiftPK);
+                                if (dataGridView.Rows[i].Cells[3].Selected || dataGridView.Rows[i].Cells[4].Selected || dataGridView.Rows[i].Cells[6].Selected || dataGridView.Rows[i].Cells[7].Selected)
                                 {
                                     DrawArc(penBlue, pS.X, pS.Y, pM.X, pM.Y, pE.X, pE.Y);
                                 }
@@ -415,7 +403,7 @@ namespace GluePathReadWrite
             penRed.Width = Convert.ToInt32(tkBGlueWidth.Value) * (float)(1 / dBShiftPK);
             penBlue.Width = Convert.ToInt32(tkBGlueWidth.Value) * (float)(1 / dBShiftPK);
             penGreen.Width = Convert.ToInt32(tkBGlueWidth.Value) * (float)(1 / dBShiftPK);
-            pictureBox1.Refresh();
+            pictureBox.Refresh();
 
             int iStandardX = Convert.ToInt32(Convert.ToDouble(tbStandardX.Text) / dBShiftPK);
             int iStandardY = Convert.ToInt32(Convert.ToDouble(tbStandardY.Text) / dBShiftPK);
@@ -424,38 +412,38 @@ namespace GluePathReadWrite
             graph.DrawString("0", new Font("Verdana", 12), new SolidBrush(Color.Green), new PointF(iStandardX, iStandardY - 20));
 
             Point pT = new Point();
-            for (int i = 0; i < dataGridView1.RowCount; i++)
+            for (int i = 0; i < dataGridView.RowCount; i++)
             {
-                if (IsNumberic(dataGridView1.Rows[i].Cells[3].Value) && IsNumberic(dataGridView1.Rows[i].Cells[4].Value))
+                if (IsNumberic(dataGridView.Rows[i].Cells[3].Value) && IsNumberic(dataGridView.Rows[i].Cells[4].Value))
                 {
-                    pT.X = Convert.ToInt32((Convert.ToDouble(dataGridView1.Rows[i].Cells[3].Value) + Convert.ToDouble(tbStandardX.Text)) / dBShiftPK);
-                    pT.Y = Convert.ToInt32((Convert.ToDouble(dataGridView1.Rows[i].Cells[4].Value) + Convert.ToDouble(tbStandardY.Text)) / dBShiftPK);
+                    pT.X = Convert.ToInt32((Convert.ToDouble(dataGridView.Rows[i].Cells[3].Value) + Convert.ToDouble(tbStandardX.Text)) / dBShiftPK);
+                    pT.Y = Convert.ToInt32((Convert.ToDouble(dataGridView.Rows[i].Cells[4].Value) + Convert.ToDouble(tbStandardY.Text)) / dBShiftPK);
 
-                    if (dataGridView1.Rows[i].Cells[3].Selected || dataGridView1.Rows[i].Cells[4].Selected)
+                    if (dataGridView.Rows[i].Cells[3].Selected || dataGridView.Rows[i].Cells[4].Selected)
                     {
                         graph.DrawArc(penBlue, pT.X - 3, pT.Y - 3, 6, 6, 0, 360);
-                        graph.DrawString(dataGridView1.Rows[i].Cells[0].Value.ToString() + "-1", new Font("Verdana", 12), new SolidBrush(Color.Blue), new PointF(pT.X, pT.Y - 20));
+                        graph.DrawString(dataGridView.Rows[i].Cells[0].Value.ToString() + "-1", new Font("Verdana", 12), new SolidBrush(Color.Blue), new PointF(pT.X, pT.Y - 20));
                     }
                     else
                     {
                         graph.DrawArc(penRed, pT.X - 3, pT.Y - 3, 6, 6, 0, 360);
-                        graph.DrawString(dataGridView1.Rows[i].Cells[0].Value.ToString() + "-1", new Font("Verdana", 12), new SolidBrush(Color.Red), new PointF(pT.X, pT.Y - 20));
+                        graph.DrawString(dataGridView.Rows[i].Cells[0].Value.ToString() + "-1", new Font("Verdana", 12), new SolidBrush(Color.Red), new PointF(pT.X, pT.Y - 20));
                     }
                 }
-                if (IsNumberic(dataGridView1.Rows[i].Cells[6].Value) && IsNumberic(dataGridView1.Rows[i].Cells[7].Value))
+                if (IsNumberic(dataGridView.Rows[i].Cells[6].Value) && IsNumberic(dataGridView.Rows[i].Cells[7].Value))
                 {
-                    pT.X = Convert.ToInt32((Convert.ToDouble(dataGridView1.Rows[i].Cells[6].Value) + Convert.ToDouble(tbStandardX.Text)) / dBShiftPK);
-                    pT.Y = Convert.ToInt32((Convert.ToDouble(dataGridView1.Rows[i].Cells[7].Value) + Convert.ToDouble(tbStandardY.Text)) / dBShiftPK);
+                    pT.X = Convert.ToInt32((Convert.ToDouble(dataGridView.Rows[i].Cells[6].Value) + Convert.ToDouble(tbStandardX.Text)) / dBShiftPK);
+                    pT.Y = Convert.ToInt32((Convert.ToDouble(dataGridView.Rows[i].Cells[7].Value) + Convert.ToDouble(tbStandardY.Text)) / dBShiftPK);
 
-                    if (dataGridView1.Rows[i].Cells[6].Selected || dataGridView1.Rows[i].Cells[7].Selected)
+                    if (dataGridView.Rows[i].Cells[6].Selected || dataGridView.Rows[i].Cells[7].Selected)
                     {
                         graph.DrawArc(penBlue, pT.X - 3, pT.Y - 3, 6, 6, 0, 360);
-                        graph.DrawString(dataGridView1.Rows[i].Cells[0].Value.ToString(), new Font("Verdana", 12), new SolidBrush(Color.Blue), new PointF(pT.X, pT.Y - 20));
+                        graph.DrawString(dataGridView.Rows[i].Cells[0].Value.ToString(), new Font("Verdana", 12), new SolidBrush(Color.Blue), new PointF(pT.X, pT.Y - 20));
                     }
                     else
                     {
                         graph.DrawArc(penRed, pT.X - 3, pT.Y - 3, 6, 6, 0, 360);
-                        graph.DrawString(dataGridView1.Rows[i].Cells[0].Value.ToString(), new Font("Verdana", 12), new SolidBrush(Color.Red), new PointF(pT.X, pT.Y - 20));
+                        graph.DrawString(dataGridView.Rows[i].Cells[0].Value.ToString(), new Font("Verdana", 12), new SolidBrush(Color.Red), new PointF(pT.X, pT.Y - 20));
                     }
                 }
             }
@@ -489,7 +477,7 @@ namespace GluePathReadWrite
                 sweepAngle = 360 - ((int)(dK1 < dK3 ? dK3 : dK1) - (int)(dK1 < dK3 ? dK1 : dK3));
             }
 
-            graph = this.pictureBox1.CreateGraphics();
+            graph = this.pictureBox.CreateGraphics();
             graph.DrawArc(pen, dTemp[0] - dTemp[2], dTemp[1] - dTemp[2], Math.Abs(dTemp[2] * 2), Math.Abs(dTemp[2] * 2), startAngle, sweepAngle);
         }
 
@@ -559,30 +547,30 @@ namespace GluePathReadWrite
 
             string strGluePath;
             System.IO.File.Delete(strFolderPath);
-            for (int i = 0; i < dataGridView1.Rows.Count; i++)
+            for (int i = 0; i < dataGridView.Rows.Count; i++)
             {
                 strGluePath = "";
-                for (int j = 0; j < dataGridView1.Columns.Count; j++)
+                for (int j = 0; j < dataGridView.Columns.Count; j++)
                 {
-                    strGluePath += dataGridView1.Columns[j].HeaderText + ":";
+                    strGluePath += dataGridView.Columns[j].HeaderText + ":";
 
-                    if (dataGridView1.Rows[i].Cells[j].Value != null)
+                    if (dataGridView.Rows[i].Cells[j].Value != null)
                     {
-                        if (dataGridView1.Rows[i].Cells[j].Value.ToString() == "Line")
+                        if (dataGridView.Rows[i].Cells[j].Value.ToString() == "Line")
                         {
                             strGluePath += "0";
                         }
-                        else if (dataGridView1.Rows[i].Cells[j].Value.ToString() == "Arc")
+                        else if (dataGridView.Rows[i].Cells[j].Value.ToString() == "Arc")
                         {
                             strGluePath += "1";
                         }
                         else
                         {
-                            strGluePath += dataGridView1.Rows[i].Cells[j].Value.ToString();
+                            strGluePath += dataGridView.Rows[i].Cells[j].Value.ToString();
                         }
                     }
 
-                    if (j != dataGridView1.Columns.Count - 1)
+                    if (j != dataGridView.Columns.Count - 1)
                         strGluePath += ",";
                 }
                 string[] aStrGluePath = { strGluePath };
@@ -614,52 +602,49 @@ namespace GluePathReadWrite
             CreateGUILine();
         }
 
-        private void 添加行ToolStripMenuItem_Click(object sender, EventArgs e)
+        private void ToolStripMenuItem_Append_Click(object sender, EventArgs e)
         {
-            if (dataGridView1.ColumnCount == 0)
+            if (dataGridView.ColumnCount == 0)
             {
-                string str_0 = "ID:,Type:,CircleMode:,MX:,MY:,MZ:,TX:,TY:,TZ:,TR:,TA:,Speed:,AccSpeed:,IOStatus:,StartDelay:,EndDelay:,StartDelayIOStatus:,EndDelayIOStatus:";
-                string[] str_1 = str_0.Split(',');
-                for (int i = 0; i < str_1.Count(); i++)//添加列
+                string strHeader = "ID:,Type:,CircleMode:,MX:,MY:,MZ:,TX:,TY:,TZ:,TR:,TA:,Speed:,AccSpeed:,IOStatus:,StartDelay:,EndDelay:,StartDelayIOStatus:,EndDelayIOStatus:";
+                string[] strings = strHeader.Split(',');
+                for (int i = 0; i < strings.Length; i++)//添加列
                 {
-                    dataGridView1.Columns.Add("column" + str_1[i].Split(':')[0], str_1[i].Split(':')[0]);
-                    dataGridView1.Columns[i].Width = 65;
+                    dataGridView.Columns.Add("column" + strings[i].Split(':')[0], strings[i].Split(':')[0]);
+                    dataGridView.Columns[i].Width = 65;
                 }
             }
 
-            dataGridView1.Rows.Add();
-            aCellComboBox1[dataGridView1.Rows.Count - 1] = new DataGridViewComboBoxCell();
-            aCellComboBox1[dataGridView1.Rows.Count - 1].Items.Add("");
-            aCellComboBox1[dataGridView1.Rows.Count - 1].Items.Add("Line");
-            aCellComboBox1[dataGridView1.Rows.Count - 1].Items.Add("Arc");
-            dataGridView1.Rows[dataGridView1.Rows.Count - 1].Cells[1] = aCellComboBox1[dataGridView1.Rows.Count - 1];
+            dataGridView.Rows[dataGridView.RowCount - 1].Cells[0].Value = dataGridView.RowCount.ToString();
 
-            aCellComboBox2[dataGridView1.Rows.Count - 1] = new DataGridViewComboBoxCell();
-            aCellComboBox2[dataGridView1.Rows.Count - 1].Items.Add("");
-            aCellComboBox2[dataGridView1.Rows.Count - 1].Items.Add("XY");
-            aCellComboBox2[dataGridView1.Rows.Count - 1].Items.Add("XYZ");
-            dataGridView1.Rows[dataGridView1.Rows.Count - 1].Cells[2] = aCellComboBox2[dataGridView1.Rows.Count - 1];
+            dataGridView.Rows.Add();
+            DataGridViewComboBoxCell dgvComboBoxCellOfType = new DataGridViewComboBoxCell();
+            dgvComboBoxCellOfType.Items.Add("");
+            dgvComboBoxCellOfType.Items.Add("Line");
+            dgvComboBoxCellOfType.Items.Add("Arc");
+            dataGridView.Rows[dataGridView.Rows.Count - 1].Cells[1] = dgvComboBoxCellOfType;
 
-            for (int i = 3; i < dataGridView1.ColumnCount; i++)
+            DataGridViewComboBoxCell dgvComboBoxCellOfCircleMode = new DataGridViewComboBoxCell();
+            dgvComboBoxCellOfCircleMode.Items.Add("");
+            dgvComboBoxCellOfCircleMode.Items.Add("XY");
+            dgvComboBoxCellOfCircleMode.Items.Add("XYZ");
+            dataGridView.Rows[dataGridView.Rows.Count - 1].Cells[2] = dgvComboBoxCellOfCircleMode;
+
+            for (int i = 3; i < dataGridView.ColumnCount; i++)
             {
-                dataGridView1.Rows[dataGridView1.RowCount - 1].Cells[i].Value = "";
+                dataGridView.Rows[dataGridView.RowCount - 1].Cells[i].Value = string.Empty;
             }
-
-            for (int i = 0; i < dataGridView1.RowCount; i++)
-            {
-                dataGridView1.Rows[i].Cells[0].Value = (i + 1).ToString();
-            }
-
         }
-        private void 插入行ToolStripMenuItem_Click(object sender, EventArgs e)
+
+        private void ToolStripMenuItem_Insert_Click(object sender, EventArgs e)
         {
-            if (dataGridView1.SelectedRows.Count < 1)
+            if (dataGridView.SelectedRows.Count < 1)
                 return;
 
             DataGridViewRow DGVR = new DataGridViewRow();
-            int iIndex = dataGridView1.Rows.IndexOf(dataGridView1.SelectedRows[0]);
+            int iIndex = dataGridView.Rows.IndexOf(dataGridView.SelectedRows[0]);
 
-            dataGridView1.Rows.Insert(iIndex, DGVR);
+            dataGridView.Rows.Insert(iIndex, DGVR);
 
             DataGridViewComboBoxCell DGVCBC_T1 = new DataGridViewComboBoxCell();
             DataGridViewComboBoxCell DGVCBC_T2 = new DataGridViewComboBoxCell();
@@ -667,47 +652,47 @@ namespace GluePathReadWrite
             DGVCBC_T1.Items.Add("");
             DGVCBC_T1.Items.Add("Line");
             DGVCBC_T1.Items.Add("Arc");
-            dataGridView1.Rows[iIndex].Cells[1] = DGVCBC_T1;
+            dataGridView.Rows[iIndex].Cells[1] = DGVCBC_T1;
 
             DGVCBC_T2.Items.Add("");
             DGVCBC_T2.Items.Add("XY");
             DGVCBC_T2.Items.Add("XYZ");
-            dataGridView1.Rows[iIndex].Cells[2] = DGVCBC_T2;
+            dataGridView.Rows[iIndex].Cells[2] = DGVCBC_T2;
 
 
-            for (int i = 3; i < dataGridView1.ColumnCount; i++)
+            for (int i = 3; i < dataGridView.ColumnCount; i++)
             {
-                dataGridView1.Rows[iIndex].Cells[i].Value = "";
+                dataGridView.Rows[iIndex].Cells[i].Value = "";
             }
-            for (int i = 0; i < dataGridView1.RowCount; i++)
+            for (int i = 0; i < dataGridView.RowCount; i++)
             {
-                dataGridView1.Rows[i].Cells[0].Value = i + 1;
+                dataGridView.Rows[i].Cells[0].Value = i + 1;
             }
-            pictureBox1.Refresh();
+            pictureBox.Refresh();
             CreateGUIPoint();
             CreateGUILine();
         }
 
-        private void 删除行ToolStripMenuItem_Click(object sender, EventArgs e)
+        private void ToolStripMenuItem_Delete_Click(object sender, EventArgs e)
         {
-            foreach (DataGridViewRow item in dataGridView1.SelectedRows)
+            foreach (DataGridViewRow item in dataGridView.SelectedRows)
             {
-                dataGridView1.Rows.Remove(item);
+                dataGridView.Rows.Remove(item);
             }
 
-            for (int i = 0; i < dataGridView1.RowCount; i++)
+            for (int i = 0; i < dataGridView.RowCount; i++)
             {
-                dataGridView1.Rows[i].Cells[0].Value = (i + 1).ToString();
+                dataGridView.Rows[i].Cells[0].Value = (i + 1).ToString();
             }
-            pictureBox1.Refresh();
+            pictureBox.Refresh();
             CreateGUIPoint();
             CreateGUILine();
         }
-        private void 清除胶路ToolStripMenuItem_Click(object sender, EventArgs e)
+        private void ToolStripMenuItem_Clear_Click(object sender, EventArgs e)
         {
-            dataGridView1.Rows.Clear();
+            dataGridView.Rows.Clear();
             tbPath.Text = "";
-            pictureBox1.Refresh();
+            pictureBox.Refresh();
         }
         private void DataGridViewAddRow()
         {
@@ -720,7 +705,7 @@ namespace GluePathReadWrite
             penRed.Color = Color.FromArgb(Convert.ToInt32(tkBTransparency.Value), Color.Red);
             penBlue.Color = Color.FromArgb(Convert.ToInt32(tkBTransparency.Value), Color.Blue);
             penGreen.Color = Color.FromArgb(Convert.ToInt32(tkBTransparency.Value), Color.Green);
-            pictureBox1.Refresh();
+            pictureBox.Refresh();
             CreateGUIPoint();
             CreateGUILine();
         }
@@ -728,7 +713,7 @@ namespace GluePathReadWrite
         private void tkbGlueWidth_ValueChanged(object sender, EventArgs e)
         {
             lbGlueWidth.Text = tkBGlueWidth.Value.ToString();
-            pictureBox1.Refresh();
+            pictureBox.Refresh();
             CreateGUIPoint();
             CreateGUILine();
         }

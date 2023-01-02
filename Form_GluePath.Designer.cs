@@ -32,7 +32,7 @@
             this.splitContainer1 = new System.Windows.Forms.SplitContainer();
             this.cms_1 = new System.Windows.Forms.ContextMenuStrip(this.components);
             this.自适应ToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
-            this.pictureBox1 = new System.Windows.Forms.PictureBox();
+            this.pictureBox = new System.Windows.Forms.PictureBox();
             this.lbAlpha = new System.Windows.Forms.Label();
             this.lbGlueWidth = new System.Windows.Forms.Label();
             this.tkBGlueWidth = new System.Windows.Forms.TrackBar();
@@ -51,25 +51,25 @@
             this.lbPX = new System.Windows.Forms.Label();
             this.label2 = new System.Windows.Forms.Label();
             this.splitContainer2 = new System.Windows.Forms.SplitContainer();
-            this.dataGridView1 = new System.Windows.Forms.DataGridView();
+            this.dataGridView = new System.Windows.Forms.DataGridView();
             this.cms_DataGridView = new System.Windows.Forms.ContextMenuStrip(this.components);
-            this.添加行ToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
-            this.插入行ToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
-            this.删除行ToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
-            this.清除胶路ToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
+            this.ToolStripMenuItem_Append = new System.Windows.Forms.ToolStripMenuItem();
+            this.ToolStripMenuItem_Insert = new System.Windows.Forms.ToolStripMenuItem();
+            this.ToolStripMenuItem_Delete = new System.Windows.Forms.ToolStripMenuItem();
+            this.ToolStripMenuItem_Clear = new System.Windows.Forms.ToolStripMenuItem();
             ((System.ComponentModel.ISupportInitialize)(this.splitContainer1)).BeginInit();
             this.splitContainer1.Panel1.SuspendLayout();
             this.splitContainer1.Panel2.SuspendLayout();
             this.splitContainer1.SuspendLayout();
             this.cms_1.SuspendLayout();
-            ((System.ComponentModel.ISupportInitialize)(this.pictureBox1)).BeginInit();
+            ((System.ComponentModel.ISupportInitialize)(this.pictureBox)).BeginInit();
             ((System.ComponentModel.ISupportInitialize)(this.tkBGlueWidth)).BeginInit();
             ((System.ComponentModel.ISupportInitialize)(this.tkBTransparency)).BeginInit();
             ((System.ComponentModel.ISupportInitialize)(this.splitContainer2)).BeginInit();
             this.splitContainer2.Panel1.SuspendLayout();
             this.splitContainer2.Panel2.SuspendLayout();
             this.splitContainer2.SuspendLayout();
-            ((System.ComponentModel.ISupportInitialize)(this.dataGridView1)).BeginInit();
+            ((System.ComponentModel.ISupportInitialize)(this.dataGridView)).BeginInit();
             this.cms_DataGridView.SuspendLayout();
             this.SuspendLayout();
             // 
@@ -77,14 +77,14 @@
             // 
             this.splitContainer1.Dock = System.Windows.Forms.DockStyle.Fill;
             this.splitContainer1.Location = new System.Drawing.Point(0, 0);
-            this.splitContainer1.Margin = new System.Windows.Forms.Padding(4, 4, 4, 4);
+            this.splitContainer1.Margin = new System.Windows.Forms.Padding(4);
             this.splitContainer1.Name = "splitContainer1";
             // 
             // splitContainer1.Panel1
             // 
             this.splitContainer1.Panel1.BackColor = System.Drawing.Color.CornflowerBlue;
             this.splitContainer1.Panel1.ContextMenuStrip = this.cms_1;
-            this.splitContainer1.Panel1.Controls.Add(this.pictureBox1);
+            this.splitContainer1.Panel1.Controls.Add(this.pictureBox);
             // 
             // splitContainer1.Panel2
             // 
@@ -126,19 +126,19 @@
             this.自适应ToolStripMenuItem.Text = "自适应";
             this.自适应ToolStripMenuItem.Click += new System.EventHandler(this.自适应ToolStripMenuItem_Click);
             // 
-            // pictureBox1
+            // pictureBox
             // 
-            this.pictureBox1.BackColor = System.Drawing.Color.Black;
-            this.pictureBox1.ContextMenuStrip = this.cms_1;
-            this.pictureBox1.Location = new System.Drawing.Point(84, 98);
-            this.pictureBox1.Margin = new System.Windows.Forms.Padding(4, 4, 4, 4);
-            this.pictureBox1.Name = "pictureBox1";
-            this.pictureBox1.Size = new System.Drawing.Size(874, 528);
-            this.pictureBox1.TabIndex = 0;
-            this.pictureBox1.TabStop = false;
-            this.pictureBox1.MouseDown += new System.Windows.Forms.MouseEventHandler(this.pictureBox1_MouseDown);
-            this.pictureBox1.MouseMove += new System.Windows.Forms.MouseEventHandler(this.pictureBox1_MouseMove);
-            this.pictureBox1.MouseUp += new System.Windows.Forms.MouseEventHandler(this.pictureBox1_MouseUp);
+            this.pictureBox.BackColor = System.Drawing.Color.Black;
+            this.pictureBox.ContextMenuStrip = this.cms_1;
+            this.pictureBox.Location = new System.Drawing.Point(84, 98);
+            this.pictureBox.Margin = new System.Windows.Forms.Padding(4);
+            this.pictureBox.Name = "pictureBox";
+            this.pictureBox.Size = new System.Drawing.Size(874, 528);
+            this.pictureBox.TabIndex = 0;
+            this.pictureBox.TabStop = false;
+            this.pictureBox.MouseDown += new System.Windows.Forms.MouseEventHandler(this.pictureBox1_MouseDown);
+            this.pictureBox.MouseMove += new System.Windows.Forms.MouseEventHandler(this.pictureBox1_MouseMove);
+            this.pictureBox.MouseUp += new System.Windows.Forms.MouseEventHandler(this.pictureBox1_MouseUp);
             // 
             // lbAlpha
             // 
@@ -163,7 +163,7 @@
             // tkBGlueWidth
             // 
             this.tkBGlueWidth.Location = new System.Drawing.Point(135, 360);
-            this.tkBGlueWidth.Margin = new System.Windows.Forms.Padding(4, 4, 4, 4);
+            this.tkBGlueWidth.Margin = new System.Windows.Forms.Padding(4);
             this.tkBGlueWidth.Name = "tkBGlueWidth";
             this.tkBGlueWidth.Size = new System.Drawing.Size(195, 69);
             this.tkBGlueWidth.TabIndex = 32;
@@ -182,7 +182,7 @@
             // tkBTransparency
             // 
             this.tkBTransparency.Location = new System.Drawing.Point(135, 435);
-            this.tkBTransparency.Margin = new System.Windows.Forms.Padding(4, 4, 4, 4);
+            this.tkBTransparency.Margin = new System.Windows.Forms.Padding(4);
             this.tkBTransparency.Name = "tkBTransparency";
             this.tkBTransparency.Size = new System.Drawing.Size(195, 69);
             this.tkBTransparency.TabIndex = 30;
@@ -201,7 +201,7 @@
             // tbPath
             // 
             this.tbPath.Location = new System.Drawing.Point(4, 78);
-            this.tbPath.Margin = new System.Windows.Forms.Padding(4, 4, 4, 4);
+            this.tbPath.Margin = new System.Windows.Forms.Padding(4);
             this.tbPath.Name = "tbPath";
             this.tbPath.Size = new System.Drawing.Size(454, 28);
             this.tbPath.TabIndex = 23;
@@ -213,7 +213,7 @@
             this.btOpenGluePath.FlatAppearance.BorderSize = 0;
             this.btOpenGluePath.FlatStyle = System.Windows.Forms.FlatStyle.Flat;
             this.btOpenGluePath.Location = new System.Drawing.Point(513, 54);
-            this.btOpenGluePath.Margin = new System.Windows.Forms.Padding(4, 4, 4, 4);
+            this.btOpenGluePath.Margin = new System.Windows.Forms.Padding(4);
             this.btOpenGluePath.Name = "btOpenGluePath";
             this.btOpenGluePath.Size = new System.Drawing.Size(75, 75);
             this.btOpenGluePath.TabIndex = 22;
@@ -247,7 +247,7 @@
             this.btSaveGluePath.FlatAppearance.BorderSize = 0;
             this.btSaveGluePath.FlatStyle = System.Windows.Forms.FlatStyle.Flat;
             this.btSaveGluePath.Location = new System.Drawing.Point(615, 54);
-            this.btSaveGluePath.Margin = new System.Windows.Forms.Padding(4, 4, 4, 4);
+            this.btSaveGluePath.Margin = new System.Windows.Forms.Padding(4);
             this.btSaveGluePath.Name = "btSaveGluePath";
             this.btSaveGluePath.Size = new System.Drawing.Size(75, 75);
             this.btSaveGluePath.TabIndex = 17;
@@ -257,7 +257,7 @@
             // tbStandardY
             // 
             this.tbStandardY.Location = new System.Drawing.Point(255, 510);
-            this.tbStandardY.Margin = new System.Windows.Forms.Padding(4, 4, 4, 4);
+            this.tbStandardY.Margin = new System.Windows.Forms.Padding(4);
             this.tbStandardY.Name = "tbStandardY";
             this.tbStandardY.Size = new System.Drawing.Size(76, 28);
             this.tbStandardY.TabIndex = 15;
@@ -265,7 +265,7 @@
             // tbStandardX
             // 
             this.tbStandardX.Location = new System.Drawing.Point(135, 510);
-            this.tbStandardX.Margin = new System.Windows.Forms.Padding(4, 4, 4, 4);
+            this.tbStandardX.Margin = new System.Windows.Forms.Padding(4);
             this.tbStandardX.Name = "tbStandardX";
             this.tbStandardX.Size = new System.Drawing.Size(76, 28);
             this.tbStandardX.TabIndex = 14;
@@ -314,7 +314,7 @@
             // 
             this.splitContainer2.Dock = System.Windows.Forms.DockStyle.Fill;
             this.splitContainer2.Location = new System.Drawing.Point(0, 0);
-            this.splitContainer2.Margin = new System.Windows.Forms.Padding(4, 4, 4, 4);
+            this.splitContainer2.Margin = new System.Windows.Forms.Padding(4);
             this.splitContainer2.Name = "splitContainer2";
             this.splitContainer2.Orientation = System.Windows.Forms.Orientation.Horizontal;
             // 
@@ -324,64 +324,64 @@
             // 
             // splitContainer2.Panel2
             // 
-            this.splitContainer2.Panel2.Controls.Add(this.dataGridView1);
+            this.splitContainer2.Panel2.Controls.Add(this.dataGridView);
             this.splitContainer2.Size = new System.Drawing.Size(1857, 1160);
             this.splitContainer2.SplitterDistance = 726;
             this.splitContainer2.SplitterWidth = 6;
             this.splitContainer2.TabIndex = 1;
             // 
-            // dataGridView1
+            // dataGridView
             // 
-            this.dataGridView1.ColumnHeadersHeightSizeMode = System.Windows.Forms.DataGridViewColumnHeadersHeightSizeMode.AutoSize;
-            this.dataGridView1.ContextMenuStrip = this.cms_DataGridView;
-            this.dataGridView1.Dock = System.Windows.Forms.DockStyle.Fill;
-            this.dataGridView1.Location = new System.Drawing.Point(0, 0);
-            this.dataGridView1.Margin = new System.Windows.Forms.Padding(4, 4, 4, 4);
-            this.dataGridView1.Name = "dataGridView1";
-            this.dataGridView1.RowHeadersWidth = 60;
-            this.dataGridView1.RowTemplate.Height = 23;
-            this.dataGridView1.Size = new System.Drawing.Size(1857, 428);
-            this.dataGridView1.TabIndex = 5;
-            this.dataGridView1.CellClick += new System.Windows.Forms.DataGridViewCellEventHandler(this.dataGridView1_CellClick);
+            this.dataGridView.ColumnHeadersHeightSizeMode = System.Windows.Forms.DataGridViewColumnHeadersHeightSizeMode.AutoSize;
+            this.dataGridView.ContextMenuStrip = this.cms_DataGridView;
+            this.dataGridView.Dock = System.Windows.Forms.DockStyle.Fill;
+            this.dataGridView.Location = new System.Drawing.Point(0, 0);
+            this.dataGridView.Margin = new System.Windows.Forms.Padding(4);
+            this.dataGridView.Name = "dataGridView";
+            this.dataGridView.RowHeadersWidth = 60;
+            this.dataGridView.RowTemplate.Height = 23;
+            this.dataGridView.Size = new System.Drawing.Size(1857, 428);
+            this.dataGridView.TabIndex = 5;
+            this.dataGridView.CellClick += new System.Windows.Forms.DataGridViewCellEventHandler(this.dataGridView1_CellClick);
             // 
             // cms_DataGridView
             // 
             this.cms_DataGridView.ImageScalingSize = new System.Drawing.Size(24, 24);
             this.cms_DataGridView.Items.AddRange(new System.Windows.Forms.ToolStripItem[] {
-            this.添加行ToolStripMenuItem,
-            this.插入行ToolStripMenuItem,
-            this.删除行ToolStripMenuItem,
-            this.清除胶路ToolStripMenuItem});
+            this.ToolStripMenuItem_Append,
+            this.ToolStripMenuItem_Insert,
+            this.ToolStripMenuItem_Delete,
+            this.ToolStripMenuItem_Clear});
             this.cms_DataGridView.Name = "cms_DataGridView";
             this.cms_DataGridView.Size = new System.Drawing.Size(153, 124);
             // 
-            // 添加行ToolStripMenuItem
+            // ToolStripMenuItem_Append
             // 
-            this.添加行ToolStripMenuItem.Name = "添加行ToolStripMenuItem";
-            this.添加行ToolStripMenuItem.Size = new System.Drawing.Size(152, 30);
-            this.添加行ToolStripMenuItem.Text = "添加行";
-            this.添加行ToolStripMenuItem.Click += new System.EventHandler(this.添加行ToolStripMenuItem_Click);
+            this.ToolStripMenuItem_Append.Name = "ToolStripMenuItem_Append";
+            this.ToolStripMenuItem_Append.Size = new System.Drawing.Size(152, 30);
+            this.ToolStripMenuItem_Append.Text = "追加行";
+            this.ToolStripMenuItem_Append.Click += new System.EventHandler(this.ToolStripMenuItem_Append_Click);
             // 
-            // 插入行ToolStripMenuItem
+            // ToolStripMenuItem_Insert
             // 
-            this.插入行ToolStripMenuItem.Name = "插入行ToolStripMenuItem";
-            this.插入行ToolStripMenuItem.Size = new System.Drawing.Size(152, 30);
-            this.插入行ToolStripMenuItem.Text = "插入行";
-            this.插入行ToolStripMenuItem.Click += new System.EventHandler(this.插入行ToolStripMenuItem_Click);
+            this.ToolStripMenuItem_Insert.Name = "ToolStripMenuItem_Insert";
+            this.ToolStripMenuItem_Insert.Size = new System.Drawing.Size(152, 30);
+            this.ToolStripMenuItem_Insert.Text = "插入行";
+            this.ToolStripMenuItem_Insert.Click += new System.EventHandler(this.ToolStripMenuItem_Insert_Click);
             // 
-            // 删除行ToolStripMenuItem
+            // ToolStripMenuItem_Delete
             // 
-            this.删除行ToolStripMenuItem.Name = "删除行ToolStripMenuItem";
-            this.删除行ToolStripMenuItem.Size = new System.Drawing.Size(152, 30);
-            this.删除行ToolStripMenuItem.Text = "删除行";
-            this.删除行ToolStripMenuItem.Click += new System.EventHandler(this.删除行ToolStripMenuItem_Click);
+            this.ToolStripMenuItem_Delete.Name = "ToolStripMenuItem_Delete";
+            this.ToolStripMenuItem_Delete.Size = new System.Drawing.Size(152, 30);
+            this.ToolStripMenuItem_Delete.Text = "删除行";
+            this.ToolStripMenuItem_Delete.Click += new System.EventHandler(this.ToolStripMenuItem_Delete_Click);
             // 
-            // 清除胶路ToolStripMenuItem
+            // ToolStripMenuItem_Clear
             // 
-            this.清除胶路ToolStripMenuItem.Name = "清除胶路ToolStripMenuItem";
-            this.清除胶路ToolStripMenuItem.Size = new System.Drawing.Size(152, 30);
-            this.清除胶路ToolStripMenuItem.Text = "清除胶路";
-            this.清除胶路ToolStripMenuItem.Click += new System.EventHandler(this.清除胶路ToolStripMenuItem_Click);
+            this.ToolStripMenuItem_Clear.Name = "ToolStripMenuItem_Clear";
+            this.ToolStripMenuItem_Clear.Size = new System.Drawing.Size(152, 30);
+            this.ToolStripMenuItem_Clear.Text = "清除胶路";
+            this.ToolStripMenuItem_Clear.Click += new System.EventHandler(this.ToolStripMenuItem_Clear_Click);
             // 
             // Form_GluePath
             // 
@@ -389,7 +389,7 @@
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
             this.ClientSize = new System.Drawing.Size(1857, 1160);
             this.Controls.Add(this.splitContainer2);
-            this.Margin = new System.Windows.Forms.Padding(4, 4, 4, 4);
+            this.Margin = new System.Windows.Forms.Padding(4);
             this.Name = "Form_GluePath";
             this.Text = "Form1";
             this.Load += new System.EventHandler(this.Form_GluePath_Load);
@@ -399,14 +399,14 @@
             ((System.ComponentModel.ISupportInitialize)(this.splitContainer1)).EndInit();
             this.splitContainer1.ResumeLayout(false);
             this.cms_1.ResumeLayout(false);
-            ((System.ComponentModel.ISupportInitialize)(this.pictureBox1)).EndInit();
+            ((System.ComponentModel.ISupportInitialize)(this.pictureBox)).EndInit();
             ((System.ComponentModel.ISupportInitialize)(this.tkBGlueWidth)).EndInit();
             ((System.ComponentModel.ISupportInitialize)(this.tkBTransparency)).EndInit();
             this.splitContainer2.Panel1.ResumeLayout(false);
             this.splitContainer2.Panel2.ResumeLayout(false);
             ((System.ComponentModel.ISupportInitialize)(this.splitContainer2)).EndInit();
             this.splitContainer2.ResumeLayout(false);
-            ((System.ComponentModel.ISupportInitialize)(this.dataGridView1)).EndInit();
+            ((System.ComponentModel.ISupportInitialize)(this.dataGridView)).EndInit();
             this.cms_DataGridView.ResumeLayout(false);
             this.ResumeLayout(false);
 
@@ -415,14 +415,14 @@
         #endregion
 
         private System.Windows.Forms.SplitContainer splitContainer1;
-        private System.Windows.Forms.PictureBox pictureBox1;
+        private System.Windows.Forms.PictureBox pictureBox;
         private System.Windows.Forms.ContextMenuStrip cms_1;
         private System.Windows.Forms.ToolStripMenuItem 自适应ToolStripMenuItem;
         private System.Windows.Forms.Label label2;
         private System.Windows.Forms.Label lbPY;
         private System.Windows.Forms.Label lbPX;
         private System.Windows.Forms.SplitContainer splitContainer2;
-        private System.Windows.Forms.DataGridView dataGridView1;
+        private System.Windows.Forms.DataGridView dataGridView;
         private System.Windows.Forms.TextBox tbStandardY;
         private System.Windows.Forms.TextBox tbStandardX;
         private System.Windows.Forms.Label label4;
@@ -432,16 +432,16 @@
         private System.Windows.Forms.Button btOpenGluePath;
         private System.Windows.Forms.TextBox tbPath;
         private System.Windows.Forms.ContextMenuStrip cms_DataGridView;
-        private System.Windows.Forms.ToolStripMenuItem 添加行ToolStripMenuItem;
-        private System.Windows.Forms.ToolStripMenuItem 删除行ToolStripMenuItem;
+        private System.Windows.Forms.ToolStripMenuItem ToolStripMenuItem_Append;
+        private System.Windows.Forms.ToolStripMenuItem ToolStripMenuItem_Delete;
         private System.Windows.Forms.Label label1;
         private System.Windows.Forms.TrackBar tkBTransparency;
         private System.Windows.Forms.Label label3;
         private System.Windows.Forms.TrackBar tkBGlueWidth;
         private System.Windows.Forms.Label lbAlpha;
         private System.Windows.Forms.Label lbGlueWidth;
-        private System.Windows.Forms.ToolStripMenuItem 插入行ToolStripMenuItem;
-        private System.Windows.Forms.ToolStripMenuItem 清除胶路ToolStripMenuItem;
+        private System.Windows.Forms.ToolStripMenuItem ToolStripMenuItem_Insert;
+        private System.Windows.Forms.ToolStripMenuItem ToolStripMenuItem_Clear;
     }
 }
 
