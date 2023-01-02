@@ -688,17 +688,19 @@ namespace GluePathReadWrite
             CreateGUIPoint();
             CreateGUILine();
         }
+
         private void ToolStripMenuItem_Clear_Click(object sender, EventArgs e)
         {
             dataGridView.Rows.Clear();
             tbPath.Text = "";
             pictureBox.Refresh();
         }
+
         private void DataGridViewAddRow()
         {
             DataGridViewRow DGVR = new DataGridViewRow();
-
         }
+
         private void tkbAlpha_ValueChanged(object sender, EventArgs e)
         {
             lbAlpha.Text = tkBTransparency.Value.ToString();
@@ -717,7 +719,6 @@ namespace GluePathReadWrite
             CreateGUIPoint();
             CreateGUILine();
         }
-
 
     }
 }
