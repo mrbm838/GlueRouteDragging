@@ -139,7 +139,7 @@ namespace GluePathReadWrite
                 this.pictureBox.Left += Convert.ToInt32(e.X - dMultiplyingP * e.X);
                 this.pictureBox.Top += Convert.ToInt32(e.Y - dMultiplyingP * e.Y);
                 dBShiftPK = Convert.ToDouble(pictureBox.Image.Width) / Convert.ToDouble(pictureBox.Width);
-                lbK.Text = (1 / dBShiftPK).ToString("0.000");
+                lbZoom.Text = (1 / dBShiftPK).ToString("0.000");
 
                 DrawGUIPoint();
                 DrawGUILine();
@@ -203,8 +203,8 @@ namespace GluePathReadWrite
                 }
             }
 
-            lbPX.Text = (dPictureBoxImageWidth * Convert.ToDouble(e.X) / Convert.ToDouble(pictureBox.Width)).ToString("0.000");
-            lbPY.Text = (dPictureBoxImageHeight * Convert.ToDouble(e.Y) / Convert.ToDouble(pictureBox.Height)).ToString("0.000");
+            lbPX.Text = (Convert.ToDouble(e.X) * dPictureBoxImageWidth / Convert.ToDouble(pictureBox.Width)).ToString("0.000");
+            lbPY.Text = (Convert.ToDouble(e.Y) * dPictureBoxImageHeight / Convert.ToDouble(pictureBox.Height)).ToString("0.000");
         }
 
         private void pictureBox1_MouseDown(object sender, MouseEventArgs e)
@@ -257,7 +257,7 @@ namespace GluePathReadWrite
             }
 
             dBShiftPK = Convert.ToDouble(pictureBox.Image.Width) / Convert.ToDouble(pictureBox.Width);
-            lbK.Text = (1 / dBShiftPK).ToString("0.000");
+            lbZoom.Text = (1 / dBShiftPK).ToString("0.000");
         }
 
         private void LoadToDataGridView(string[] strTxt)
@@ -407,7 +407,7 @@ namespace GluePathReadWrite
 
             int iStandardX = Convert.ToInt32(Convert.ToDouble(tbStandardX.Text) / dBShiftPK);
             int iStandardY = Convert.ToInt32(Convert.ToDouble(tbStandardY.Text) / dBShiftPK);
-            graph.FillEllipse(Brushes.Green, iStandardX - 3, iStandardY - 3, 10, 10);
+            graph.FillEllipse(Brushes.Green, iStandardX - 2, iStandardY - 2, 10, 10);
             //graph.DrawArc(penGreen, iStandardX - 30, iStandardY - 30, 6, 6, 0, 360);
             graph.DrawString("0", new Font("Verdana", 10), new SolidBrush(Color.Green), new PointF(iStandardX, iStandardY - 20));
 
@@ -421,7 +421,7 @@ namespace GluePathReadWrite
                     flag = true;
                     pT.X = Convert.ToInt32((Convert.ToDouble(dataGridView.Rows[i].Cells[3].Value) + Convert.ToDouble(tbStandardX.Text)) / dBShiftPK);
                     pT.Y = Convert.ToInt32((Convert.ToDouble(dataGridView.Rows[i].Cells[4].Value) + Convert.ToDouble(tbStandardY.Text)) / dBShiftPK);
-                    Rectangle ellipse = new Rectangle(pT.X - 3, pT.Y - 3, 10, 10);
+                    Rectangle ellipse = new Rectangle(pT.X - 2, pT.Y - 2, 10, 10);
                     if (!dicGraphics.Keys.Contains(i + "-1")) dicGraphics.Add(i + "-1", ellipse);
                     if (dataGridView.Rows[i].Cells[3].Selected || dataGridView.Rows[i].Cells[4].Selected)
                     {
@@ -438,7 +438,7 @@ namespace GluePathReadWrite
                 {
                     pT.X = Convert.ToInt32((Convert.ToDouble(dataGridView.Rows[i].Cells[6].Value) + Convert.ToDouble(tbStandardX.Text)) / dBShiftPK);
                     pT.Y = Convert.ToInt32((Convert.ToDouble(dataGridView.Rows[i].Cells[7].Value) + Convert.ToDouble(tbStandardY.Text)) / dBShiftPK);
-                    Rectangle ellipse = new Rectangle(pT.X - 3, pT.Y - 3, 10, 10);
+                    Rectangle ellipse = new Rectangle(pT.X - 2, pT.Y - 2, 10, 10);
                     if (!dicGraphics.Keys.Contains(i + (flag ? "-2" : string.Empty))) dicGraphics.Add(i + (flag ? "-2" : string.Empty), ellipse);
                     if (dataGridView.Rows[i].Cells[6].Selected || dataGridView.Rows[i].Cells[7].Selected)
                     {
