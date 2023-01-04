@@ -1,10 +1,10 @@
-﻿using System;
+﻿using GlueReadWrite;
+using System;
 using System.Collections.Generic;
 using System.ComponentModel;
 using System.Data;
 using System.Drawing;
 using System.IO;
-//using System.IO;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
@@ -257,7 +257,7 @@ namespace GluePathReadWrite
                     //dataGridView.Rows[i].Cells[3].Value = Math.Round(e.X * dRatio, 3) - Convert.ToDouble(tbStandardX.Text);
                     //dataGridView.Rows[i].Cells[4].Value = Math.Round(e.Y * dRatio, 3) - Convert.ToDouble(tbStandardY.Text);
 
-                    //if (IsNumberic(dataGridView.Rows[serial].Cells[3].Value) && IsNumberic(dataGridView.Rows[serial].Cells[4].Value))
+                    //if (GluePathForXAndY.IsNumberic(dataGridView.Rows[serial].Cells[3].Value) && GluePathForXAndY.IsNumberic(dataGridView.Rows[serial].Cells[4].Value))
                     //{
                     //    //var transCoordinateMX = xPos + Convert.ToInt32(Convert.ToDouble(tbStandardX.Text) / dRatio);
                     //    //var transCoordinateMY = yPos + Convert.ToInt32(Convert.ToDouble(tbStandardY.Text) / dRatio);
@@ -270,7 +270,7 @@ namespace GluePathReadWrite
                     //    //}
 
                     //}
-                    //if (IsNumberic(dataGridView.Rows[serial].Cells[6].Value) && IsNumberic(dataGridView.Rows[serial].Cells[7].Value))
+                    //if (GluePathForXAndY.IsNumberic(dataGridView.Rows[serial].Cells[6].Value) && GluePathForXAndY.IsNumberic(dataGridView.Rows[serial].Cells[7].Value))
                     //{
                     //    //var transCoordinateTX = xPos + Convert.ToInt32(Convert.ToDouble(tbStandardX.Text) / dRatio);
                     //    //var transCoordinateTY = yPos + Convert.ToInt32(Convert.ToDouble(tbStandardY.Text) / dRatio);
@@ -415,8 +415,8 @@ namespace GluePathReadWrite
                     {
                         if (dataGridView.Rows[i].Cells[1].Value?.ToString() == "Line")
                         {
-                            if (IsNumberic(dataGridView.Rows[i].Cells[6].Value) && IsNumberic(dataGridView.Rows[i].Cells[7].Value) &&
-                                IsNumberic(dataGridView.Rows[i - 1].Cells[6].Value) && IsNumberic(dataGridView.Rows[i - 1].Cells[7].Value))
+                            if (GluePathForXAndY.IsNumberic(dataGridView.Rows[i].Cells[6].Value) && GluePathForXAndY.IsNumberic(dataGridView.Rows[i].Cells[7].Value) &&
+                                GluePathForXAndY.IsNumberic(dataGridView.Rows[i - 1].Cells[6].Value) && GluePathForXAndY.IsNumberic(dataGridView.Rows[i - 1].Cells[7].Value))
                             {
                                 pS.X = Convert.ToInt32((Convert.ToDouble(dataGridView.Rows[i - 1].Cells[6].Value.ToString()) + Convert.ToDouble(tbStandardX.Text)) / _dRatio);
                                 pS.Y = Convert.ToInt32((Convert.ToDouble(dataGridView.Rows[i - 1].Cells[7].Value.ToString()) + Convert.ToDouble(tbStandardY.Text)) / _dRatio);
@@ -434,9 +434,9 @@ namespace GluePathReadWrite
                         }
                         else if (dataGridView.Rows[i].Cells[1].Value?.ToString() == "Arc")
                         {
-                            if (IsNumberic(dataGridView.Rows[i].Cells[3].Value) && IsNumberic(dataGridView.Rows[i].Cells[4].Value) &&
-                                IsNumberic(dataGridView.Rows[i].Cells[6].Value) && IsNumberic(dataGridView.Rows[i].Cells[7].Value) &&
-                                IsNumberic(dataGridView.Rows[i - 1].Cells[6].Value) && IsNumberic(dataGridView.Rows[i - 1].Cells[7].Value))
+                            if (GluePathForXAndY.IsNumberic(dataGridView.Rows[i].Cells[3].Value) && GluePathForXAndY.IsNumberic(dataGridView.Rows[i].Cells[4].Value) &&
+                            GluePathForXAndY.IsNumberic(dataGridView.Rows[i].Cells[6].Value) && GluePathForXAndY.IsNumberic(dataGridView.Rows[i].Cells[7].Value) &&
+                                GluePathForXAndY.IsNumberic(dataGridView.Rows[i - 1].Cells[6].Value) && GluePathForXAndY.IsNumberic(dataGridView.Rows[i - 1].Cells[7].Value))
                             {
                                 pS.X = Convert.ToInt32((Convert.ToDouble(dataGridView.Rows[i - 1].Cells[6].Value.ToString()) + Convert.ToDouble(tbStandardX.Text)) / _dRatio);
                                 pS.Y = Convert.ToInt32((Convert.ToDouble(dataGridView.Rows[i - 1].Cells[7].Value.ToString()) + Convert.ToDouble(tbStandardY.Text)) / _dRatio);
@@ -444,13 +444,14 @@ namespace GluePathReadWrite
                                 pM.Y = Convert.ToInt32((Convert.ToDouble(dataGridView.Rows[i].Cells[4].Value.ToString()) + Convert.ToDouble(tbStandardY.Text)) / _dRatio);
                                 pE.X = Convert.ToInt32((Convert.ToDouble(dataGridView.Rows[i].Cells[6].Value.ToString()) + Convert.ToDouble(tbStandardX.Text)) / _dRatio);
                                 pE.Y = Convert.ToInt32((Convert.ToDouble(dataGridView.Rows[i].Cells[7].Value.ToString()) + Convert.ToDouble(tbStandardY.Text)) / _dRatio);
+                                    float[] drawArc = GluePathForXAndY. DrawArc(pS.X, pS.Y, pM.X, pM.Y, pE.X, pE.Y);
                                 if (dataGridView.Rows[i].Cells[3].Selected || dataGridView.Rows[i].Cells[4].Selected || dataGridView.Rows[i].Cells[6].Selected || dataGridView.Rows[i].Cells[7].Selected)
                                 {
-                                    DrawArc(penBlue, pS.X, pS.Y, pM.X, pM.Y, pE.X, pE.Y);
+                                    graph.DrawArc(penBlue, drawArc[0], drawArc[1], drawArc[2], drawArc[3], drawArc[4], drawArc[5]);
                                 }
                                 else
                                 {
-                                    DrawArc(penRed, pS.X, pS.Y, pM.X, pM.Y, pE.X, pE.Y);
+                                    graph.DrawArc(penRed, drawArc[0], drawArc[1], drawArc[2], drawArc[3], drawArc[4], drawArc[5]);
                                 }
                             }
                         }
@@ -495,19 +496,17 @@ namespace GluePathReadWrite
             graph.FillEllipse(Brushes.Green, _homeRectangle);
             //graph.DrawArc(penGreen, iStandardX - 30, iStandardY - 30, 6, 6, 0, 360);
             graph.DrawString("0", new Font("Verdana", 10), new SolidBrush(Color.Green), new PointF(iStandardX, iStandardY - 20));
-
             Point pT = new Point();
             bool isArc = false;
 
             if (bDrawSingle)
             {
-                if (IsNumberic(dataGridView.Rows[_selectedRow].Cells[_selectedColumn].Value) && IsNumberic(dataGridView.Rows[_selectedRow].Cells[_selectedColumn + 1].Value))
+                if (GluePathForXAndY.IsNumberic(dataGridView.Rows[_selectedRow].Cells[_selectedColumn].Value) && GluePathForXAndY.IsNumberic(dataGridView.Rows[_selectedRow].Cells[_selectedColumn + 1].Value))
                 {
                     int x = Convert.ToInt32(Convert.ToDouble(dataGridView.Rows[_selectedRow].Cells[_selectedColumn].Value));
                     int y = Convert.ToInt32(Convert.ToDouble(dataGridView.Rows[_selectedRow].Cells[_selectedColumn + 1].Value));
                     pT.X = Convert.ToInt32((x + Convert.ToDouble(tbStandardX.Text)) / _dRatio);
                     pT.Y = Convert.ToInt32((y + Convert.ToDouble(tbStandardY.Text)) / _dRatio);
-
                     Rectangle ellipse = new Rectangle(pT.X - 2, pT.Y - 2, 10, 10);
 
                     if (dataGridView.Rows[_selectedRow].Cells[_selectedColumn].Selected || dataGridView.Rows[_selectedRow].Cells[_selectedColumn + 1].Selected)
@@ -523,8 +522,8 @@ namespace GluePathReadWrite
                 for (int i = 0; i < dataGridView.RowCount; i++)
                 {
                     isArc = false;
-                    if (IsNumberic(dataGridView.Rows[i].Cells[3].Value) &&
-                        IsNumberic(dataGridView.Rows[i].Cells[4].Value))
+                    if (GluePathForXAndY.IsNumberic(dataGridView.Rows[i].Cells[3].Value) &&
+                        GluePathForXAndY.IsNumberic(dataGridView.Rows[i].Cells[4].Value))
                     {
                         isArc = true;
                         int mx = Convert.ToInt32(Convert.ToDouble(dataGridView.Rows[i].Cells[3].Value));
@@ -553,8 +552,8 @@ namespace GluePathReadWrite
                         }
                     }
 
-                    if (IsNumberic(dataGridView.Rows[i].Cells[6].Value) &&
-                        IsNumberic(dataGridView.Rows[i].Cells[7].Value))
+                    if (GluePathForXAndY.IsNumberic(dataGridView.Rows[i].Cells[6].Value) &&
+                        GluePathForXAndY.IsNumberic(dataGridView.Rows[i].Cells[7].Value))
                     {
                         int tx = Convert.ToInt32(Convert.ToDouble(dataGridView.Rows[i].Cells[6].Value));
                         int ty = Convert.ToInt32(Convert.ToDouble(dataGridView.Rows[i].Cells[7].Value));
@@ -584,90 +583,6 @@ namespace GluePathReadWrite
                     }
                 }
             }
-        }
-
-        public bool IsNumberic(object obj)
-        {
-            bool isNum;
-            if (obj != null)
-            {
-                isNum = double.TryParse(obj.ToString(), System.Globalization.NumberStyles.Float, System.Globalization.NumberFormatInfo.InvariantInfo, out _);
-            }
-            else
-            {
-                isNum = false;
-            }
-            return isNum;
-        }
-
-        /// <summary>
-        /// 根据三点画圆弧
-        /// </summary>
-        /// <param name="dX1">第一个点的X坐标</param>
-        /// <param name="dY1">第一个点的Y坐标</param>
-        /// <param name="dX2">第二个点的X坐标</param>
-        /// <param name="dY2">第二个点的Y坐标</param>
-        /// <param name="dX3">第三个点的X坐标</param>
-        /// <param name="dY3">第三个点的Y坐标</param>
-        private void DrawArc(Pen pen, double dX1, double dY1, double dX2, double dY2, double dX3, double dY3)
-        {
-            float[] fTemp = GetCircle(dX1, dY1, dX2, dY2, dX3, dY3);
-            double dK1 = ReturnCircleK((float)dX1, (float)dY1, fTemp[0], fTemp[1]);
-            double dK2 = ReturnCircleK((float)dX2, (float)dY2, fTemp[0], fTemp[1]);
-            double dK3 = ReturnCircleK((float)dX3, (float)dY3, fTemp[0], fTemp[1]);
-
-            int startAngle, sweepAngle;
-            if ((dK1 < dK2 && dK3 > dK2) || (dK1 > dK2 && dK3 < dK2))//未横跨X轴正方向
-            {
-                startAngle = (int)(dK1 < dK3 ? dK1 : dK3); //数值较小的为起始点
-                sweepAngle = (int)(dK1 < dK3 ? dK3 : dK1) - (int)(dK1 < dK3 ? dK1 : dK3);
-            }
-            else
-            {
-                startAngle = (int)(dK1 < dK3 ? dK3 : dK1);//数值较大的为起始点
-                sweepAngle = 360 - ((int)(dK1 < dK3 ? dK3 : dK1) - (int)(dK1 < dK3 ? dK1 : dK3));
-            }
-
-            //graph = this.pictureBox.CreateGraphics();
-            graph.DrawArc(pen, fTemp[0] - fTemp[2], fTemp[1] - fTemp[2], Math.Abs(fTemp[2] * 2), Math.Abs(fTemp[2] * 2), startAngle, sweepAngle);
-        }
-
-        /// <summary>
-        /// 根据三点计算并获取圆
-        /// </summary>
-        /// <param name="x1">第一点的X坐标</param>
-        /// <param name="y1">第一点的Y坐标</param>
-        /// <param name="x2">第二点的X坐标</param>
-        /// <param name="y2">第二点的Y坐标</param>
-        /// <param name="x3">第三点的X坐标</param>
-        /// <param name="y3">第三点的Y坐标</param>
-        /// <returns>圆参数float数组：圆心X坐标、圆心Y坐标、圆半径</returns>
-        public float[] GetCircle(double x1, double y1, double x2, double y2, double x3, double y3)
-        {
-            double k1 = (y2 - y1) / (x2 - x1);
-            double k2 = (y3 - y1) / (x3 - x1);
-
-            double xm1 = x1 - ((x1 - x2) / 2);
-            double ym1 = y1 - ((y1 - y2) / 2);
-            double km1 = -(1 / k1);
-            double bm1 = ym1 - (km1 * xm1);
-
-            double xm2 = x1 - ((x1 - x3) / 2);
-            double ym2 = y1 - ((y1 - y3) / 2);
-            double km2 = -(1 / k2);
-            double bm2 = ym2 - (km2 * xm2);
-
-            double xc = (bm2 - bm1) / (km1 - km2);
-            double yc = km1 * xc + bm1;
-            double rc = Math.Sqrt(Math.Pow((x1 - xc), 2) + Math.Pow((y1 - yc), 2));
-            return new float[] { (float)xc, (float)yc, (float)rc };
-        }
-
-        public double ReturnCircleK(float fx1, float fy1, float fx2, float fy2)
-        {
-            double fA = Math.Atan2(fy1 - fy2, fx1 - fx2) / Math.PI * 180;
-            if (fA < 0) fA += 360;
-            return fA;
         }
 
         private void btSaveGluePath_Click(object sender, EventArgs e)

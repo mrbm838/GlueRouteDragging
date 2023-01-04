@@ -33,6 +33,7 @@
             this.cms_SplitContainer = new System.Windows.Forms.ContextMenuStrip(this.components);
             this.ToolStripMenuItem_Fit = new System.Windows.Forms.ToolStripMenuItem();
             this.pictureBox = new System.Windows.Forms.PictureBox();
+            this.cartesianChart1 = new LiveCharts.WinForms.CartesianChart();
             this.lbAlpha = new System.Windows.Forms.Label();
             this.lbGlueWidth = new System.Windows.Forms.Label();
             this.tkBGlueWidth = new System.Windows.Forms.TrackBar();
@@ -57,7 +58,6 @@
             this.ToolStripMenuItem_Insert = new System.Windows.Forms.ToolStripMenuItem();
             this.ToolStripMenuItem_Delete = new System.Windows.Forms.ToolStripMenuItem();
             this.ToolStripMenuItem_Clear = new System.Windows.Forms.ToolStripMenuItem();
-            this.cartesianChart1 = new LiveCharts.WinForms.CartesianChart();
             ((System.ComponentModel.ISupportInitialize)(this.splitContainer1)).BeginInit();
             this.splitContainer1.Panel1.SuspendLayout();
             this.splitContainer1.Panel2.SuspendLayout();
@@ -78,7 +78,7 @@
             // 
             this.splitContainer1.Dock = System.Windows.Forms.DockStyle.Left;
             this.splitContainer1.Location = new System.Drawing.Point(0, 0);
-            this.splitContainer1.Margin = new System.Windows.Forms.Padding(4, 3, 4, 3);
+            this.splitContainer1.Margin = new System.Windows.Forms.Padding(4, 4, 4, 4);
             this.splitContainer1.Name = "splitContainer1";
             // 
             // splitContainer1.Panel1
@@ -92,9 +92,9 @@
             this.splitContainer1.Panel2.BackColor = System.Drawing.Color.FromArgb(((int)(((byte)(192)))), ((int)(((byte)(255)))), ((int)(((byte)(192)))));
             this.splitContainer1.Panel2.Controls.Add(this.cartesianChart1);
             this.splitContainer1.Panel2.Cursor = System.Windows.Forms.Cursors.Arrow;
-            this.splitContainer1.Size = new System.Drawing.Size(1441, 550);
-            this.splitContainer1.SplitterDistance = 728;
-            this.splitContainer1.SplitterWidth = 5;
+            this.splitContainer1.Size = new System.Drawing.Size(1621, 684);
+            this.splitContainer1.SplitterDistance = 818;
+            this.splitContainer1.SplitterWidth = 6;
             this.splitContainer1.TabIndex = 0;
             // 
             // cms_SplitContainer
@@ -104,13 +104,13 @@
             this.cms_SplitContainer.Items.AddRange(new System.Windows.Forms.ToolStripItem[] {
             this.ToolStripMenuItem_Fit});
             this.cms_SplitContainer.Name = "cms_1";
-            this.cms_SplitContainer.Size = new System.Drawing.Size(124, 28);
+            this.cms_SplitContainer.Size = new System.Drawing.Size(135, 34);
             // 
             // ToolStripMenuItem_Fit
             // 
             this.ToolStripMenuItem_Fit.Enabled = false;
             this.ToolStripMenuItem_Fit.Name = "ToolStripMenuItem_Fit";
-            this.ToolStripMenuItem_Fit.Size = new System.Drawing.Size(123, 24);
+            this.ToolStripMenuItem_Fit.Size = new System.Drawing.Size(134, 30);
             this.ToolStripMenuItem_Fit.Text = "自适应";
             this.ToolStripMenuItem_Fit.Click += new System.EventHandler(this.ToolStripMenuItem_Fit_Click);
             // 
@@ -118,81 +118,90 @@
             // 
             this.pictureBox.BackColor = System.Drawing.Color.Black;
             this.pictureBox.ContextMenuStrip = this.cms_SplitContainer;
-            this.pictureBox.Location = new System.Drawing.Point(4, 45);
-            this.pictureBox.Margin = new System.Windows.Forms.Padding(4, 3, 4, 3);
+            this.pictureBox.Location = new System.Drawing.Point(4, 54);
+            this.pictureBox.Margin = new System.Windows.Forms.Padding(4, 4, 4, 4);
             this.pictureBox.Name = "pictureBox";
-            this.pictureBox.Size = new System.Drawing.Size(682, 440);
+            this.pictureBox.Size = new System.Drawing.Size(767, 528);
             this.pictureBox.TabIndex = 0;
             this.pictureBox.TabStop = false;
             this.pictureBox.MouseDown += new System.Windows.Forms.MouseEventHandler(this.pictureBox1_MouseDown);
             this.pictureBox.MouseMove += new System.Windows.Forms.MouseEventHandler(this.pictureBox1_MouseMove);
             this.pictureBox.MouseUp += new System.Windows.Forms.MouseEventHandler(this.pictureBox1_MouseUp);
             // 
+            // cartesianChart1
+            // 
+            this.cartesianChart1.Location = new System.Drawing.Point(3, 35);
+            this.cartesianChart1.Margin = new System.Windows.Forms.Padding(3, 4, 3, 4);
+            this.cartesianChart1.Name = "cartesianChart1";
+            this.cartesianChart1.Size = new System.Drawing.Size(790, 611);
+            this.cartesianChart1.TabIndex = 0;
+            this.cartesianChart1.Text = "cartesianChart1";
+            // 
             // lbAlpha
             // 
             this.lbAlpha.AutoSize = true;
-            this.lbAlpha.Location = new System.Drawing.Point(1702, 369);
+            this.lbAlpha.Location = new System.Drawing.Point(1915, 443);
             this.lbAlpha.Margin = new System.Windows.Forms.Padding(4, 0, 4, 0);
             this.lbAlpha.Name = "lbAlpha";
-            this.lbAlpha.Size = new System.Drawing.Size(15, 15);
+            this.lbAlpha.Size = new System.Drawing.Size(17, 18);
             this.lbAlpha.TabIndex = 34;
             this.lbAlpha.Text = "0";
             // 
             // lbGlueWidth
             // 
             this.lbGlueWidth.AutoSize = true;
-            this.lbGlueWidth.Location = new System.Drawing.Point(1702, 307);
+            this.lbGlueWidth.Location = new System.Drawing.Point(1915, 368);
             this.lbGlueWidth.Margin = new System.Windows.Forms.Padding(4, 0, 4, 0);
             this.lbGlueWidth.Name = "lbGlueWidth";
-            this.lbGlueWidth.Size = new System.Drawing.Size(15, 15);
+            this.lbGlueWidth.Size = new System.Drawing.Size(17, 18);
             this.lbGlueWidth.TabIndex = 33;
             this.lbGlueWidth.Text = "0";
             // 
             // tkBGlueWidth
             // 
-            this.tkBGlueWidth.Location = new System.Drawing.Point(1520, 293);
-            this.tkBGlueWidth.Margin = new System.Windows.Forms.Padding(4, 3, 4, 3);
+            this.tkBGlueWidth.Location = new System.Drawing.Point(1710, 352);
+            this.tkBGlueWidth.Margin = new System.Windows.Forms.Padding(4, 4, 4, 4);
             this.tkBGlueWidth.Name = "tkBGlueWidth";
-            this.tkBGlueWidth.Size = new System.Drawing.Size(173, 56);
+            this.tkBGlueWidth.Size = new System.Drawing.Size(195, 69);
             this.tkBGlueWidth.TabIndex = 32;
             this.tkBGlueWidth.ValueChanged += new System.EventHandler(this.tkbGlueWidth_ValueChanged);
             // 
             // label3
             // 
             this.label3.AutoSize = true;
-            this.label3.Location = new System.Drawing.Point(1460, 369);
+            this.label3.Location = new System.Drawing.Point(1642, 443);
             this.label3.Margin = new System.Windows.Forms.Padding(4, 0, 4, 0);
             this.label3.Name = "label3";
-            this.label3.Size = new System.Drawing.Size(52, 15);
+            this.label3.Size = new System.Drawing.Size(62, 18);
             this.label3.TabIndex = 31;
             this.label3.Text = "透明：";
             // 
             // tkBTransparency
             // 
-            this.tkBTransparency.Location = new System.Drawing.Point(1520, 355);
-            this.tkBTransparency.Margin = new System.Windows.Forms.Padding(4, 3, 4, 3);
+            this.tkBTransparency.Location = new System.Drawing.Point(1710, 426);
+            this.tkBTransparency.Margin = new System.Windows.Forms.Padding(4, 4, 4, 4);
             this.tkBTransparency.Name = "tkBTransparency";
-            this.tkBTransparency.Size = new System.Drawing.Size(173, 56);
+            this.tkBTransparency.Size = new System.Drawing.Size(195, 69);
             this.tkBTransparency.TabIndex = 30;
             this.tkBTransparency.ValueChanged += new System.EventHandler(this.tkBTransparency_ValueChanged);
             // 
             // label1
             // 
             this.label1.AutoSize = true;
-            this.label1.Location = new System.Drawing.Point(1460, 307);
+            this.label1.Location = new System.Drawing.Point(1642, 368);
             this.label1.Margin = new System.Windows.Forms.Padding(4, 0, 4, 0);
             this.label1.Name = "label1";
-            this.label1.Size = new System.Drawing.Size(52, 15);
+            this.label1.Size = new System.Drawing.Size(62, 18);
             this.label1.TabIndex = 27;
             this.label1.Text = "胶宽：";
             // 
             // tbPath
             // 
-            this.tbPath.Location = new System.Drawing.Point(1449, 110);
-            this.tbPath.Margin = new System.Windows.Forms.Padding(4, 3, 4, 3);
+            this.tbPath.Location = new System.Drawing.Point(1630, 132);
+            this.tbPath.Margin = new System.Windows.Forms.Padding(4, 4, 4, 4);
             this.tbPath.Multiline = true;
             this.tbPath.Name = "tbPath";
-            this.tbPath.Size = new System.Drawing.Size(311, 28);
+            this.tbPath.Size = new System.Drawing.Size(349, 33);
             this.tbPath.TabIndex = 23;
             // 
             // btOpenGluePath
@@ -201,10 +210,10 @@
             this.btOpenGluePath.BackgroundImageLayout = System.Windows.Forms.ImageLayout.Stretch;
             this.btOpenGluePath.FlatAppearance.BorderSize = 0;
             this.btOpenGluePath.FlatStyle = System.Windows.Forms.FlatStyle.Flat;
-            this.btOpenGluePath.Location = new System.Drawing.Point(1495, 29);
-            this.btOpenGluePath.Margin = new System.Windows.Forms.Padding(4, 3, 4, 3);
+            this.btOpenGluePath.Location = new System.Drawing.Point(1682, 35);
+            this.btOpenGluePath.Margin = new System.Windows.Forms.Padding(4, 4, 4, 4);
             this.btOpenGluePath.Name = "btOpenGluePath";
-            this.btOpenGluePath.Size = new System.Drawing.Size(67, 62);
+            this.btOpenGluePath.Size = new System.Drawing.Size(75, 74);
             this.btOpenGluePath.TabIndex = 22;
             this.btOpenGluePath.UseVisualStyleBackColor = true;
             this.btOpenGluePath.Click += new System.EventHandler(this.btOpenGluePath_Click);
@@ -212,20 +221,20 @@
             // label6
             // 
             this.label6.AutoSize = true;
-            this.label6.Location = new System.Drawing.Point(1460, 245);
+            this.label6.Location = new System.Drawing.Point(1642, 294);
             this.label6.Margin = new System.Windows.Forms.Padding(4, 0, 4, 0);
             this.label6.Name = "label6";
-            this.label6.Size = new System.Drawing.Size(52, 15);
+            this.label6.Size = new System.Drawing.Size(62, 18);
             this.label6.TabIndex = 21;
             this.label6.Text = "缩放：";
             // 
             // lbZoom
             // 
             this.lbZoom.AutoSize = true;
-            this.lbZoom.Location = new System.Drawing.Point(1547, 245);
+            this.lbZoom.Location = new System.Drawing.Point(1740, 294);
             this.lbZoom.Margin = new System.Windows.Forms.Padding(4, 0, 4, 0);
             this.lbZoom.Name = "lbZoom";
-            this.lbZoom.Size = new System.Drawing.Size(15, 15);
+            this.lbZoom.Size = new System.Drawing.Size(17, 18);
             this.lbZoom.TabIndex = 20;
             this.lbZoom.Text = "1";
             // 
@@ -235,75 +244,75 @@
             this.btSaveGluePath.BackgroundImageLayout = System.Windows.Forms.ImageLayout.Stretch;
             this.btSaveGluePath.FlatAppearance.BorderSize = 0;
             this.btSaveGluePath.FlatStyle = System.Windows.Forms.FlatStyle.Flat;
-            this.btSaveGluePath.Location = new System.Drawing.Point(1650, 29);
-            this.btSaveGluePath.Margin = new System.Windows.Forms.Padding(4, 3, 4, 3);
+            this.btSaveGluePath.Location = new System.Drawing.Point(1856, 35);
+            this.btSaveGluePath.Margin = new System.Windows.Forms.Padding(4, 4, 4, 4);
             this.btSaveGluePath.Name = "btSaveGluePath";
-            this.btSaveGluePath.Size = new System.Drawing.Size(67, 62);
+            this.btSaveGluePath.Size = new System.Drawing.Size(75, 74);
             this.btSaveGluePath.TabIndex = 17;
             this.btSaveGluePath.UseVisualStyleBackColor = true;
             this.btSaveGluePath.Click += new System.EventHandler(this.btSaveGluePath_Click);
             // 
             // tbStandardY
             // 
-            this.tbStandardY.Location = new System.Drawing.Point(1625, 432);
-            this.tbStandardY.Margin = new System.Windows.Forms.Padding(4, 3, 4, 3);
+            this.tbStandardY.Location = new System.Drawing.Point(1828, 518);
+            this.tbStandardY.Margin = new System.Windows.Forms.Padding(4, 4, 4, 4);
             this.tbStandardY.Name = "tbStandardY";
-            this.tbStandardY.Size = new System.Drawing.Size(68, 25);
+            this.tbStandardY.Size = new System.Drawing.Size(76, 28);
             this.tbStandardY.TabIndex = 15;
             // 
             // tbStandardX
             // 
-            this.tbStandardX.Location = new System.Drawing.Point(1533, 432);
-            this.tbStandardX.Margin = new System.Windows.Forms.Padding(4, 3, 4, 3);
+            this.tbStandardX.Location = new System.Drawing.Point(1725, 518);
+            this.tbStandardX.Margin = new System.Windows.Forms.Padding(4, 4, 4, 4);
             this.tbStandardX.Name = "tbStandardX";
-            this.tbStandardX.Size = new System.Drawing.Size(68, 25);
+            this.tbStandardX.Size = new System.Drawing.Size(76, 28);
             this.tbStandardX.TabIndex = 14;
             // 
             // label4
             // 
             this.label4.AutoSize = true;
-            this.label4.Location = new System.Drawing.Point(1460, 432);
+            this.label4.Location = new System.Drawing.Point(1642, 518);
             this.label4.Margin = new System.Windows.Forms.Padding(4, 0, 4, 0);
             this.label4.Name = "label4";
-            this.label4.Size = new System.Drawing.Size(52, 15);
+            this.label4.Size = new System.Drawing.Size(62, 18);
             this.label4.TabIndex = 13;
             this.label4.Text = "基准：";
             // 
             // lbPY
             // 
             this.lbPY.AutoSize = true;
-            this.lbPY.Location = new System.Drawing.Point(1622, 182);
+            this.lbPY.Location = new System.Drawing.Point(1825, 218);
             this.lbPY.Margin = new System.Windows.Forms.Padding(4, 0, 4, 0);
             this.lbPY.Name = "lbPY";
-            this.lbPY.Size = new System.Drawing.Size(15, 15);
+            this.lbPY.Size = new System.Drawing.Size(17, 18);
             this.lbPY.TabIndex = 7;
             this.lbPY.Text = "0";
             // 
             // lbPX
             // 
             this.lbPX.AutoSize = true;
-            this.lbPX.Location = new System.Drawing.Point(1547, 182);
+            this.lbPX.Location = new System.Drawing.Point(1740, 218);
             this.lbPX.Margin = new System.Windows.Forms.Padding(4, 0, 4, 0);
             this.lbPX.Name = "lbPX";
-            this.lbPX.Size = new System.Drawing.Size(15, 15);
+            this.lbPX.Size = new System.Drawing.Size(17, 18);
             this.lbPX.TabIndex = 6;
             this.lbPX.Text = "0";
             // 
             // label2
             // 
             this.label2.AutoSize = true;
-            this.label2.Location = new System.Drawing.Point(1460, 182);
+            this.label2.Location = new System.Drawing.Point(1642, 218);
             this.label2.Margin = new System.Windows.Forms.Padding(4, 0, 4, 0);
             this.label2.Name = "label2";
-            this.label2.Size = new System.Drawing.Size(52, 15);
+            this.label2.Size = new System.Drawing.Size(62, 18);
             this.label2.TabIndex = 5;
             this.label2.Text = "坐标：";
             // 
             // splitContainer2
             // 
             this.splitContainer2.Dock = System.Windows.Forms.DockStyle.Bottom;
-            this.splitContainer2.Location = new System.Drawing.Point(0, -76);
-            this.splitContainer2.Margin = new System.Windows.Forms.Padding(4, 3, 4, 3);
+            this.splitContainer2.Location = new System.Drawing.Point(0, 6);
+            this.splitContainer2.Margin = new System.Windows.Forms.Padding(4, 4, 4, 4);
             this.splitContainer2.Name = "splitContainer2";
             this.splitContainer2.Orientation = System.Windows.Forms.Orientation.Horizontal;
             // 
@@ -331,9 +340,9 @@
             // splitContainer2.Panel2
             // 
             this.splitContainer2.Panel2.Controls.Add(this.dataGridView);
-            this.splitContainer2.Size = new System.Drawing.Size(1782, 879);
-            this.splitContainer2.SplitterDistance = 550;
-            this.splitContainer2.SplitterWidth = 5;
+            this.splitContainer2.Size = new System.Drawing.Size(2005, 1055);
+            this.splitContainer2.SplitterDistance = 684;
+            this.splitContainer2.SplitterWidth = 6;
             this.splitContainer2.TabIndex = 1;
             // 
             // dataGridView
@@ -342,11 +351,11 @@
             this.dataGridView.ContextMenuStrip = this.cms_DataGridView;
             this.dataGridView.Dock = System.Windows.Forms.DockStyle.Fill;
             this.dataGridView.Location = new System.Drawing.Point(0, 0);
-            this.dataGridView.Margin = new System.Windows.Forms.Padding(4, 3, 4, 3);
+            this.dataGridView.Margin = new System.Windows.Forms.Padding(4, 4, 4, 4);
             this.dataGridView.Name = "dataGridView";
             this.dataGridView.RowHeadersWidth = 60;
             this.dataGridView.RowTemplate.Height = 23;
-            this.dataGridView.Size = new System.Drawing.Size(1782, 324);
+            this.dataGridView.Size = new System.Drawing.Size(2005, 365);
             this.dataGridView.TabIndex = 5;
             this.dataGridView.CellClick += new System.Windows.Forms.DataGridViewCellEventHandler(this.dataGridView_CellClick);
             // 
@@ -359,51 +368,43 @@
             this.ToolStripMenuItem_Delete,
             this.ToolStripMenuItem_Clear});
             this.cms_DataGridView.Name = "cms_DataGridView";
-            this.cms_DataGridView.Size = new System.Drawing.Size(139, 100);
+            this.cms_DataGridView.Size = new System.Drawing.Size(153, 124);
             // 
             // ToolStripMenuItem_Append
             // 
             this.ToolStripMenuItem_Append.Name = "ToolStripMenuItem_Append";
-            this.ToolStripMenuItem_Append.Size = new System.Drawing.Size(138, 24);
+            this.ToolStripMenuItem_Append.Size = new System.Drawing.Size(152, 30);
             this.ToolStripMenuItem_Append.Text = "追加行";
             this.ToolStripMenuItem_Append.Click += new System.EventHandler(this.ToolStripMenuItem_Append_Click);
             // 
             // ToolStripMenuItem_Insert
             // 
             this.ToolStripMenuItem_Insert.Name = "ToolStripMenuItem_Insert";
-            this.ToolStripMenuItem_Insert.Size = new System.Drawing.Size(138, 24);
+            this.ToolStripMenuItem_Insert.Size = new System.Drawing.Size(152, 30);
             this.ToolStripMenuItem_Insert.Text = "插入行";
             this.ToolStripMenuItem_Insert.Click += new System.EventHandler(this.ToolStripMenuItem_Insert_Click);
             // 
             // ToolStripMenuItem_Delete
             // 
             this.ToolStripMenuItem_Delete.Name = "ToolStripMenuItem_Delete";
-            this.ToolStripMenuItem_Delete.Size = new System.Drawing.Size(138, 24);
+            this.ToolStripMenuItem_Delete.Size = new System.Drawing.Size(152, 30);
             this.ToolStripMenuItem_Delete.Text = "删除行";
             this.ToolStripMenuItem_Delete.Click += new System.EventHandler(this.ToolStripMenuItem_Delete_Click);
             // 
             // ToolStripMenuItem_Clear
             // 
             this.ToolStripMenuItem_Clear.Name = "ToolStripMenuItem_Clear";
-            this.ToolStripMenuItem_Clear.Size = new System.Drawing.Size(138, 24);
+            this.ToolStripMenuItem_Clear.Size = new System.Drawing.Size(152, 30);
             this.ToolStripMenuItem_Clear.Text = "清除胶路";
             this.ToolStripMenuItem_Clear.Click += new System.EventHandler(this.ToolStripMenuItem_Clear_Click);
             // 
-            // cartesianChart1
-            // 
-            this.cartesianChart1.Location = new System.Drawing.Point(3, 29);
-            this.cartesianChart1.Name = "cartesianChart1";
-            this.cartesianChart1.Size = new System.Drawing.Size(702, 509);
-            this.cartesianChart1.TabIndex = 0;
-            this.cartesianChart1.Text = "cartesianChart1";
-            // 
             // Form_GluePath
             // 
-            this.AutoScaleDimensions = new System.Drawing.SizeF(8F, 15F);
+            this.AutoScaleDimensions = new System.Drawing.SizeF(9F, 18F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
-            this.ClientSize = new System.Drawing.Size(1782, 803);
+            this.ClientSize = new System.Drawing.Size(2005, 1061);
             this.Controls.Add(this.splitContainer2);
-            this.Margin = new System.Windows.Forms.Padding(4, 3, 4, 3);
+            this.Margin = new System.Windows.Forms.Padding(4, 4, 4, 4);
             this.Name = "Form_GluePath";
             this.Text = "Form1";
             this.Load += new System.EventHandler(this.Form_GluePath_Load);

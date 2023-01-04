@@ -67,6 +67,8 @@
     <Compile Include="Form_GluePath.Designer.cs">
       <DependentUpon>Form_GluePath.cs</DependentUpon>
     </Compile>
+    <Compile Include="GluePathForXAndY.cs" />
+    <Compile Include="GluePathForZ.cs" />
     <Compile Include="Program.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
     <EmbeddedResource Include="Form_GluePath.resx">
