@@ -9,6 +9,7 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 using System.Windows.Forms;
+using System.Windows.Forms.DataVisualization.Charting;
 
 namespace GluePathReadWrite
 {
@@ -41,6 +42,13 @@ namespace GluePathReadWrite
 
         private int _selectedRow;
         private int _selectedColumn;
+
+        private List<Coordination> _listCoorXAndZ = new List<Coordination>();
+        private List<Coordination> _listCoorYAndZ = new List<Coordination>();
+        private List<Series> _listSeries = new List<Series>();
+
+        private Series _seriesX;
+        private Series _seriesY;
 
         public Form_GluePath()
         {
@@ -78,6 +86,98 @@ namespace GluePathReadWrite
             tkBTransparency.TickFrequency = 25;
             tkBTransparency.SmallChange = 1;
             tkBTransparency.Value = 255;
+
+            chart.ChartAreas[0].AxisX.TitleFont = new Font("宋体", 10);
+            chart.ChartAreas[0].AxisY.TitleFont = new Font("宋体", 10);
+            chart.ChartAreas[0].AxisX.Title = "X轴坐标";
+            chart.ChartAreas[0].AxisY.Title = "Z轴坐标";
+            chart.ChartAreas[0].Area3DStyle.Enable3D = true;
+            chart.Series.Clear();
+            chart.Legends.Clear();
+            _seriesX = new Series
+            {
+                ChartType = SeriesChartType.Spline,
+                Color = Color.Maroon,
+                XValueMember = "CoorX",
+                YValueMembers = "CoorZ",
+                MarkerSize = 8,
+                MarkerBorderColor = Color.Black,
+                MarkerColor = Color.Red,
+                MarkerStyle = MarkerStyle.Circle,
+                BorderWidth = Convert.ToInt32(Math.Log(2, tkBGlueWidth.Value)),
+                IsValueShownAsLabel = true
+            };
+
+            #region MyRegion
+
+            tbPath.Text = @"E:\2169\胶路拖拽\GlueReadWrite\bin\Debug\File\GluePath.txt";
+            LoadToDataGridView(ReadGluePathFile(tbPath.Text));
+            DrawGUIPoint(true);
+            DrawGUILine();
+
+            LoadChartData();
+
+            #endregion
+        }
+
+        private void LoadChartData()
+        {
+            chart.Series.Clear();
+            //_seriesX.Points.Clear();
+            FlashCoordinationList();
+            chart.DataSource = _listCoorXAndZ;
+            //_listSeries.ForEach(t => chart.Series.Add(t));
+            //seriesX.BorderDashStyle = ChartDashStyle.Solid;
+            //seriesX.BorderColor = Color.Red;
+            chart.Series.Clear();
+            chart.Series.Add(_seriesX);
+        }
+
+        private void FlashCoordinationList()
+        {
+            _listCoorXAndZ.Clear();
+            _listCoorYAndZ.Clear();
+            for (int i = 0; i < dataGridView.Rows.Count; i++)
+            {
+                if (dataGridView.Rows[i].Cells[1].Value.ToString() == EnumLineType.Line.ToString())
+                {
+                    _listCoorXAndZ.Add(new Coordination
+                    {
+                        CoorX = Convert.ToDouble(dataGridView.Rows[i].Cells[6].Value),
+                        CoorZ = Convert.ToDouble(dataGridView.Rows[i].Cells[8].Value)
+                    });
+                    _listCoorYAndZ.Add(new Coordination
+                    {
+                        CoorY = Convert.ToDouble(dataGridView.Rows[i].Cells[7].Value),
+                        CoorZ = Convert.ToDouble(dataGridView.Rows[i].Cells[8].Value)
+                    });
+                }
+                else
+                {
+                    _listCoorXAndZ.AddRange(new[]{
+                        new Coordination()
+                    {
+                        CoorX = Convert.ToDouble(dataGridView.Rows[i].Cells[3].Value),
+                        CoorZ = Convert.ToDouble(dataGridView.Rows[i].Cells[5].Value)
+                    },
+                        new Coordination()
+                    {
+                        CoorX = Convert.ToDouble(dataGridView.Rows[i].Cells[6].Value),
+                        CoorZ = Convert.ToDouble(dataGridView.Rows[i].Cells[8].Value)
+                    }});
+                    _listCoorYAndZ.AddRange(new[]{
+                        new Coordination()
+                    {
+                        CoorY = Convert.ToDouble(dataGridView.Rows[i].Cells[4].Value),
+                        CoorZ = Convert.ToDouble(dataGridView.Rows[i].Cells[5].Value)
+                    },
+                        new Coordination()
+                    {
+                        CoorY = Convert.ToDouble(dataGridView.Rows[i].Cells[7].Value),
+                        CoorZ = Convert.ToDouble(dataGridView.Rows[i].Cells[8].Value)
+                    }});
+                }
+            }
         }
 
         private void btOpenGluePath_Click(object sender, EventArgs e)
@@ -89,6 +189,8 @@ namespace GluePathReadWrite
                 LoadToDataGridView(ReadGluePathFile(strFilePath));
                 DrawGUIPoint(true);
                 DrawGUILine();
+
+                LoadChartData();
             }
         }
 
@@ -111,17 +213,17 @@ namespace GluePathReadWrite
 
         public static Bitmap ReadImageFile(string path)
         {
-            System.IO.FileStream fs = System.IO.File.OpenRead(path);
-            int filelength = (int)fs.Length; //获得文件长度 
-            Byte[] image = new Byte[filelength]; //建立一个字节数组 
-            fs.Read(image, 0, filelength); //按字节流读取 
-            System.Drawing.Image result = System.Drawing.Image.FromStream(fs);
+            FileStream fs = File.OpenRead(path);
+            int fileLength = (int)fs.Length; //获得文件长度 
+            byte[] image = new byte[fileLength]; //建立一个字节数组 
+            fs.Read(image, 0, fileLength); //按字节流读取 
+            Image result = Image.FromStream(fs);
             fs.Close();
             Bitmap bit = new Bitmap(result);
             return bit;
         }
 
-        private void pbxDrawing_MouseWheel(object sender, System.Windows.Forms.MouseEventArgs e)
+        private void pbxDrawing_MouseWheel(object sender, MouseEventArgs e)
         {
             try
             {
@@ -217,9 +319,10 @@ namespace GluePathReadWrite
         private void pictureBox1_MouseDown(object sender, MouseEventArgs e)
         {
             dataGridView.ClearSelection();
-            if (e.Button == MouseButtons.Middle || e.Button == MouseButtons.Left)
+            if (e.Button == MouseButtons.Right || e.Button == MouseButtons.Left)
             {
                 this.pictureBox.Focus();
+                this.Cursor = Cursors.Cross;
                 bMoveFlag = true;
                 xPos = e.X;
                 yPos = e.Y;
@@ -292,12 +395,15 @@ namespace GluePathReadWrite
             }
         }
 
-        private void ToolStripMenuItem_Fit_Click(object sender, EventArgs e)
+        private void ToolStripMenuItem_Fit_Click(object sender, MouseEventArgs e)
         {
-            SetPictureBox();
-            dMultiplyingG = 1;
-            DrawGUIPoint(true);
-            DrawGUILine();
+            if (e.Button == MouseButtons.Right)
+            {
+                SetPictureBox();
+                dMultiplyingG = 1;
+                DrawGUIPoint(true);
+                DrawGUILine();
+            }
         }
 
         private void SetPictureBox()
@@ -444,7 +550,7 @@ namespace GluePathReadWrite
                                 pM.Y = Convert.ToInt32((Convert.ToDouble(dataGridView.Rows[i].Cells[4].Value.ToString()) + Convert.ToDouble(tbStandardY.Text)) / _dRatio);
                                 pE.X = Convert.ToInt32((Convert.ToDouble(dataGridView.Rows[i].Cells[6].Value.ToString()) + Convert.ToDouble(tbStandardX.Text)) / _dRatio);
                                 pE.Y = Convert.ToInt32((Convert.ToDouble(dataGridView.Rows[i].Cells[7].Value.ToString()) + Convert.ToDouble(tbStandardY.Text)) / _dRatio);
-                                    float[] drawArc = GluePathForXAndY. DrawArc(pS.X, pS.Y, pM.X, pM.Y, pE.X, pE.Y);
+                                float[] drawArc = GluePathForXAndY.DrawArc(pS.X, pS.Y, pM.X, pM.Y, pE.X, pE.Y);
                                 if (dataGridView.Rows[i].Cells[3].Selected || dataGridView.Rows[i].Cells[4].Selected || dataGridView.Rows[i].Cells[6].Selected || dataGridView.Rows[i].Cells[7].Selected)
                                 {
                                     graph.DrawArc(penBlue, drawArc[0], drawArc[1], drawArc[2], drawArc[3], drawArc[4], drawArc[5]);
@@ -757,6 +863,34 @@ namespace GluePathReadWrite
             pictureBox.Refresh();
             DrawGUIPoint(false);
             DrawGUILine();
+        }
+
+        private void chart_MouseDown(object sender, MouseEventArgs e)
+        {
+            //LoadChartData();
+            //this.chart1.Series[0].Points[0].Color=颜色；
+        }
+
+        private void chart_MouseMove(object sender, MouseEventArgs e)
+        {
+            lbCX.Text = e.X.ToString();
+            lbCY.Text = e.Y.ToString();
+
+        }
+
+        private void chart_GetToolTipText(object sender, ToolTipEventArgs e)
+        {
+            if (e.HitTestResult.ChartElementType == ChartElementType.DataPoint)
+            {
+                this.Cursor = Cursors.Cross;
+                int index = e.HitTestResult.PointIndex;
+                DataPoint dataPoint = e.HitTestResult.Series.Points[index];
+                e.Text = $"({dataPoint.XValue}_{dataPoint.YValues[0]})";
+            }
+            else
+            {
+                this.Cursor = Cursors.Default;
+            }
         }
     }
 }
