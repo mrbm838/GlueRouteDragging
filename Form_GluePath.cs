@@ -91,7 +91,7 @@ namespace GluePathReadWrite
             chart.ChartAreas[0].AxisY.TitleFont = new Font("宋体", 10);
             chart.ChartAreas[0].AxisX.Title = "X轴坐标";
             chart.ChartAreas[0].AxisY.Title = "Z轴坐标";
-            chart.ChartAreas[0].Area3DStyle.Enable3D = true;
+            //chart.ChartAreas[0].Area3DStyle.Enable3D = true;
             chart.Series.Clear();
             chart.Legends.Clear();
             _seriesX = new Series
@@ -105,12 +105,14 @@ namespace GluePathReadWrite
                 MarkerColor = Color.Red,
                 MarkerStyle = MarkerStyle.Circle,
                 BorderWidth = Convert.ToInt32(Math.Log(2, tkBGlueWidth.Value)),
-                IsValueShownAsLabel = true
+                //IsValueShownAsLabel = true
+                //Label = "sfa"
             };
+
 
             #region MyRegion
 
-            tbPath.Text = @"E:\2169\胶路拖拽\GlueReadWrite\bin\Debug\File\GluePath.txt";
+            tbPath.Text = @"E:\Cowain\2169\GlueReadWrite\bin\Debug\File\GluePath.txt";//@"E:\2169\胶路拖拽\GlueReadWrite\bin\Debug\File\GluePath.txt";
             LoadToDataGridView(ReadGluePathFile(tbPath.Text));
             DrawGUIPoint(true);
             DrawGUILine();
@@ -124,13 +126,21 @@ namespace GluePathReadWrite
         {
             chart.Series.Clear();
             //_seriesX.Points.Clear();
+            //chart.ChartAreas[0].AxisX.Maximum = _listCoorXAndZ.Find(t =>    )
             FlashCoordinationList();
-            chart.DataSource = _listCoorXAndZ;
+            //chart.DataSource = _listCoorXAndZ;C# chart获取绘制完成的信号
+            for (int i = 0; i < _listCoorXAndZ.Count; i++)
+            {
+                _seriesX.Points.AddXY(_listCoorXAndZ[i].CoorX, _listCoorXAndZ[i].CoorY);
+                _seriesX.Points[i].Label = _listCoorXAndZ[i].strLabel;
+            }
+            chart.Series.Add(_seriesX);
             //_listSeries.ForEach(t => chart.Series.Add(t));
             //seriesX.BorderDashStyle = ChartDashStyle.Solid;
             //seriesX.BorderColor = Color.Red;
-            chart.Series.Clear();
-            chart.Series.Add(_seriesX);
+
+            //int idx = _form.chart1.Series["Series1"].Points.AddY(heightDouble);
+            //chart.Series["Series1"].Points[9].Label = ...;
         }
 
         private void FlashCoordinationList()
@@ -144,38 +154,44 @@ namespace GluePathReadWrite
                     _listCoorXAndZ.Add(new Coordination
                     {
                         CoorX = Convert.ToDouble(dataGridView.Rows[i].Cells[6].Value),
-                        CoorZ = Convert.ToDouble(dataGridView.Rows[i].Cells[8].Value)
+                        CoorZ = Convert.ToDouble(dataGridView.Rows[i].Cells[8].Value),
+                        strLabel = (i + 1).ToString()
                     });
                     _listCoorYAndZ.Add(new Coordination
                     {
                         CoorY = Convert.ToDouble(dataGridView.Rows[i].Cells[7].Value),
-                        CoorZ = Convert.ToDouble(dataGridView.Rows[i].Cells[8].Value)
+                        CoorZ = Convert.ToDouble(dataGridView.Rows[i].Cells[8].Value),
+                        strLabel = (i + 1).ToString()
                     });
                 }
                 else
                 {
                     _listCoorXAndZ.AddRange(new[]{
-                        new Coordination()
-                    {
-                        CoorX = Convert.ToDouble(dataGridView.Rows[i].Cells[3].Value),
-                        CoorZ = Convert.ToDouble(dataGridView.Rows[i].Cells[5].Value)
-                    },
-                        new Coordination()
-                    {
-                        CoorX = Convert.ToDouble(dataGridView.Rows[i].Cells[6].Value),
-                        CoorZ = Convert.ToDouble(dataGridView.Rows[i].Cells[8].Value)
-                    }});
+                        new Coordination
+                        {
+                            CoorX = Convert.ToDouble(dataGridView.Rows[i].Cells[3].Value),
+                            CoorZ = Convert.ToDouble(dataGridView.Rows[i].Cells[5].Value),
+                            strLabel = $"{i + 1}_1"
+                        },
+                        new Coordination
+                        {
+                            CoorX = Convert.ToDouble(dataGridView.Rows[i].Cells[6].Value),
+                            CoorZ = Convert.ToDouble(dataGridView.Rows[i].Cells[8].Value),
+                            strLabel = $"{i + 1}_1"
+                        }});
                     _listCoorYAndZ.AddRange(new[]{
-                        new Coordination()
-                    {
-                        CoorY = Convert.ToDouble(dataGridView.Rows[i].Cells[4].Value),
-                        CoorZ = Convert.ToDouble(dataGridView.Rows[i].Cells[5].Value)
-                    },
-                        new Coordination()
-                    {
-                        CoorY = Convert.ToDouble(dataGridView.Rows[i].Cells[7].Value),
-                        CoorZ = Convert.ToDouble(dataGridView.Rows[i].Cells[8].Value)
-                    }});
+                        new Coordination
+                        {
+                            CoorY = Convert.ToDouble(dataGridView.Rows[i].Cells[4].Value),
+                            CoorZ = Convert.ToDouble(dataGridView.Rows[i].Cells[5].Value),
+                            strLabel = $"{i + 1}_2"
+                        },
+                        new Coordination
+                        {
+                            CoorY = Convert.ToDouble(dataGridView.Rows[i].Cells[7].Value),
+                            CoorZ = Convert.ToDouble(dataGridView.Rows[i].Cells[8].Value),
+                            strLabel = $"{i + 1}_2"
+                        }});
                 }
             }
         }

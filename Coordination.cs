@@ -13,5 +13,7 @@ namespace GlueReadWrite
         public double CoorY { get; set; }
 
         public double CoorZ { get; set; }
+
+        public string strLabel { get; set; }
     }
 }
