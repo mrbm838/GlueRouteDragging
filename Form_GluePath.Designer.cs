@@ -62,6 +62,8 @@
             this.ToolStripMenuItem_Insert = new System.Windows.Forms.ToolStripMenuItem();
             this.ToolStripMenuItem_Delete = new System.Windows.Forms.ToolStripMenuItem();
             this.ToolStripMenuItem_Clear = new System.Windows.Forms.ToolStripMenuItem();
+            this.checkBox1 = new System.Windows.Forms.CheckBox();
+            this.textBox1 = new System.Windows.Forms.TextBox();
             ((System.ComponentModel.ISupportInitialize)(this.splitContainer1)).BeginInit();
             this.splitContainer1.Panel1.SuspendLayout();
             this.splitContainer1.Panel2.SuspendLayout();
@@ -317,6 +319,8 @@
             // 
             // splitContainer2.Panel1
             // 
+            this.splitContainer2.Panel1.Controls.Add(this.textBox1);
+            this.splitContainer2.Panel1.Controls.Add(this.checkBox1);
             this.splitContainer2.Panel1.Controls.Add(this.label5);
             this.splitContainer2.Panel1.Controls.Add(this.lbCX);
             this.splitContainer2.Panel1.Controls.Add(this.lbCY);
@@ -430,6 +434,23 @@
             this.ToolStripMenuItem_Clear.Text = "清除胶路";
             this.ToolStripMenuItem_Clear.Click += new System.EventHandler(this.ToolStripMenuItem_Clear_Click);
             // 
+            // checkBox1
+            // 
+            this.checkBox1.AutoSize = true;
+            this.checkBox1.Location = new System.Drawing.Point(1384, 510);
+            this.checkBox1.Name = "checkBox1";
+            this.checkBox1.Size = new System.Drawing.Size(101, 19);
+            this.checkBox1.TabIndex = 38;
+            this.checkBox1.Text = "checkBox1";
+            this.checkBox1.UseVisualStyleBackColor = true;
+            // 
+            // textBox1
+            // 
+            this.textBox1.Location = new System.Drawing.Point(1515, 510);
+            this.textBox1.Name = "textBox1";
+            this.textBox1.Size = new System.Drawing.Size(109, 25);
+            this.textBox1.TabIndex = 39;
+            // 
             // Form_GluePath
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(120F, 120F);
@@ -492,6 +513,8 @@
         private System.Windows.Forms.Label label5;
         private System.Windows.Forms.Label lbCX;
         private System.Windows.Forms.Label lbCY;
+        private System.Windows.Forms.TextBox textBox1;
+        private System.Windows.Forms.CheckBox checkBox1;
     }
 }
 

@@ -4,6 +4,7 @@ using System.Collections.Generic;
 using System.ComponentModel;
 using System.Data;
 using System.Drawing;
+using System.Globalization;
 using System.IO;
 using System.Linq;
 using System.Runtime.InteropServices;
@@ -21,6 +22,8 @@ namespace GluePathReadWrite
 
     public partial class Form_GluePath : Form
     {
+        
+
         int xPos;
         int yPos;
         bool bMoveFlag;
@@ -61,6 +64,8 @@ namespace GluePathReadWrite
 
         private void Form_GluePath_Load(object sender, EventArgs e)
         {
+            textBox1.AutoSize = false;
+
             Bitmap bmp = ReadImageFile(Application.StartupPath + @"\File\glue.BMP");
             pictureBox.Image = bmp;
             pictureBox.SizeMode = PictureBoxSizeMode.Zoom;
@@ -105,21 +110,19 @@ namespace GluePathReadWrite
 
         private void DrawChartLine()
         {
-            chart.Series.Clear();
-            //_seriesX.Points.Clear();
+            chart.Series.Clear();       // Clear series in "chart"
+            _seriesX.Points.Clear();    // Clear points in "_seriesX"
             //chart.ChartAreas[0].AxisX.Maximum = _listCoorXAndZ.Find(t =>    )
-            FlashCoordinationList();
-
-            chart.Series.Add(_seriesX);
             //_listSeries.ForEach(t => chart.Series.Add(t));
-            
+            FlashCoordinationList();
+            chart.Series.Add(_seriesX);
+
             //chart.DataSource = _listCoorXAndZ;//C# chart获取绘制完成的信号
             for (int i = 0; i < _listCoorXAndZ.Count; i++)
             {
                 _seriesX.Points.AddXY(_listCoorXAndZ[i].CoorX, _listCoorXAndZ[i].CoorZ);
                 _seriesX.Points[i].Label = _listCoorXAndZ[i].strLabel;
             }
-            chart.ChartAreas[0].GetSeriesZPosition(_seriesX);
 
         }
 
@@ -887,53 +890,77 @@ namespace GluePathReadWrite
 
         private void chart_MouseDown(object sender, MouseEventArgs e)
         {
-            //DrawChartLine();
-            //this.chart1.Series[0].Points[0].Color=颜色；
-
-            if (e.Button == MouseButtons.Left && bHitPoint)
+            dataGridView.ClearSelection();
+            if (e.Button == MouseButtons.Left)
             {
-                var strings = _listCoorXAndZ[pointIndex].strLabel.Split('_');
-                if (strings.Length == 1)
+                HitTestResult hit = chart.HitTest(e.X, e.Y, ChartElementType.DataPoint);
+                if (hit.Series != null)
                 {
-                    int intFirst = Convert.ToInt32(strings[0]);
-                    dataGridView.Rows[intFirst].Cells[8].Selected = true;
-                }
-                else
-                {
-                    int intFirst = Convert.ToInt32(strings[0]);
-                    if (strings[1] == "-1")
-                        dataGridView.Rows[intFirst].Cells[5].Selected = true;
-                    else
-                        dataGridView.Rows[intFirst].Cells[8].Selected = true;
+                    this.Cursor = Cursors.HSplit;
+                    _pointIndex = hit.PointIndex;
+                    //chart.Series[0].Points[hit.PointIndex].Color = Color.Blue;
 
+                    var strings = _listCoorXAndZ[hit.PointIndex].strLabel.Split('_');
+                    int id = Convert.ToInt32(strings[0]) - 1;
+                    if (strings.Length == 1)
+                    {
+                        dataGridView.Rows[id].Cells[8].Selected = true;
+                    }
+                    else
+                    {
+                        if (strings[1] == "1")
+                            dataGridView.Rows[id].Cells[5].Selected = true;
+                        else
+                            dataGridView.Rows[id].Cells[8].Selected = true;
+                    }
                 }
             }
         }
 
         private void chart_MouseMove(object sender, MouseEventArgs e)
         {
-            lbCX.Text = e.X.ToString();
-            lbCY.Text = e.Y.ToString();
+            var xValue = chart.ChartAreas[0].AxisX.PixelPositionToValue(e.X);
+            var yValue = chart.ChartAreas[0].AxisY.PixelPositionToValue(e.Y);
+            lbCX.Text = xValue.ToString("f3");
+            lbCY.Text = yValue.ToString("f3");
 
+            if (e.Button == MouseButtons.Left)
+            {
+                var strings = _listCoorXAndZ[_pointIndex].strLabel.Split('_');
+                int id = Convert.ToInt32(strings[0]) - 1;
+                if (dataGridView.Rows[id].Cells[5].Selected || dataGridView.Rows[id].Cells[8].Selected)
+                {
+                    if (strings.Length == 1)
+                    {
+                        dataGridView.Rows[id].Cells[8].Value = yValue;
+                    }
+                    else
+                    {
+                        if (strings[1] == "1")
+                            dataGridView.Rows[id].Cells[5].Value = yValue;
+                        else
+                            dataGridView.Rows[id].Cells[8].Value = yValue;
+                    }
+
+                    DrawChartLine();
+                }
+            }
         }
 
-        private int pointIndex;
-        private DataPoint dataPoint;
-        private bool bHitPoint;
+        private int _pointIndex;
+        //private DataPoint _dataPoint;
 
         private void chart_GetToolTipText(object sender, ToolTipEventArgs e)
         {
             if (e.HitTestResult.ChartElementType == ChartElementType.DataPoint)
             {
-                bHitPoint = true;
-                this.Cursor = Cursors.Cross;
-                pointIndex = e.HitTestResult.PointIndex;
-                dataPoint = e.HitTestResult.Series.Points[pointIndex];
+                //_bHitPoint = true;
+                DataPoint dataPoint = e.HitTestResult.Series.Points[e.HitTestResult.PointIndex];
                 e.Text = $"({dataPoint.XValue}_{dataPoint.YValues[0]})";
             }
             else
             {
-                bHitPoint = false;
+                //_bHitPoint = false;
                 this.Cursor = Cursors.Default;
             }
         }
