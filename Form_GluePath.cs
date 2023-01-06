@@ -6,7 +6,9 @@ using System.Data;
 using System.Drawing;
 using System.IO;
 using System.Linq;
+using System.Runtime.InteropServices;
 using System.Text;
+using System.Threading;
 using System.Threading.Tasks;
 using System.Windows.Forms;
 using System.Windows.Forms.DataVisualization.Charting;
@@ -87,60 +89,38 @@ namespace GluePathReadWrite
             tkBTransparency.SmallChange = 1;
             tkBTransparency.Value = 255;
 
-            chart.ChartAreas[0].AxisX.TitleFont = new Font("宋体", 10);
-            chart.ChartAreas[0].AxisY.TitleFont = new Font("宋体", 10);
-            chart.ChartAreas[0].AxisX.Title = "X轴坐标";
-            chart.ChartAreas[0].AxisY.Title = "Z轴坐标";
-            //chart.ChartAreas[0].Area3DStyle.Enable3D = true;
-            chart.Series.Clear();
-            chart.Legends.Clear();
-            _seriesX = new Series
-            {
-                ChartType = SeriesChartType.Spline,
-                Color = Color.Maroon,
-                XValueMember = "CoorX",
-                YValueMembers = "CoorZ",
-                MarkerSize = 8,
-                MarkerBorderColor = Color.Black,
-                MarkerColor = Color.Red,
-                MarkerStyle = MarkerStyle.Circle,
-                BorderWidth = Convert.ToInt32(Math.Log(2, tkBGlueWidth.Value)),
-                //IsValueShownAsLabel = true
-                //Label = "sfa"
-            };
-
+            ConfigureSeries();
 
             #region MyRegion
 
-            tbPath.Text = @"E:\Cowain\2169\GlueReadWrite\bin\Debug\File\GluePath.txt";//@"E:\2169\胶路拖拽\GlueReadWrite\bin\Debug\File\GluePath.txt";
+            tbPath.Text = @"E:\2169\胶路拖拽\GlueReadWrite\bin\Debug\File\GluePath.txt";//@"E:\Cowain\2169\GlueReadWrite\bin\Debug\File\GluePath.txt";
             LoadToDataGridView(ReadGluePathFile(tbPath.Text));
             DrawGUIPoint(true);
             DrawGUILine();
 
-            LoadChartData();
+            DrawChartLine();
 
             #endregion
         }
 
-        private void LoadChartData()
+        private void DrawChartLine()
         {
             chart.Series.Clear();
             //_seriesX.Points.Clear();
             //chart.ChartAreas[0].AxisX.Maximum = _listCoorXAndZ.Find(t =>    )
             FlashCoordinationList();
-            //chart.DataSource = _listCoorXAndZ;C# chart获取绘制完成的信号
-            for (int i = 0; i < _listCoorXAndZ.Count; i++)
-            {
-                _seriesX.Points.AddXY(_listCoorXAndZ[i].CoorX, _listCoorXAndZ[i].CoorY);
-                _seriesX.Points[i].Label = _listCoorXAndZ[i].strLabel;
-            }
+
             chart.Series.Add(_seriesX);
             //_listSeries.ForEach(t => chart.Series.Add(t));
-            //seriesX.BorderDashStyle = ChartDashStyle.Solid;
-            //seriesX.BorderColor = Color.Red;
+            
+            //chart.DataSource = _listCoorXAndZ;//C# chart获取绘制完成的信号
+            for (int i = 0; i < _listCoorXAndZ.Count; i++)
+            {
+                _seriesX.Points.AddXY(_listCoorXAndZ[i].CoorX, _listCoorXAndZ[i].CoorZ);
+                _seriesX.Points[i].Label = _listCoorXAndZ[i].strLabel;
+            }
+            chart.ChartAreas[0].GetSeriesZPosition(_seriesX);
 
-            //int idx = _form.chart1.Series["Series1"].Points.AddY(heightDouble);
-            //chart.Series["Series1"].Points[9].Label = ...;
         }
 
         private void FlashCoordinationList()
@@ -177,14 +157,14 @@ namespace GluePathReadWrite
                         {
                             CoorX = Convert.ToDouble(dataGridView.Rows[i].Cells[6].Value),
                             CoorZ = Convert.ToDouble(dataGridView.Rows[i].Cells[8].Value),
-                            strLabel = $"{i + 1}_1"
+                            strLabel = $"{i + 1}_2"
                         }});
                     _listCoorYAndZ.AddRange(new[]{
                         new Coordination
                         {
                             CoorY = Convert.ToDouble(dataGridView.Rows[i].Cells[4].Value),
                             CoorZ = Convert.ToDouble(dataGridView.Rows[i].Cells[5].Value),
-                            strLabel = $"{i + 1}_2"
+                            strLabel = $"{i + 1}_1"
                         },
                         new Coordination
                         {
@@ -194,6 +174,30 @@ namespace GluePathReadWrite
                         }});
                 }
             }
+        }
+
+        private void ConfigureSeries()
+        {
+            chart.ChartAreas[0].AxisX.TitleFont = new Font("宋体", 10);
+            chart.ChartAreas[0].AxisY.TitleFont = new Font("宋体", 10);
+            chart.ChartAreas[0].AxisX.Title = "X轴坐标";
+            chart.ChartAreas[0].AxisY.Title = "Z轴坐标";
+            //chart.ChartAreas[0].Area3DStyle.Enable3D = true;
+            chart.Series.Clear();
+            chart.Legends.Clear();
+            _seriesX = new Series
+            {
+                ChartType = SeriesChartType.Spline,
+                Color = Color.Maroon,
+                XValueMember = "CoorX",
+                YValueMembers = "CoorZ",
+                MarkerSize = 8,
+                MarkerBorderColor = Color.Black,
+                MarkerColor = Color.Red,
+                MarkerStyle = MarkerStyle.Circle,
+                BorderWidth = Convert.ToInt32(Math.Log(2, tkBGlueWidth.Value)),
+                //IsValueShownAsLabel = true
+            };
         }
 
         private void btOpenGluePath_Click(object sender, EventArgs e)
@@ -206,7 +210,7 @@ namespace GluePathReadWrite
                 DrawGUIPoint(true);
                 DrawGUILine();
 
-                LoadChartData();
+                DrawChartLine();
             }
         }
 
@@ -883,8 +887,27 @@ namespace GluePathReadWrite
 
         private void chart_MouseDown(object sender, MouseEventArgs e)
         {
-            //LoadChartData();
+            //DrawChartLine();
             //this.chart1.Series[0].Points[0].Color=颜色；
+
+            if (e.Button == MouseButtons.Left && bHitPoint)
+            {
+                var strings = _listCoorXAndZ[pointIndex].strLabel.Split('_');
+                if (strings.Length == 1)
+                {
+                    int intFirst = Convert.ToInt32(strings[0]);
+                    dataGridView.Rows[intFirst].Cells[8].Selected = true;
+                }
+                else
+                {
+                    int intFirst = Convert.ToInt32(strings[0]);
+                    if (strings[1] == "-1")
+                        dataGridView.Rows[intFirst].Cells[5].Selected = true;
+                    else
+                        dataGridView.Rows[intFirst].Cells[8].Selected = true;
+
+                }
+            }
         }
 
         private void chart_MouseMove(object sender, MouseEventArgs e)
@@ -894,19 +917,30 @@ namespace GluePathReadWrite
 
         }
 
+        private int pointIndex;
+        private DataPoint dataPoint;
+        private bool bHitPoint;
+
         private void chart_GetToolTipText(object sender, ToolTipEventArgs e)
         {
             if (e.HitTestResult.ChartElementType == ChartElementType.DataPoint)
             {
+                bHitPoint = true;
                 this.Cursor = Cursors.Cross;
-                int index = e.HitTestResult.PointIndex;
-                DataPoint dataPoint = e.HitTestResult.Series.Points[index];
+                pointIndex = e.HitTestResult.PointIndex;
+                dataPoint = e.HitTestResult.Series.Points[pointIndex];
                 e.Text = $"({dataPoint.XValue}_{dataPoint.YValues[0]})";
             }
             else
             {
+                bHitPoint = false;
                 this.Cursor = Cursors.Default;
             }
+        }
+
+        private void chart_Validated(object sender, EventArgs e)
+        {
+
         }
     }
 }
