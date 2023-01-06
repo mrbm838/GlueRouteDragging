@@ -16,7 +16,7 @@ namespace GluePathReadWrite
         {
             Application.EnableVisualStyles();
             Application.SetCompatibleTextRenderingDefault(false);
-            Application.Run(new Form_GluePath());
+            Application.Run(new FormGluePath());
         }
     }
 }

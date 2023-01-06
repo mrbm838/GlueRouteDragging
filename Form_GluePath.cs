@@ -20,10 +20,8 @@ namespace GluePathReadWrite
     //x = (x1 - x2)* cos(pi / 180.0 * θ) - (y1 - y2)* sin(pi / 180.0 * θ) + x2;
     //y = (x1 - x2)* sin(pi / 180.0 * θ) + (y1 - y2)* cos(pi / 180.0 * θ) + y2;
 
-    public partial class Form_GluePath : Form
+    public partial class FormGluePath : Form
     {
-        
-
         int xPos;
         int yPos;
         bool bMoveFlag;
@@ -54,8 +52,11 @@ namespace GluePathReadWrite
 
         private Series _seriesX;
         private Series _seriesY;
+        private int _pointIndex;
 
-        public Form_GluePath()
+        private string _glueFilePath;
+
+        public FormGluePath()
         {
             InitializeComponent();
             pictureBox.MouseWheel += new MouseEventHandler(pbxDrawing_MouseWheel);
@@ -65,6 +66,10 @@ namespace GluePathReadWrite
         private void Form_GluePath_Load(object sender, EventArgs e)
         {
             textBox1.AutoSize = false;
+            textBox1.Height = 28;
+            textBox1.Font = new Font("宋体", 12);
+            button1.Height = 16;
+            button2.Height = 16;
 
             Bitmap bmp = ReadImageFile(Application.StartupPath + @"\File\glue.BMP");
             pictureBox.Image = bmp;
@@ -98,8 +103,8 @@ namespace GluePathReadWrite
 
             #region MyRegion
 
-            tbPath.Text = @"E:\2169\胶路拖拽\GlueReadWrite\bin\Debug\File\GluePath.txt";//@"E:\Cowain\2169\GlueReadWrite\bin\Debug\File\GluePath.txt";
-            LoadToDataGridView(ReadGluePathFile(tbPath.Text));
+            var str = @"E:\Cowain\2169\GlueReadWrite\bin\Debug\File\GluePath.txt";//@"E:\2169\胶路拖拽\GlueReadWrite\bin\Debug\File\GluePath.txt";//
+            LoadToDataGridView(ReadGluePathFile(str));
             DrawGUIPoint(true);
             DrawGUILine();
 
@@ -205,11 +210,11 @@ namespace GluePathReadWrite
 
         private void btOpenGluePath_Click(object sender, EventArgs e)
         {
-            string strFilePath = OpenFileDialog(Application.StartupPath + "\\File");
-            if (strFilePath != "")
+            _glueFilePath = OpenFileDialog(Application.StartupPath + "\\File");
+            if (_glueFilePath != "")
             {
-                tbPath.Text = strFilePath;
-                LoadToDataGridView(ReadGluePathFile(strFilePath));
+                this.Text = Path.GetFileName(_glueFilePath);
+                LoadToDataGridView(ReadGluePathFile(_glueFilePath));
                 DrawGUIPoint(true);
                 DrawGUILine();
 
@@ -518,7 +523,7 @@ namespace GluePathReadWrite
 
         public string[] ReadGluePathFile(string path)
         {
-            System.IO.StreamReader sr = new System.IO.StreamReader(path, Encoding.Default);
+            StreamReader sr = new StreamReader(path, Encoding.Default);
             List<string> list = new List<string>();
             string line;
             while ((line = sr.ReadLine()) != null)
@@ -725,7 +730,7 @@ namespace GluePathReadWrite
             if (DialogResult.OK != MessageBox.Show("是否保存胶路？", "提示", MessageBoxButtons.OKCancel, MessageBoxIcon.Information))
                 return;
 
-            string strFolderPath = tbPath.Text.Trim();//saveFileDialog.FileName;
+            string strFolderPath = _glueFilePath;
             StringBuilder strGlueData = new StringBuilder();
             for (int i = 0; i < dataGridView.Rows.Count; i++)
             {
@@ -865,7 +870,7 @@ namespace GluePathReadWrite
         private void ToolStripMenuItem_Clear_Click(object sender, EventArgs e)
         {
             dataGridView.Rows.Clear();
-            tbPath.Text = string.Empty;
+            this.Text = string.Empty;
             pictureBox.Refresh();
         }
 
@@ -919,10 +924,10 @@ namespace GluePathReadWrite
 
         private void chart_MouseMove(object sender, MouseEventArgs e)
         {
-            var xValue = chart.ChartAreas[0].AxisX.PixelPositionToValue(e.X);
-            var yValue = chart.ChartAreas[0].AxisY.PixelPositionToValue(e.Y);
-            lbCX.Text = xValue.ToString("f3");
-            lbCY.Text = yValue.ToString("f3");
+            var xValue = Math.Round(chart.ChartAreas[0].AxisX.PixelPositionToValue(e.X), 3);
+            var yValue = Math.Round(chart.ChartAreas[0].AxisY.PixelPositionToValue(e.Y), 3);
+            lbCX.Text = xValue.ToString(CultureInfo.InvariantCulture);
+            lbCY.Text = yValue.ToString(CultureInfo.InvariantCulture);
 
             if (e.Button == MouseButtons.Left)
             {
@@ -941,14 +946,10 @@ namespace GluePathReadWrite
                         else
                             dataGridView.Rows[id].Cells[8].Value = yValue;
                     }
-
                     DrawChartLine();
                 }
             }
         }
-
-        private int _pointIndex;
-        //private DataPoint _dataPoint;
 
         private void chart_GetToolTipText(object sender, ToolTipEventArgs e)
         {
