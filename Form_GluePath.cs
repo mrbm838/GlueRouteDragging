@@ -52,7 +52,7 @@ namespace GluePathReadWrite
 
         private Series _seriesX;
         private Series _seriesY;
-        private int _pointIndex;
+        private int _pointIndex = -1;
 
         private string _glueFilePath;
 
@@ -65,11 +65,13 @@ namespace GluePathReadWrite
 
         private void Form_GluePath_Load(object sender, EventArgs e)
         {
-            textBox1.AutoSize = false;
-            textBox1.Height = 28;
-            textBox1.Font = new Font("宋体", 12);
+            tbRotation.AutoSize = false;
+            tbRotation.Height = 28;
+            tbRotation.Font = new Font("宋体", 12);
             button1.Height = 16;
-            button2.Height = 16;
+            button2.Height = 17;
+            button1.Text = string.Empty;
+            button2.Text = string.Empty;
 
             Bitmap bmp = ReadImageFile(Application.StartupPath + @"\File\glue.BMP");
             pictureBox.Image = bmp;
@@ -103,8 +105,8 @@ namespace GluePathReadWrite
 
             #region MyRegion
 
-            var str = @"E:\Cowain\2169\GlueReadWrite\bin\Debug\File\GluePath.txt";//@"E:\2169\胶路拖拽\GlueReadWrite\bin\Debug\File\GluePath.txt";//
-            LoadToDataGridView(ReadGluePathFile(str));
+            _glueFilePath = @"E:\2169\胶路拖拽\GlueReadWrite\bin\Debug\File\GluePath.txt";//@"E:\Cowain\2169\GlueReadWrite\bin\Debug\File\GluePath.txt";//
+            LoadToDataGridView(ReadGluePathFile(_glueFilePath));
             DrawGUIPoint(true);
             DrawGUILine();
 
@@ -117,16 +119,16 @@ namespace GluePathReadWrite
         {
             chart.Series.Clear();       // Clear series in "chart"
             _seriesX.Points.Clear();    // Clear points in "_seriesX"
-            //chart.ChartAreas[0].AxisX.Maximum = _listCoorXAndZ.Find(t =>    )
-            //_listSeries.ForEach(t => chart.Series.Add(t));
             FlashCoordinationList();
             chart.Series.Add(_seriesX);
 
-            //chart.DataSource = _listCoorXAndZ;//C# chart获取绘制完成的信号
+            //chart.DataSource = _listCoorXAndZ;// C# chart获取绘制完成的信号
             for (int i = 0; i < _listCoorXAndZ.Count; i++)
             {
                 _seriesX.Points.AddXY(_listCoorXAndZ[i].CoorX, _listCoorXAndZ[i].CoorZ);
                 _seriesX.Points[i].Label = _listCoorXAndZ[i].strLabel;
+                _seriesX.Points[i].MarkerColor = i == _pointIndex ? Color.Blue : Color.Red;
+                _seriesX.Points[i].MarkerSize = 10;
             }
 
         }
@@ -190,7 +192,7 @@ namespace GluePathReadWrite
             chart.ChartAreas[0].AxisY.TitleFont = new Font("宋体", 10);
             chart.ChartAreas[0].AxisX.Title = "X轴坐标";
             chart.ChartAreas[0].AxisY.Title = "Z轴坐标";
-            //chart.ChartAreas[0].Area3DStyle.Enable3D = true;
+            chart.ChartAreas[0].Area3DStyle.Enable3D = true;
             chart.Series.Clear();
             chart.Legends.Clear();
             _seriesX = new Series
@@ -365,12 +367,14 @@ namespace GluePathReadWrite
                         if (strings.Length == 1 || strings[1].Equals("2"))
                         {
                             dataGridView.Rows[serial].Cells[6].Selected = true;
+                            _pointIndex = _dicGraphics.Keys.ToList().IndexOf(item.Key);
                             dataGridView_CellClick(dataGridView, new DataGridViewCellEventArgs(6, serial));
                             _selectedColumn = 6;
                         }
                         else
                         {
                             dataGridView.Rows[serial].Cells[3].Selected = true;
+                            _pointIndex = Array.IndexOf(_dicGraphics.Keys.ToArray(), item.Key);
                             dataGridView_CellClick(dataGridView, new DataGridViewCellEventArgs(3, serial));
                             _selectedColumn = 3;
                         }
@@ -485,7 +489,7 @@ namespace GluePathReadWrite
                         DataGridViewComboBoxCell dgvComboBoxCellOfType = new DataGridViewComboBoxCell();
                         dgvComboBoxCellOfType.Items.Add("Line");
                         dgvComboBoxCellOfType.Items.Add("Arc");
-                        dataGridView.Rows[i].Cells[1] = (DataGridViewCell)dgvComboBoxCellOfType;
+                        dataGridView.Rows[i].Cells[1] = dgvComboBoxCellOfType;
 
                     }
                     else if (j == 2)
@@ -494,7 +498,7 @@ namespace GluePathReadWrite
                         dgvComboBoxCellOfCircleMode.Items.Add("");
                         dgvComboBoxCellOfCircleMode.Items.Add("XY");
                         dgvComboBoxCellOfCircleMode.Items.Add("XYZ");
-                        dataGridView.Rows[i].Cells[2] = (DataGridViewCell)dgvComboBoxCellOfCircleMode;
+                        dataGridView.Rows[i].Cells[2] = dgvComboBoxCellOfCircleMode;
                     }
                     else
                     {
@@ -519,6 +523,7 @@ namespace GluePathReadWrite
                     dataGridView.Rows[i].Cells[1].Value = "";
                 }
             }
+            dataGridView.ClearSelection();
         }
 
         public string[] ReadGluePathFile(string path)
@@ -643,7 +648,7 @@ namespace GluePathReadWrite
                     pT.Y = Convert.ToInt32((y + Convert.ToDouble(tbStandardY.Text)) / _dRatio);
                     Rectangle ellipse = new Rectangle(pT.X - 2, pT.Y - 2, 10, 10);
 
-                    if (dataGridView.Rows[_selectedRow].Cells[_selectedColumn].Selected || dataGridView.Rows[_selectedRow].Cells[_selectedColumn + 1].Selected)
+                    if (dataGridView.Rows[_selectedRow].Cells[_selectedColumn].Selected || dataGridView.Rows[_selectedRow].Cells[_selectedColumn + 1].Selected || dataGridView.Rows[_selectedRow].Cells[_selectedColumn + 2].Selected)
                     {
                         graph.FillEllipse(Brushes.Blue, ellipse);
                         graph.DrawString(dataGridView.Rows[_selectedRow].Cells[0].Value + (_selectedColumn == 3 ? "-1" : "-2"),
@@ -672,7 +677,7 @@ namespace GluePathReadWrite
                             else _dicGraphics[i + "-1"] = ellipse;
                         }
 
-                        if (dataGridView.Rows[i].Cells[3].Selected || dataGridView.Rows[i].Cells[4].Selected)
+                        if (dataGridView.Rows[i].Cells[3].Selected || dataGridView.Rows[i].Cells[4].Selected || dataGridView.Rows[i].Cells[5].Selected)
                         {
                             graph.FillEllipse(Brushes.Blue, ellipse);
                             graph.DrawString(dataGridView.Rows[i].Cells[0].Value + "-1", new Font("Verdana", 10),
@@ -702,7 +707,7 @@ namespace GluePathReadWrite
                             else _dicGraphics[i + (isArc ? "-2" : string.Empty)] = ellipse;
                         }
 
-                        if (dataGridView.Rows[i].Cells[6].Selected || dataGridView.Rows[i].Cells[7].Selected)
+                        if (dataGridView.Rows[i].Cells[6].Selected || dataGridView.Rows[i].Cells[7].Selected || dataGridView.Rows[i].Cells[8].Selected)
                         {
                             graph.FillEllipse(Brushes.Blue, ellipse);
                             graph.DrawString(dataGridView.Rows[i].Cells[0].Value + (isArc ? "-2" : string.Empty),
@@ -730,7 +735,7 @@ namespace GluePathReadWrite
             if (DialogResult.OK != MessageBox.Show("是否保存胶路？", "提示", MessageBoxButtons.OKCancel, MessageBoxIcon.Information))
                 return;
 
-            string strFolderPath = _glueFilePath;
+            //string strFolderPath = _glueFilePath;
             StringBuilder strGlueData = new StringBuilder();
             for (int i = 0; i < dataGridView.Rows.Count; i++)
             {
@@ -755,7 +760,7 @@ namespace GluePathReadWrite
                     strGlueData.Append(j != dataGridView.Columns.Count - 1 ? "," : "\r\n");
                 }
             }
-            using (StreamWriter sw = new StreamWriter(strFolderPath, false, Encoding.Default))
+            using (StreamWriter sw = new StreamWriter(_glueFilePath, false, Encoding.Default))
             {
                 sw.Write(strGlueData);
             }
@@ -783,6 +788,7 @@ namespace GluePathReadWrite
         {
             DrawGUIPoint(false);
             DrawGUILine();
+            DrawChartLine();
         }
 
         private void ToolStripMenuItem_Append_Click(object sender, EventArgs e)
@@ -907,16 +913,15 @@ namespace GluePathReadWrite
 
                     var strings = _listCoorXAndZ[hit.PointIndex].strLabel.Split('_');
                     int id = Convert.ToInt32(strings[0]) - 1;
-                    if (strings.Length == 1)
+                    if (strings.Length == 1 || strings[1] == "2")
                     {
                         dataGridView.Rows[id].Cells[8].Selected = true;
+                        dataGridView_CellClick(dataGridView, new DataGridViewCellEventArgs(id, 8));
                     }
                     else
                     {
-                        if (strings[1] == "1")
-                            dataGridView.Rows[id].Cells[5].Selected = true;
-                        else
-                            dataGridView.Rows[id].Cells[8].Selected = true;
+                        dataGridView.Rows[id].Cells[5].Selected = true;
+                        dataGridView_CellClick(dataGridView, new DataGridViewCellEventArgs(id, 5));
                     }
                 }
             }
@@ -955,13 +960,11 @@ namespace GluePathReadWrite
         {
             if (e.HitTestResult.ChartElementType == ChartElementType.DataPoint)
             {
-                //_bHitPoint = true;
                 DataPoint dataPoint = e.HitTestResult.Series.Points[e.HitTestResult.PointIndex];
                 e.Text = $"({dataPoint.XValue}_{dataPoint.YValues[0]})";
             }
             else
             {
-                //_bHitPoint = false;
                 this.Cursor = Cursors.Default;
             }
         }
