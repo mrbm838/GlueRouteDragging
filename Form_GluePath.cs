@@ -105,7 +105,7 @@ namespace GluePathReadWrite
 
             #region MyRegion
 
-            _glueFilePath = @"E:\Cowain\2169\GlueReadWrite\bin\Debug\File\GluePath.txt";//@"E:\2169\胶路拖拽\GlueReadWrite\bin\Debug\File\GluePath.txt";//
+            _glueFilePath = @"E:\2169\胶路拖拽\GlueReadWrite\bin\Debug\File\GluePath.txt";//@"E:\Cowain\2169\GlueReadWrite\bin\Debug\File\GluePath.txt";//
             LoadToDataGridView(ReadGluePathFile(_glueFilePath));
             DrawGUIPoint(true);
             DrawGUILine();
@@ -565,19 +565,19 @@ namespace GluePathReadWrite
                 if (bDrawSingle)
                 {
                     //pictureBox.Invalidate(_dicPoints[strKey]);
-                    if (dataGridView.Rows[_selectedRow].Cells[1].Value?.ToString() == EnumLineType.Line.ToString())
-                    {
-                        _dicGraphicsPaths[(_selectedRow + 1).ToString()].ClearMarkers();
-                    }
-                    else if (dataGridView.Rows[_selectedRow].Cells[1].Value?.ToString() == EnumLineType.Arc.ToString())
-                    {
-                        _dicGraphicsPaths[_selectedRow + 1 + "_1"].ClearMarkers();
-                        _dicGraphicsPaths[_selectedRow + 1 + "_2"].ClearMarkers();
-                    }
+                    //if (dataGridView.Rows[_selectedRow].Cells[1].Value?.ToString() == EnumLineType.Line.ToString())
+                    //{
+                    //    _dicGraphicsPaths[(_selectedRow + 1).ToString()].ClearMarkers();
+                    //}
+                    //else if (dataGridView.Rows[_selectedRow].Cells[1].Value?.ToString() == EnumLineType.Arc.ToString())
+                    //{
+                    //    _dicGraphicsPaths[_selectedRow + 1 + "_1"].ClearMarkers();
+                    //    _dicGraphicsPaths[_selectedRow + 1 + "_2"].ClearMarkers();
+                    //}
                 }
                 else
                 {
-                    _dicGraphicsPaths.Values.ToList().ForEach(t => t.ClearMarkers());
+                    //_dicGraphicsPaths.Values.ToList().ForEach(t => t.ClearMarkers());
                     //画点那里会把线条都清掉
                 }
             }
@@ -675,8 +675,16 @@ namespace GluePathReadWrite
                                     if (isChange)
                                     {
                                         GraphicsPath gp = new GraphicsPath();
-                                        gp.AddLine(pS, pE);
-                                        _dicGraphicsPaths.Add((i + 1).ToString(), gp);
+                                        string key = (i + 1).ToString();
+                                        if (_dicGraphicsPaths.Keys.Contains(key))
+                                        {
+                                            _dicGraphicsPaths[key] = gp;
+                                        }
+                                        else
+                                        {
+                                            gp.AddLine(pS, pE);
+                                            _dicGraphicsPaths.Add((i + 1).ToString(), gp);
+                                        }
                                     }
                                 }
                             }
@@ -707,10 +715,17 @@ namespace GluePathReadWrite
                                         GraphicsPath gp = new GraphicsPath();
                                         string keyFirst = i + 1 + "_1";
                                         string keyLast = i + 1 + "_2";
-                                        gp.AddArc(drawArc[0], drawArc[1], drawArc[2], drawArc[3], drawArc[4],
-                                            drawArc[5]);
-                                        _dicGraphicsPaths.Add(keyFirst, gp);
-                                        _dicGraphicsPaths.Add(keyLast, gp);
+                                        if (_dicGraphicsPaths.Keys.Contains(keyFirst))
+                                        {
+                                            _dicGraphicsPaths[keyFirst] = gp;
+                                            _dicGraphicsPaths[keyLast] = gp;
+                                        }
+                                        else
+                                        {
+                                            gp.AddArc(drawArc[0], drawArc[1], drawArc[2], drawArc[3], drawArc[4], drawArc[5]);
+                                            _dicGraphicsPaths.Add(keyFirst, gp);
+                                            _dicGraphicsPaths.Add(keyLast, gp);
+                                        }
                                     }
                                 }
                             }
@@ -736,9 +751,9 @@ namespace GluePathReadWrite
                 }
                 else
                 {
-                    //pictureBox.Refresh();
+                    pictureBox.Refresh();
                     //graph.Clear(Color.White);
-                    _dicRectangles.Values.ToList().ForEach(t => pictureBox.Invalidate(t));
+                    //_dicRectangles.Values.ToList().ForEach(t => pictureBox.Invalidate(t));
                 }
             }
             catch
