@@ -29,13 +29,13 @@
         private void InitializeComponent()
         {
             this.components = new System.ComponentModel.Container();
-            System.Windows.Forms.DataVisualization.Charting.ChartArea chartArea1 = new System.Windows.Forms.DataVisualization.Charting.ChartArea();
-            System.Windows.Forms.DataVisualization.Charting.Legend legend1 = new System.Windows.Forms.DataVisualization.Charting.Legend();
-            System.Windows.Forms.DataVisualization.Charting.Series series1 = new System.Windows.Forms.DataVisualization.Charting.Series();
+            System.Windows.Forms.DataVisualization.Charting.ChartArea chartArea2 = new System.Windows.Forms.DataVisualization.Charting.ChartArea();
+            System.Windows.Forms.DataVisualization.Charting.Legend legend2 = new System.Windows.Forms.DataVisualization.Charting.Legend();
+            System.Windows.Forms.DataVisualization.Charting.Series series2 = new System.Windows.Forms.DataVisualization.Charting.Series();
             this.splitContainer1 = new System.Windows.Forms.SplitContainer();
             this.pictureBox = new System.Windows.Forms.PictureBox();
             this.chart = new System.Windows.Forms.DataVisualization.Charting.Chart();
-            this.lbAlpha = new System.Windows.Forms.Label();
+            this.lbTransparency = new System.Windows.Forms.Label();
             this.lbGlueWidth = new System.Windows.Forms.Label();
             this.tkBGlueWidth = new System.Windows.Forms.TrackBar();
             this.label3 = new System.Windows.Forms.Label();
@@ -119,18 +119,18 @@
             // 
             // chart
             // 
-            chartArea1.Name = "ChartArea1";
-            this.chart.ChartAreas.Add(chartArea1);
+            chartArea2.Name = "ChartArea1";
+            this.chart.ChartAreas.Add(chartArea2);
             this.chart.Dock = System.Windows.Forms.DockStyle.Fill;
-            legend1.Name = "Legend1";
-            this.chart.Legends.Add(legend1);
+            legend2.Name = "Legend1";
+            this.chart.Legends.Add(legend2);
             this.chart.Location = new System.Drawing.Point(0, 0);
             this.chart.Margin = new System.Windows.Forms.Padding(1);
             this.chart.Name = "chart";
-            series1.ChartArea = "ChartArea1";
-            series1.Legend = "Legend1";
-            series1.Name = "Series1";
-            this.chart.Series.Add(series1);
+            series2.ChartArea = "ChartArea1";
+            series2.Legend = "Legend1";
+            series2.Name = "Series1";
+            this.chart.Series.Add(series2);
             this.chart.Size = new System.Drawing.Size(564, 452);
             this.chart.TabIndex = 1;
             this.chart.Text = "chart1";
@@ -139,14 +139,14 @@
             this.chart.MouseMove += new System.Windows.Forms.MouseEventHandler(this.chart_MouseMove);
             this.chart.Validated += new System.EventHandler(this.chart_Validated);
             // 
-            // lbAlpha
+            // lbTransparency
             // 
-            this.lbAlpha.AutoSize = true;
-            this.lbAlpha.Location = new System.Drawing.Point(1271, 287);
-            this.lbAlpha.Name = "lbAlpha";
-            this.lbAlpha.Size = new System.Drawing.Size(11, 12);
-            this.lbAlpha.TabIndex = 34;
-            this.lbAlpha.Text = "0";
+            this.lbTransparency.AutoSize = true;
+            this.lbTransparency.Location = new System.Drawing.Point(1271, 287);
+            this.lbTransparency.Name = "lbTransparency";
+            this.lbTransparency.Size = new System.Drawing.Size(11, 12);
+            this.lbTransparency.TabIndex = 34;
+            this.lbTransparency.Text = "0";
             // 
             // lbGlueWidth
             // 
@@ -286,7 +286,7 @@
             this.splitContainer2.Panel1.Controls.Add(this.label5);
             this.splitContainer2.Panel1.Controls.Add(this.lbCX);
             this.splitContainer2.Panel1.Controls.Add(this.lbCY);
-            this.splitContainer2.Panel1.Controls.Add(this.lbAlpha);
+            this.splitContainer2.Panel1.Controls.Add(this.lbTransparency);
             this.splitContainer2.Panel1.Controls.Add(this.splitContainer1);
             this.splitContainer2.Panel1.Controls.Add(this.lbGlueWidth);
             this.splitContainer2.Panel1.Controls.Add(this.btSaveGluePath);
@@ -307,7 +307,7 @@
             // splitContainer2.Panel2
             // 
             this.splitContainer2.Panel2.Controls.Add(this.dataGridView);
-            this.splitContainer2.Size = new System.Drawing.Size(1283, 703);
+            this.splitContainer2.Size = new System.Drawing.Size(1296, 703);
             this.splitContainer2.SplitterDistance = 452;
             this.splitContainer2.TabIndex = 1;
             // 
@@ -430,7 +430,7 @@
             this.dataGridView.Name = "dataGridView";
             this.dataGridView.RowHeadersWidth = 60;
             this.dataGridView.RowTemplate.Height = 23;
-            this.dataGridView.Size = new System.Drawing.Size(1283, 247);
+            this.dataGridView.Size = new System.Drawing.Size(1296, 247);
             this.dataGridView.TabIndex = 5;
             this.dataGridView.CellClick += new System.Windows.Forms.DataGridViewCellEventHandler(this.dataGridView_CellClick);
             // 
@@ -477,7 +477,7 @@
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(96F, 96F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Dpi;
-            this.ClientSize = new System.Drawing.Size(1283, 703);
+            this.ClientSize = new System.Drawing.Size(1296, 703);
             this.Controls.Add(this.splitContainer2);
             this.Margin = new System.Windows.Forms.Padding(3, 1, 3, 1);
             this.Name = "FormGluePath";
@@ -526,7 +526,7 @@
         private System.Windows.Forms.TrackBar tkBTransparency;
         private System.Windows.Forms.Label label3;
         private System.Windows.Forms.TrackBar tkBGlueWidth;
-        private System.Windows.Forms.Label lbAlpha;
+        private System.Windows.Forms.Label lbTransparency;
         private System.Windows.Forms.Label lbGlueWidth;
         private System.Windows.Forms.ToolStripMenuItem ToolStripMenuItem_Insert;
         private System.Windows.Forms.ToolStripMenuItem ToolStripMenuItem_Clear;
