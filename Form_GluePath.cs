@@ -15,6 +15,7 @@ using System.Threading.Tasks;
 using System.Windows.Forms;
 using System.Windows.Forms.DataVisualization.Charting;
 using System.Windows.Media.Imaging;
+//using System.Windows.Shapes;
 
 namespace GluePathReadWrite
 {
@@ -162,26 +163,26 @@ namespace GluePathReadWrite
                         {
                             CoorX = Convert.ToDouble(dataGridView.Rows[i].Cells[3].Value),
                             CoorZ = Convert.ToDouble(dataGridView.Rows[i].Cells[5].Value),
-                            StrLabel = $"{i + 1}_1"
+                            StrLabel = $"{i + 1}-1"
                         },
                         new Coordination
                         {
                             CoorX = Convert.ToDouble(dataGridView.Rows[i].Cells[6].Value),
                             CoorZ = Convert.ToDouble(dataGridView.Rows[i].Cells[8].Value),
-                            StrLabel = $"{i + 1}_2"
+                            StrLabel = $"{i + 1}-2"
                         }});
                         _listCoorYAndZ.AddRange(new[]{
                         new Coordination
                         {
                             CoorY = Convert.ToDouble(dataGridView.Rows[i].Cells[4].Value),
                             CoorZ = Convert.ToDouble(dataGridView.Rows[i].Cells[5].Value),
-                            StrLabel = $"{i + 1}_1"
+                            StrLabel = $"{i + 1}-1"
                         },
                         new Coordination
                         {
                             CoorY = Convert.ToDouble(dataGridView.Rows[i].Cells[7].Value),
                             CoorZ = Convert.ToDouble(dataGridView.Rows[i].Cells[8].Value),
-                            StrLabel = $"{i + 1}_2"
+                            StrLabel = $"{i + 1}-2"
                         }});
                     }
                 }
@@ -296,7 +297,7 @@ namespace GluePathReadWrite
             }
         }
 
-        private void pictureBox1_MouseUp(object sender, MouseEventArgs e)
+        private void pictureBox_MouseUp(object sender, MouseEventArgs e)
         {
             if (e.Button == MouseButtons.Right || e.Button == MouseButtons.Left)
             {
@@ -306,7 +307,7 @@ namespace GluePathReadWrite
             }
         }
 
-        private void pictureBox1_MouseMove(object sender, MouseEventArgs e)
+        private void pictureBox_MouseMove(object sender, MouseEventArgs e)
         {
             if (bMoveFlag)
             {
@@ -353,7 +354,7 @@ namespace GluePathReadWrite
             lbPY.Text = (Convert.ToDouble(e.Y) * dPictureBoxImageHeight / Convert.ToDouble(pictureBox.Height)).ToString("0.000");
         }
 
-        private void pictureBox1_MouseDown(object sender, MouseEventArgs e)
+        private void pictureBox_MouseDown(object sender, MouseEventArgs e)
         {
             dataGridView.ClearSelection();
             if (e.Button == MouseButtons.Right || e.Button == MouseButtons.Left)
@@ -386,15 +387,15 @@ namespace GluePathReadWrite
                             {
                                 dataGridView.Rows[serial].Cells[6].Selected = true;
                                 _pointIndex = _dicRectangles.Keys.ToList().IndexOf(rectangle.Key);
-                                dataGridView_CellClick(dataGridView, new DataGridViewCellEventArgs(6, serial));
                                 _selectedColumn = 6;
+                                dataGridView_CellClick(dataGridView, new DataGridViewCellEventArgs(6, serial));
                             }
                             else
                             {
                                 dataGridView.Rows[serial].Cells[3].Selected = true;
                                 _pointIndex = Array.IndexOf(_dicRectangles.Keys.ToArray(), rectangle.Key);
-                                dataGridView_CellClick(dataGridView, new DataGridViewCellEventArgs(3, serial));
                                 _selectedColumn = 3;
+                                dataGridView_CellClick(dataGridView, new DataGridViewCellEventArgs(3, serial));
                             }
                         }
                         break;
@@ -589,7 +590,7 @@ namespace GluePathReadWrite
             penBlue.Width = Convert.ToInt32(tkBGlueWidth.Value) * (float)(1 / _dRatio);
             Point pS = new Point(), pM = default, pE = default;
 
-            if (bDrawSingle)
+            if (false)//bDrawSingle
             {
                 if (dataGridView.Rows[0] != null)
                 {
@@ -638,8 +639,8 @@ namespace GluePathReadWrite
                                 graph.DrawArc(penRed, drawArc[0], drawArc[1], drawArc[2], drawArc[3], drawArc[4], drawArc[5]);
                             }
                             GraphicsPath gp = new GraphicsPath();
-                            string keyFirst = _selectedRow + 1 + "_1";
-                            string keyLast = _selectedRow + 1 + "_2";
+                            string keyFirst = _selectedRow + 1 + "-1";
+                            string keyLast = _selectedRow + 1 + "-2";
                             gp.AddArc(drawArc[0], drawArc[1], drawArc[2], drawArc[3], drawArc[4], drawArc[5]);
                             _dicGraphicsPaths[keyFirst] = gp;
                             _dicGraphicsPaths[keyLast] = gp;
@@ -746,7 +747,7 @@ namespace GluePathReadWrite
                 if (bDrawSingle)
                 {
                     pictureBox.Invalidate(_homeRectangle);
-                    string strKey = $"{_selectedRow}{(_selectedColumn == 3 ? "_1" : "_2")}";
+                    string strKey = $"{_selectedRow}{(_selectedColumn == 3 ? "-1" : "-2")}";
                     pictureBox.Invalidate(_dicRectangles[strKey]);
                 }
                 else
@@ -776,6 +777,18 @@ namespace GluePathReadWrite
             if (_selectedRow == -1 || _selectedColumn == -1) return;
             if (bDrawSingle)
             {
+                if (_lastSelectedRow != -1 && _lastSelectedColumn != -1)
+                {
+                    int x = Convert.ToInt32(Convert.ToDouble(dataGridView.Rows[_lastSelectedRow].Cells[_lastSelectedColumn].Value));
+                    int y = Convert.ToInt32(Convert.ToDouble(dataGridView.Rows[_lastSelectedRow].Cells[_lastSelectedColumn + 1].Value));
+                    pT.X = Convert.ToInt32((x + Convert.ToDouble(tbStandardX.Text)) / _dRatio);
+                    pT.Y = Convert.ToInt32((y + Convert.ToDouble(tbStandardY.Text)) / _dRatio);
+                    Rectangle lastEllipse = new Rectangle(pT.X - 2, pT.Y - 2, 10, 10);
+                    graph.FillEllipse(Brushes.Red, lastEllipse);
+                    graph.DrawString(dataGridView.Rows[_lastSelectedRow].Cells[0].Value + (_lastSelectedColumn == 3 ? "-1" : "-2"),
+                        new Font("Verdana", 10), new SolidBrush(Color.Red), new PointF(pT.X, pT.Y - 20));
+                }
+
                 if (GluePathForXAndY.IsNumberic(dataGridView.Rows[_selectedRow].Cells[_selectedColumn].Value) && GluePathForXAndY.IsNumberic(dataGridView.Rows[_selectedRow].Cells[_selectedColumn + 1].Value))
                 {
                     int x = Convert.ToInt32(Convert.ToDouble(dataGridView.Rows[_selectedRow].Cells[_selectedColumn].Value));
@@ -920,10 +933,18 @@ namespace GluePathReadWrite
             }
         }
 
+        private int _lastSelectedRow = -1;
+        private int _lastSelectedColumn = -1;
+
         private void dataGridView_CellClick(object sender, DataGridViewCellEventArgs e)
         {
+            _selectedRow = e.RowIndex;
+            _selectedColumn = e.ColumnIndex;
             DrawGUIPoint(false, true);
             DrawGUILine();
+            _lastSelectedRow = _selectedRow;
+            _lastSelectedColumn = _selectedColumn;
+
             if (e.ColumnIndex == 5 || e.ColumnIndex == 8)
             {
                 string strLabel;
@@ -933,7 +954,7 @@ namespace GluePathReadWrite
                 }
                 else
                 {
-                    strLabel = $"{e.RowIndex + 1}{(e.ColumnIndex == 5 ? "_1" : "_2")}";
+                    strLabel = $"{e.RowIndex + 1}{(e.ColumnIndex == 5 ? "-1" : "-2")}";
                 }
 
                 for (int i = 0; i < _listCoorXAndZ.Count; i++)
