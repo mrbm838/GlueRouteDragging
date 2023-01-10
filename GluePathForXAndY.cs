@@ -92,8 +92,52 @@ namespace GlueReadWrite
         public static double ReturnCircleK(float fx1, float fy1, float fx2, float fy2)
         {
             double fA = Math.Atan2(fy1 - fy2, fx1 - fx2) / Math.PI * 180;
-            if (fA < 0) fA += 360;
+            if (fA < 0) fA += 360;  
             return fA;
+        }
+
+        /// <summary>
+        /// 物理坐标转为像素坐标，再转为图像坐标
+        /// </summary>
+        /// <param name="doubles">0：物理坐标X，1：物理坐标Y，2：基准点坐标X，3：基准点坐标Y，4：图像与像框的比例</param>
+        /// <returns>返回图像int类型坐标点</returns>
+        public static Point TransformToPixels(params double[] doubles)//(double unitX, double unitY, double originX, double originY, double radio)
+        {
+            //using (Graphics g = Graphics.FromHwnd(IntPtr.Zero))
+            //{
+            //    pixelX = (int)((g.DpiX / 96) * unitX);
+            //    pixelY = (int)((g.DpiY / 96) * unitY);
+            //}
+
+            // alternative:
+            // using (Graphics g = Graphics.FromHdc(IntPtr.Zero)) { }
+            double dx = 0.008, dy = 0.008;
+            int picX = Convert.ToInt32((doubles[0] + doubles[2] * dx) / dx);
+            int picY = Convert.ToInt32((doubles[1] + doubles[3] * dy) / dy);
+            if (doubles.Length > 4)
+            {
+                picX = Convert.ToInt32((doubles[0] + doubles[2] * dx) / dx / doubles[4]);
+                picY = Convert.ToInt32((doubles[1] + doubles[3] * dy) / dy / doubles[4]);
+            }
+            return new Point { X = picX, Y = picY };
+        }
+
+        /// <summary>
+        /// 物理坐标转为像素坐标，再转为图像坐标
+        /// </summary>
+        /// <param name="doubles">0：物理坐标X，1：物理坐标Y，2：基准点坐标X，3：基准点坐标Y，4：图像与像框的比例</param>
+        /// <returns>返回图像float类型坐标点</returns>
+        public static PointF TransformToPixelsF(params double[] doubles)//(double unitX, double unitY, double originX, double originY, double radio)
+        {
+            double dx = 0.008, dy = 0.008;
+            float picX = Convert.ToInt64((doubles[0] + doubles[2] * dx) / dx);
+            float picY = Convert.ToInt64((doubles[1] + doubles[3] * dy) / dy);
+            if (doubles.Length > 4)
+            {
+                picX /= (float)doubles[4];
+                picY /= (float)doubles[4];
+            }
+            return new PointF { X = picX, Y = picY };
         }
     }
 }

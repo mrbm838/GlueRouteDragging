@@ -244,7 +244,7 @@
             // lbPY
             // 
             this.lbPY.AutoSize = true;
-            this.lbPY.Location = new System.Drawing.Point(1217, 145);
+            this.lbPY.Location = new System.Drawing.Point(1222, 145);
             this.lbPY.Name = "lbPY";
             this.lbPY.Size = new System.Drawing.Size(11, 12);
             this.lbPY.TabIndex = 7;
@@ -386,7 +386,7 @@
             // lbCY
             // 
             this.lbCY.AutoSize = true;
-            this.lbCY.Location = new System.Drawing.Point(1217, 169);
+            this.lbCY.Location = new System.Drawing.Point(1222, 169);
             this.lbCY.Name = "lbCY";
             this.lbCY.Size = new System.Drawing.Size(11, 12);
             this.lbCY.TabIndex = 37;
