@@ -14,7 +14,12 @@ namespace GlueReadWrite
 
     enum EnumCircleMode
     {
-        
+        XY,
+        XZ,
+        YZ,
+        XYZ,
+        XYZR,
+        XYZRA
     }
 
     public class GlueVariableDefine

@@ -68,6 +68,7 @@ namespace GluePathReadWrite
             pictureBox.MouseWheel += new MouseEventHandler(pbxDrawing_MouseWheel);
             //pictureBox.Paint += new PaintEventHandler(pictureBox_Paint);
             dataGridView.AllowUserToAddRows = false;
+            dataGridView.DefaultCellStyle = new DataGridViewCellStyle() { Alignment = DataGridViewContentAlignment.MiddleCenter };
         }
 
         private void Form_GluePath_Load(object sender, EventArgs e)
@@ -557,16 +558,97 @@ namespace GluePathReadWrite
             dataGridView.ClearSelection();
         }
 
+        private void btSaveGluePath_Click(object sender, EventArgs e)
+        {
+            //SaveFileDialog saveFileDialog = new SaveFileDialog
+            //{
+            //    Filter = "(*.txt)|*.txt"
+            //};
+            //if (saveFileDialog.ShowDialog() != DialogResult.OK)
+            //    return;
+            if (DialogResult.OK != MessageBox.Show("是否保存胶路？", "提示", MessageBoxButtons.OKCancel, MessageBoxIcon.Information))
+                return;
+
+            //string strFolderPath = _glueFilePath;
+            StringBuilder strGlueData = new StringBuilder();
+            for (int i = -1; i < dataGridView.Rows.Count; i++)
+            {
+                for (int j = 0; j < dataGridView.Columns.Count; j++)
+                {
+                    if (i == -1)
+                    {
+                        strGlueData.Append(dataGridView.Columns[j].HeaderText + (j != dataGridView.Columns.Count - 1 ? "," : "\r\n"));
+                        continue;
+                    }
+
+                    if (dataGridView.Rows[i].Cells[j].Value != null)
+                    {
+                        if (dataGridView.Rows[i].Cells[1].Value.ToString() == EnumLineType.Line.ToString())
+                        {
+                            strGlueData.Append("0");
+                        }
+                        else if (dataGridView.Rows[i].Cells[1].Value.ToString() == EnumLineType.Arc.ToString())
+                        {
+                            strGlueData.Append("2");
+                        }
+                        else
+                        {
+                            strGlueData.Append(dataGridView.Rows[i].Cells[j].Value);
+                        }
+
+                        switch (j)
+                        {
+                            case 1:
+                                if (dataGridView.Rows[i].Cells[1].Value.ToString() == EnumLineType.Line.ToString())
+                                    strGlueData.Append("0");
+                                else if (dataGridView.Rows[i].Cells[1].Value.ToString() == EnumLineType.Arc.ToString())
+                                    strGlueData.Append("2");
+                                break;
+                            case 2:
+                                var v =(int)(EnumCircleMode)Enum.Parse(typeof(EnumCircleMode), dataGridView.Rows[i].Cells[2].Value.ToString());
+                                //switch (Enum.Parse(typeof(EnumCircleMode), dataGridView.Rows[i].Cells[2].Value.ToString()))
+                                //{
+                                //    case EnumCircleMode.XY: strGlueData.Append()
+                                //}
+                                break;
+                            case 13:
+                                if ((bool)dataGridView.Rows[i].Cells[13].Value)
+                                    strGlueData.Append("1");
+                                else
+                                    strGlueData.Append("0");
+                                break;
+                            default:
+                                break;
+                        }
+                    }
+                    strGlueData.Append(j != dataGridView.Columns.Count - 1 ? "," : "\r\n");
+                }
+            }
+            using (StreamWriter sw = new StreamWriter(_glueFilePath, false, Encoding.Default))
+            {
+                sw.Write(strGlueData);
+            }
+        }
+
         private void LoadToDataGridViewCsv(string[] strTxt)
         {
             dataGridView.Rows.Clear();
             dataGridView.Columns.Clear();
 
             string[] strHead = strTxt[0].Split(',');
-            string[,] strPathData = new string[strTxt.Length, strHead.Length];
+            //string[,] strPathData = new string[strTxt.Length, strHead.Length];
 
             for (int i = 0; i < strHead.Length; i++)//添加列
             {
+                if (i == 13)
+                {
+                    DataGridViewCheckBoxColumn dgvCheckBoxColumn = new DataGridViewCheckBoxColumn();
+                    dgvCheckBoxColumn.Name = "column" + strHead[i].Split(',')[0];
+                    dgvCheckBoxColumn.HeaderText = strHead[i].Split(',')[0];
+                    dgvCheckBoxColumn.Width = 50;
+                    dataGridView.Columns.Add(dgvCheckBoxColumn);
+                    continue;
+                }
                 dataGridView.Columns.Add("column" + strHead[i].Split(',')[0], strHead[i].Split(',')[0]);
                 dataGridView.Columns[i].Width = 70;
             }
@@ -586,33 +668,42 @@ namespace GluePathReadWrite
                     else if (j == 2)
                     {
                         DataGridViewComboBoxCell dgvComboBoxCellOfCircleMode = new DataGridViewComboBoxCell();
-                        dgvComboBoxCellOfCircleMode.Items.Add("");
-                        dgvComboBoxCellOfCircleMode.Items.Add("XY");
-                        dgvComboBoxCellOfCircleMode.Items.Add("XYZ");
+                        dgvComboBoxCellOfCircleMode.DataSource = Enum.GetValues(typeof(EnumCircleMode));
                         dataGridView.Rows[i].Cells[2] = dgvComboBoxCellOfCircleMode;
                     }
                     else
                     {
                         dataGridView.Rows[i].Cells[j].Value = strings[j];
                     }
+                    //strPathData[i, j] = strings[j];
+                }
 
-                    strPathData[i, j] = strings[j];
-                }
-                if (strTxt[i + 1].Split(',')[1] == "1")
-                {
-                    dataGridView.Rows[i].Cells[1].Value = EnumLineType.Arc;
-                    dataGridView.Rows[i].Cells[2].Value = "XY";
-                }
-                else if (strTxt[i + 1].Split(',')[1] == "0")
+                if (strings[1] == "0")
                 {
                     dataGridView.Rows[i].Cells[1].Value = EnumLineType.Line;
+                    dataGridView.Rows[i].Cells[2].ReadOnly = true;
                     dataGridView.Rows[i].Cells[3].ReadOnly = true;
                     dataGridView.Rows[i].Cells[4].ReadOnly = true;
+                    dataGridView.Rows[i].Cells[5].ReadOnly = true;
+                    dataGridView.Rows[i].Cells[3].Style.BackColor = Color.Pink;
+                    dataGridView.Rows[i].Cells[4].Style.BackColor = Color.Pink;
+                    dataGridView.Rows[i].Cells[5].Style.BackColor = Color.Pink;
                 }
                 else
                 {
-                    dataGridView.Rows[i].Cells[1].Value = "";
+                    dataGridView.Rows[i].Cells[1].Value = EnumLineType.Arc;
+                    dataGridView.Rows[i].Cells[2].Value = EnumCircleMode.XY;
                 }
+
+                if (strings[2] == "-1")
+                {
+                    dataGridView.Rows[i].Cells[2].Value = string.Empty;
+                }
+
+
+                //DataGridViewCheckBoxCell dgvCheckBoxCell = new DataGridViewCheckBoxCell();
+                dataGridView.Rows[i].Cells[13].Value = strings[13] == "1"; //dgvCheckBoxCell;
+                //dgvCheckBoxCell.Selected = strings[13] == "1";
             }
             dataGridView.ClearSelection();
         }
@@ -1145,48 +1236,6 @@ namespace GluePathReadWrite
 
             }
 
-        }
-
-        private void btSaveGluePath_Click(object sender, EventArgs e)
-        {
-            //SaveFileDialog saveFileDialog = new SaveFileDialog
-            //{
-            //    Filter = "(*.txt)|*.txt"
-            //};
-            //if (saveFileDialog.ShowDialog() != DialogResult.OK)
-            //    return;
-            if (DialogResult.OK != MessageBox.Show("是否保存胶路？", "提示", MessageBoxButtons.OKCancel, MessageBoxIcon.Information))
-                return;
-
-            //string strFolderPath = _glueFilePath;
-            StringBuilder strGlueData = new StringBuilder();
-            for (int i = 0; i < dataGridView.Rows.Count; i++)
-            {
-                for (int j = 0; j < dataGridView.Columns.Count; j++)
-                {
-                    strGlueData.Append(dataGridView.Columns[j].HeaderText + ":");
-                    if (dataGridView.Rows[i].Cells[j].Value != null)
-                    {
-                        if (dataGridView.Rows[i].Cells[j].Value.ToString() == EnumLineType.Line.ToString())
-                        {
-                            strGlueData.Append("0");
-                        }
-                        else if (dataGridView.Rows[i].Cells[j].Value.ToString() == EnumLineType.Arc.ToString())
-                        {
-                            strGlueData.Append("1");
-                        }
-                        else
-                        {
-                            strGlueData.Append(dataGridView.Rows[i].Cells[j].Value.ToString());
-                        }
-                    }
-                    strGlueData.Append(j != dataGridView.Columns.Count - 1 ? "," : "\r\n");
-                }
-            }
-            using (StreamWriter sw = new StreamWriter(_glueFilePath, false, Encoding.Default))
-            {
-                sw.Write(strGlueData);
-            }
         }
 
         private void SaveImageJpeg(Image image, string strNamePath)
