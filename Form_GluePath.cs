@@ -62,6 +62,10 @@ namespace GluePathReadWrite
         private string _glueFilePath;
         private Bitmap _bmp;
 
+        private int _lastSelectedRow = -1;
+        private int _lastSelectedColumn = -1;
+        private string _strGlueFileTail;
+
         public FormGluePath()
         {
             InitializeComponent();
@@ -111,10 +115,11 @@ namespace GluePathReadWrite
 
             #region MyRegion
 
-            _glueFilePath = @"E:\2169\胶路拖拽\GlueReadWrite - 副本\bin\Debug\File\jiaolu.csv";
+            _glueFilePath = @"E:\Cowain\2169\GlueReadWrite\bin\Debug\File\jiaolu.csv";
+            ////@"E:\2169\胶路拖拽\GlueReadWrite - 副本\bin\Debug\File\jiaolu.csv";
             //@"E:\2169\胶路拖拽\GlueReadWrite - 副本\bin\Debug\File\T03-LC190-F2-R01.csv";
             //@"E:\2169\胶路拖拽\GlueReadWrite\bin\Debug\File\GluePath.txt";
-            //@"E:\Cowain\2169\GlueReadWrite\bin\Debug\File\GluePath.txt";
+
             LoadToDataGridViewCsv(ReadGluePathFile(_glueFilePath));
             DrawGuiPointNew();
             DrawGuiLineNew();
@@ -593,7 +598,6 @@ namespace GluePathReadWrite
                         }
                         else
                         {
-                            strGlueData.Append(dataGridView.Rows[i].Cells[j].Value);
                         }
 
                         switch (j)
@@ -605,11 +609,14 @@ namespace GluePathReadWrite
                                     strGlueData.Append("2");
                                 break;
                             case 2:
-                                var v =(int)(EnumCircleMode)Enum.Parse(typeof(EnumCircleMode), dataGridView.Rows[i].Cells[2].Value.ToString());
-                                //switch (Enum.Parse(typeof(EnumCircleMode), dataGridView.Rows[i].Cells[2].Value.ToString()))
-                                //{
-                                //    case EnumCircleMode.XY: strGlueData.Append()
-                                //}
+                                try
+                                {
+                                    strGlueData.Append((int)(EnumCircleMode)Enum.Parse(typeof(EnumCircleMode), dataGridView.Rows[i].Cells[2].Value.ToString()));
+                                }
+                                catch (ArgumentException)
+                                {
+                                    strGlueData.Append("-1");
+                                }
                                 break;
                             case 13:
                                 if ((bool)dataGridView.Rows[i].Cells[13].Value)
@@ -618,12 +625,14 @@ namespace GluePathReadWrite
                                     strGlueData.Append("0");
                                 break;
                             default:
+                                strGlueData.Append(dataGridView.Rows[i].Cells[j].Value);
                                 break;
                         }
                     }
                     strGlueData.Append(j != dataGridView.Columns.Count - 1 ? "," : "\r\n");
                 }
             }
+            strGlueData.Append(_strGlueFileTail);
             using (StreamWriter sw = new StreamWriter(_glueFilePath, false, Encoding.Default))
             {
                 sw.Write(strGlueData);
@@ -636,6 +645,7 @@ namespace GluePathReadWrite
             dataGridView.Columns.Clear();
 
             string[] strHead = strTxt[0].Split(',');
+            _strGlueFileTail = strTxt.Last();
             //string[,] strPathData = new string[strTxt.Length, strHead.Length];
 
             for (int i = 0; i < strHead.Length; i++)//添加列
@@ -700,10 +710,7 @@ namespace GluePathReadWrite
                     dataGridView.Rows[i].Cells[2].Value = string.Empty;
                 }
 
-
-                //DataGridViewCheckBoxCell dgvCheckBoxCell = new DataGridViewCheckBoxCell();
-                dataGridView.Rows[i].Cells[13].Value = strings[13] == "1"; //dgvCheckBoxCell;
-                //dgvCheckBoxCell.Selected = strings[13] == "1";
+                dataGridView.Rows[i].Cells[13].Value = strings[13] == "1";
             }
             dataGridView.ClearSelection();
         }
@@ -1255,9 +1262,6 @@ namespace GluePathReadWrite
                 MessageBox.Show(ex.ToString());
             }
         }
-
-        private int _lastSelectedRow = -1;
-        private int _lastSelectedColumn = -1;
 
         private void dataGridView_CellClick(object sender, DataGridViewCellEventArgs e)
         {

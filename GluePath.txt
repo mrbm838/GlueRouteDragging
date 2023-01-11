@@ -1,9 +1,0 @@
-ID:1,Type:0,CircleMode:,MX:-,MY:-,MZ:,TX:520,TY:-195.2,TZ:-7.5,TR:0,TA:0,Speed:10,AccSpeed:5,IOStatus:0,StartDelay:0,EndDelay:0,StartDelayIOStatus:0,EndDelayIOStatus:0
-ID:2,Type:0,CircleMode:,MX:-,MY:-,MZ:,TX:520,TY:-128,TZ:-17.5,TR:,TA:,Speed:,AccSpeed:,IOStatus:,StartDelay:,EndDelay:,StartDelayIOStatus:,EndDelayIOStatus:
-ID:3,Type:1,CircleMode:XY,MX:366.4,MY:-80,MZ:-37.5,TX:241.6,TY:30.4000000000001,TZ:-37.5,TR:,TA:,Speed:,AccSpeed:,IOStatus:,StartDelay:,EndDelay:,StartDelayIOStatus:,EndDelayIOStatus:
-ID:4,Type:0,CircleMode:,MX:-,MY:-,MZ:,TX:212.8,TY:112,TZ:-27.5,TR:,TA:,Speed:,AccSpeed:,IOStatus:,StartDelay:,EndDelay:,StartDelayIOStatus:,EndDelayIOStatus:
-ID:5,Type:1,CircleMode:XY,MX:174.4,MY:270.4,MZ:-37.5,TX:-17.5999999999999,TY:332.8,TZ:-37.5,TR:,TA:,Speed:,AccSpeed:,IOStatus:,StartDelay:,EndDelay:,StartDelayIOStatus:,EndDelayIOStatus:
-ID:6,Type:0,CircleMode:,MX:-,MY:-,MZ:,TX:-147.929,TY:281.357,TZ:-17.5,TR:,TA:,Speed:,AccSpeed:,IOStatus:,StartDelay:,EndDelay:,StartDelayIOStatus:,EndDelayIOStatus:
-ID:7,Type:1,CircleMode:XY,MX:-201.051,MY:203.095,MZ:-37.5,TX:-201.051,TY:72.058,TZ:-37.5,TR:,TA:,Speed:,AccSpeed:,IOStatus:,StartDelay:,EndDelay:,StartDelayIOStatus:,EndDelayIOStatus:
-ID:8,Type:0,CircleMode:,MX:-,MY:-,MZ:,TX:-212.964,TY:-47.066,TZ:-7.5,TR:,TA:,Speed:,AccSpeed:,IOStatus:,StartDelay:,EndDelay:,StartDelayIOStatus:,EndDelayIOStatus:
-ID:9,Type:1,CircleMode:XY,MX:-314.219,MY:-76.847,MZ:-37.5,TX:-433.343,TY:-142.365,TZ:-37.5,TR:,TA:,Speed:,AccSpeed:,IOStatus:,StartDelay:,EndDelay:,StartDelayIOStatus:,EndDelayIOStatus:
