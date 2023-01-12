@@ -111,7 +111,7 @@ namespace GlueReadWrite
 
             // alternative:
             // using (Graphics g = Graphics.FromHdc(IntPtr.Zero)) { }
-            double dx = 0.008, dy = 0.008;
+            double dx = GlueVariableDefine.PhysicalLength / GlueVariableDefine.PixelsNumber, dy = dx;
             int picX = Convert.ToInt32((doubles[0] + doubles[2] * dx) / dx);
             int picY = Convert.ToInt32((doubles[1] + doubles[3] * dy) / dy);
             if (doubles.Length > 4)
@@ -129,7 +129,7 @@ namespace GlueReadWrite
         /// <returns>返回图像float类型坐标点</returns>
         public static PointF TransformToPixelsF(params double[] doubles)//(double unitX, double unitY, double originX, double originY, double radio)
         {
-            double dx = 0.008, dy = 0.008;
+            double dx = GlueVariableDefine.PhysicalLength / GlueVariableDefine.PixelsNumber, dy = dx;
             float picX = Convert.ToInt64((doubles[0] + doubles[2] * dx) / dx);
             float picY = Convert.ToInt64((doubles[1] + doubles[3] * dy) / dy);
             if (doubles.Length > 4)

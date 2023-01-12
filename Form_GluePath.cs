@@ -115,10 +115,8 @@ namespace GluePathReadWrite
 
             #region MyRegion
 
-            _glueFilePath = @"E:\Cowain\2169\GlueReadWrite\bin\Debug\File\jiaolu.csv";
-            ////@"E:\2169\胶路拖拽\GlueReadWrite - 副本\bin\Debug\File\jiaolu.csv";
-            //@"E:\2169\胶路拖拽\GlueReadWrite - 副本\bin\Debug\File\T03-LC190-F2-R01.csv";
-            //@"E:\2169\胶路拖拽\GlueReadWrite\bin\Debug\File\GluePath.txt";
+            _glueFilePath = @"E:\2169\胶路拖拽\GlueReadWrite - 副本\bin\Debug\File\jiaolu.csv";
+            //@"E:\Cowain\2169\GlueReadWrite\bin\Debug\File\jiaolu.csv";
 
             LoadToDataGridViewCsv(ReadGluePathFile(_glueFilePath));
             DrawGuiPointNew();
@@ -337,18 +335,6 @@ namespace GluePathReadWrite
                 }
                 if (e.Button == MouseButtons.Left)
                 {
-                    //if (dataGridView.Rows[i].Cells[1].Value.ToString() == "Line")
-                    //{
-                    //    dataGridView.Rows[i].Cells[3].Value = "-";
-                    //    dataGridView.Rows[i].Cells[4].Value = "-";
-                    //    dataGridView.Rows[i].Cells[3].ReadOnly = true;
-                    //    dataGridView.Rows[i].Cells[4].ReadOnly = true;
-                    //}
-                    //else if (dataGridView.Rows[i].Cells[1].Value.ToString() == "Arc")
-                    //{
-                    //    dataGridView.Rows[i].Cells[3].ReadOnly = false;
-                    //    dataGridView.Rows[i].Cells[4].ReadOnly = false;
-                    //}
                     try
                     {
                         double dx = 0.008, dy = 0.008;
@@ -565,12 +551,6 @@ namespace GluePathReadWrite
 
         private void btSaveGluePath_Click(object sender, EventArgs e)
         {
-            //SaveFileDialog saveFileDialog = new SaveFileDialog
-            //{
-            //    Filter = "(*.txt)|*.txt"
-            //};
-            //if (saveFileDialog.ShowDialog() != DialogResult.OK)
-            //    return;
             if (DialogResult.OK != MessageBox.Show("是否保存胶路？", "提示", MessageBoxButtons.OKCancel, MessageBoxIcon.Information))
                 return;
 
@@ -588,18 +568,6 @@ namespace GluePathReadWrite
 
                     if (dataGridView.Rows[i].Cells[j].Value != null)
                     {
-                        if (dataGridView.Rows[i].Cells[1].Value.ToString() == EnumLineType.Line.ToString())
-                        {
-                            strGlueData.Append("0");
-                        }
-                        else if (dataGridView.Rows[i].Cells[1].Value.ToString() == EnumLineType.Arc.ToString())
-                        {
-                            strGlueData.Append("2");
-                        }
-                        else
-                        {
-                        }
-
                         switch (j)
                         {
                             case 1:
@@ -1051,9 +1019,10 @@ namespace GluePathReadWrite
 
         public void DrawGuiLineNew()
         {
+            GetPixelsNumberAndPhysicalLength();
             penRed.Width = Convert.ToInt32(tkBGlueWidth.Value) / (float)_dRatio;
             penBlue.Width = Convert.ToInt32(tkBGlueWidth.Value) / (float)_dRatio;
-            PointF pS = new PointF(), pM = default, pE = default;
+            PointF pS = new PointF(), pM, pE;
 
             for (int i = 1; i < dataGridView.RowCount; i++)
             {
@@ -1165,6 +1134,7 @@ namespace GluePathReadWrite
         private void DrawGuiPointNew()
         {
             pictureBox.Refresh();
+            GetPixelsNumberAndPhysicalLength();
 
             penRed.Width = Convert.ToInt32(tkBGlueWidth.Value) * (float)(1 / _dRatio);
             penBlue.Width = Convert.ToInt32(tkBGlueWidth.Value) * (float)(1 / _dRatio);
@@ -1240,9 +1210,21 @@ namespace GluePathReadWrite
                             new Font("Verdana", 10), new SolidBrush(Color.Red), new PointF(pT.X, pT.Y));
                     }
                 }
-
             }
+        }
 
+        private void GetPixelsNumberAndPhysicalLength()
+        {
+            try
+            {
+                GlueVariableDefine.PixelsNumber = Convert.ToInt32(tbPixelsNumber.Text);
+                GlueVariableDefine.PhysicalLength = Convert.ToDouble(tbPhyscialLength.Text);
+            }
+            catch (Exception e)
+            {
+                MessageBox.Show(e.Message, "提示", MessageBoxButtons.OK, MessageBoxIcon.Error);
+                throw;
+            }
         }
 
         private void SaveImageJpeg(Image image, string strNamePath)
@@ -1434,7 +1416,7 @@ namespace GluePathReadWrite
             lbCX.Text = xValue.ToString(CultureInfo.InvariantCulture);
             lbCY.Text = yValue.ToString(CultureInfo.InvariantCulture);
 
-            if (e.Button == MouseButtons.Left)
+            if (e.Button == MouseButtons.Left && _pointIndex != -1)
             {
                 var strings = _listCoorXAndZ[_pointIndex].StrLabel.Split('_');
                 int id = Convert.ToInt32(strings[0]) - 1;

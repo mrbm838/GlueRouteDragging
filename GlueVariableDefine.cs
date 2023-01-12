@@ -24,5 +24,8 @@ namespace GlueReadWrite
 
     public class GlueVariableDefine
     {
+        public static double PhysicalLength { get; set; }
+
+        public static int PixelsNumber { get; set; }
     }
 }
