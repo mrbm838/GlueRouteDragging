@@ -29,14 +29,22 @@
         private void InitializeComponent()
         {
             this.components = new System.ComponentModel.Container();
-            System.Windows.Forms.DataVisualization.Charting.ChartArea chartArea2 = new System.Windows.Forms.DataVisualization.Charting.ChartArea();
-            System.Windows.Forms.DataVisualization.Charting.Legend legend2 = new System.Windows.Forms.DataVisualization.Charting.Legend();
-            System.Windows.Forms.DataVisualization.Charting.Series series2 = new System.Windows.Forms.DataVisualization.Charting.Series();
+            System.Windows.Forms.DataVisualization.Charting.ChartArea chartArea1 = new System.Windows.Forms.DataVisualization.Charting.ChartArea();
+            System.Windows.Forms.DataVisualization.Charting.Legend legend1 = new System.Windows.Forms.DataVisualization.Charting.Legend();
+            System.Windows.Forms.DataVisualization.Charting.Series series1 = new System.Windows.Forms.DataVisualization.Charting.Series();
             this.splitContainer1 = new System.Windows.Forms.SplitContainer();
             this.pictureBox = new System.Windows.Forms.PictureBox();
             this.splitter1 = new System.Windows.Forms.Splitter();
             this.chart = new System.Windows.Forms.DataVisualization.Charting.Chart();
             this.panel1 = new System.Windows.Forms.Panel();
+            this.label15 = new System.Windows.Forms.Label();
+            this.lbPhysicX = new System.Windows.Forms.Label();
+            this.lbPhysicY = new System.Windows.Forms.Label();
+            this.label12 = new System.Windows.Forms.Label();
+            this.lbPictureX = new System.Windows.Forms.Label();
+            this.lbPictureY = new System.Windows.Forms.Label();
+            this.label11 = new System.Windows.Forms.Label();
+            this.label10 = new System.Windows.Forms.Label();
             this.label9 = new System.Windows.Forms.Label();
             this.tbPhyscialLength = new System.Windows.Forms.TextBox();
             this.label8 = new System.Windows.Forms.Label();
@@ -55,9 +63,9 @@
             this.tkBGlueWidth = new System.Windows.Forms.TrackBar();
             this.label2 = new System.Windows.Forms.Label();
             this.label3 = new System.Windows.Forms.Label();
-            this.lbPX = new System.Windows.Forms.Label();
+            this.lbPixelX = new System.Windows.Forms.Label();
             this.tkBTransparency = new System.Windows.Forms.TrackBar();
-            this.lbPY = new System.Windows.Forms.Label();
+            this.lbPixelY = new System.Windows.Forms.Label();
             this.label1 = new System.Windows.Forms.Label();
             this.label4 = new System.Windows.Forms.Label();
             this.tbStandardX = new System.Windows.Forms.TextBox();
@@ -72,8 +80,6 @@
             this.ToolStripMenuItem_Insert = new System.Windows.Forms.ToolStripMenuItem();
             this.ToolStripMenuItem_Delete = new System.Windows.Forms.ToolStripMenuItem();
             this.ToolStripMenuItem_Clear = new System.Windows.Forms.ToolStripMenuItem();
-            this.label10 = new System.Windows.Forms.Label();
-            this.label11 = new System.Windows.Forms.Label();
             ((System.ComponentModel.ISupportInitialize)(this.splitContainer1)).BeginInit();
             this.splitContainer1.Panel1.SuspendLayout();
             this.splitContainer1.Panel2.SuspendLayout();
@@ -138,18 +144,18 @@
             // 
             // chart
             // 
-            chartArea2.Name = "ChartArea1";
-            this.chart.ChartAreas.Add(chartArea2);
+            chartArea1.Name = "ChartArea1";
+            this.chart.ChartAreas.Add(chartArea1);
             this.chart.Dock = System.Windows.Forms.DockStyle.Left;
-            legend2.Name = "Legend1";
-            this.chart.Legends.Add(legend2);
+            legend1.Name = "Legend1";
+            this.chart.Legends.Add(legend1);
             this.chart.Location = new System.Drawing.Point(0, 0);
             this.chart.Margin = new System.Windows.Forms.Padding(1);
             this.chart.Name = "chart";
-            series2.ChartArea = "ChartArea1";
-            series2.Legend = "Legend1";
-            series2.Name = "Series1";
-            this.chart.Series.Add(series2);
+            series1.ChartArea = "ChartArea1";
+            series1.Legend = "Legend1";
+            series1.Name = "Series1";
+            this.chart.Series.Add(series1);
             this.chart.Size = new System.Drawing.Size(569, 452);
             this.chart.TabIndex = 1;
             this.chart.Text = "chart1";
@@ -160,6 +166,12 @@
             // 
             // panel1
             // 
+            this.panel1.Controls.Add(this.label15);
+            this.panel1.Controls.Add(this.lbPhysicX);
+            this.panel1.Controls.Add(this.lbPhysicY);
+            this.panel1.Controls.Add(this.label12);
+            this.panel1.Controls.Add(this.lbPictureX);
+            this.panel1.Controls.Add(this.lbPictureY);
             this.panel1.Controls.Add(this.label11);
             this.panel1.Controls.Add(this.label10);
             this.panel1.Controls.Add(this.label9);
@@ -180,9 +192,9 @@
             this.panel1.Controls.Add(this.tkBGlueWidth);
             this.panel1.Controls.Add(this.label2);
             this.panel1.Controls.Add(this.label3);
-            this.panel1.Controls.Add(this.lbPX);
+            this.panel1.Controls.Add(this.lbPixelX);
             this.panel1.Controls.Add(this.tkBTransparency);
-            this.panel1.Controls.Add(this.lbPY);
+            this.panel1.Controls.Add(this.lbPixelY);
             this.panel1.Controls.Add(this.label1);
             this.panel1.Controls.Add(this.label4);
             this.panel1.Controls.Add(this.tbStandardX);
@@ -196,10 +208,82 @@
             this.panel1.Size = new System.Drawing.Size(225, 452);
             this.panel1.TabIndex = 6;
             // 
+            // label15
+            // 
+            this.label15.AutoSize = true;
+            this.label15.Location = new System.Drawing.Point(19, 142);
+            this.label15.Name = "label15";
+            this.label15.Size = new System.Drawing.Size(65, 12);
+            this.label15.TabIndex = 100;
+            this.label15.Text = "物理坐标：";
+            // 
+            // lbPhysicX
+            // 
+            this.lbPhysicX.AutoSize = true;
+            this.lbPhysicX.Location = new System.Drawing.Point(91, 142);
+            this.lbPhysicX.Name = "lbPhysicX";
+            this.lbPhysicX.Size = new System.Drawing.Size(11, 12);
+            this.lbPhysicX.TabIndex = 101;
+            this.lbPhysicX.Text = "0";
+            // 
+            // lbPhysicY
+            // 
+            this.lbPhysicY.AutoSize = true;
+            this.lbPhysicY.Location = new System.Drawing.Point(146, 142);
+            this.lbPhysicY.Name = "lbPhysicY";
+            this.lbPhysicY.Size = new System.Drawing.Size(11, 12);
+            this.lbPhysicY.TabIndex = 102;
+            this.lbPhysicY.Text = "0";
+            // 
+            // label12
+            // 
+            this.label12.AutoSize = true;
+            this.label12.Location = new System.Drawing.Point(19, 190);
+            this.label12.Name = "label12";
+            this.label12.Size = new System.Drawing.Size(65, 12);
+            this.label12.TabIndex = 97;
+            this.label12.Text = "图像坐标：";
+            // 
+            // lbPictureX
+            // 
+            this.lbPictureX.AutoSize = true;
+            this.lbPictureX.Location = new System.Drawing.Point(91, 190);
+            this.lbPictureX.Name = "lbPictureX";
+            this.lbPictureX.Size = new System.Drawing.Size(11, 12);
+            this.lbPictureX.TabIndex = 98;
+            this.lbPictureX.Text = "0";
+            // 
+            // lbPictureY
+            // 
+            this.lbPictureY.AutoSize = true;
+            this.lbPictureY.Location = new System.Drawing.Point(146, 190);
+            this.lbPictureY.Name = "lbPictureY";
+            this.lbPictureY.Size = new System.Drawing.Size(11, 12);
+            this.lbPictureY.TabIndex = 99;
+            this.lbPictureY.Text = "0";
+            // 
+            // label11
+            // 
+            this.label11.AutoSize = true;
+            this.label11.Location = new System.Drawing.Point(159, 114);
+            this.label11.Name = "label11";
+            this.label11.Size = new System.Drawing.Size(17, 12);
+            this.label11.TabIndex = 96;
+            this.label11.Text = "mm";
+            // 
+            // label10
+            // 
+            this.label10.AutoSize = true;
+            this.label10.Location = new System.Drawing.Point(159, 85);
+            this.label10.Name = "label10";
+            this.label10.Size = new System.Drawing.Size(17, 12);
+            this.label10.TabIndex = 95;
+            this.label10.Text = "pt";
+            // 
             // label9
             // 
             this.label9.AutoSize = true;
-            this.label9.Location = new System.Drawing.Point(19, 141);
+            this.label9.Location = new System.Drawing.Point(19, 114);
             this.label9.Name = "label9";
             this.label9.Size = new System.Drawing.Size(89, 12);
             this.label9.TabIndex = 94;
@@ -207,7 +291,7 @@
             // 
             // tbPhyscialLength
             // 
-            this.tbPhyscialLength.Location = new System.Drawing.Point(114, 135);
+            this.tbPhyscialLength.Location = new System.Drawing.Point(114, 108);
             this.tbPhyscialLength.Name = "tbPhyscialLength";
             this.tbPhyscialLength.Size = new System.Drawing.Size(43, 21);
             this.tbPhyscialLength.TabIndex = 93;
@@ -216,7 +300,7 @@
             // label8
             // 
             this.label8.AutoSize = true;
-            this.label8.Location = new System.Drawing.Point(19, 109);
+            this.label8.Location = new System.Drawing.Point(19, 85);
             this.label8.Name = "label8";
             this.label8.Size = new System.Drawing.Size(89, 12);
             this.label8.TabIndex = 92;
@@ -224,7 +308,7 @@
             // 
             // tbPixelsNumber
             // 
-            this.tbPixelsNumber.Location = new System.Drawing.Point(114, 103);
+            this.tbPixelsNumber.Location = new System.Drawing.Point(114, 79);
             this.tbPixelsNumber.Name = "tbPixelsNumber";
             this.tbPixelsNumber.Size = new System.Drawing.Size(43, 21);
             this.tbPixelsNumber.TabIndex = 91;
@@ -234,7 +318,7 @@
             // 
             this.label7.AutoSize = true;
             this.label7.Font = new System.Drawing.Font("宋体", 10.5F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(134)));
-            this.label7.Location = new System.Drawing.Point(18, 34);
+            this.label7.Location = new System.Drawing.Point(18, 19);
             this.label7.Margin = new System.Windows.Forms.Padding(2, 0, 2, 0);
             this.label7.Name = "label7";
             this.label7.Size = new System.Drawing.Size(77, 14);
@@ -245,7 +329,7 @@
             // 
             this.button2.BackgroundImage = global::GlueReadWrite.Properties.Resources.xiangxia;
             this.button2.BackgroundImageLayout = System.Windows.Forms.ImageLayout.Zoom;
-            this.button2.Location = new System.Drawing.Point(161, 43);
+            this.button2.Location = new System.Drawing.Point(161, 28);
             this.button2.Margin = new System.Windows.Forms.Padding(2);
             this.button2.Name = "button2";
             this.button2.Size = new System.Drawing.Size(27, 11);
@@ -257,7 +341,7 @@
             // 
             this.button1.BackgroundImage = global::GlueReadWrite.Properties.Resources.xiangshang;
             this.button1.BackgroundImageLayout = System.Windows.Forms.ImageLayout.Zoom;
-            this.button1.Location = new System.Drawing.Point(161, 28);
+            this.button1.Location = new System.Drawing.Point(161, 13);
             this.button1.Margin = new System.Windows.Forms.Padding(2);
             this.button1.Name = "button1";
             this.button1.Size = new System.Drawing.Size(27, 10);
@@ -267,7 +351,7 @@
             // 
             // tbRotation
             // 
-            this.tbRotation.Location = new System.Drawing.Point(101, 29);
+            this.tbRotation.Location = new System.Drawing.Point(101, 14);
             this.tbRotation.Name = "tbRotation";
             this.tbRotation.Size = new System.Drawing.Size(87, 21);
             this.tbRotation.TabIndex = 87;
@@ -277,7 +361,7 @@
             // 
             this.cbWhole.AutoSize = true;
             this.cbWhole.Font = new System.Drawing.Font("宋体", 12F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(134)));
-            this.cbWhole.Location = new System.Drawing.Point(18, 65);
+            this.cbWhole.Location = new System.Drawing.Point(18, 50);
             this.cbWhole.Name = "cbWhole";
             this.cbWhole.Size = new System.Drawing.Size(90, 20);
             this.cbWhole.TabIndex = 86;
@@ -287,7 +371,7 @@
             // label5
             // 
             this.label5.AutoSize = true;
-            this.label5.Location = new System.Drawing.Point(19, 201);
+            this.label5.Location = new System.Drawing.Point(19, 213);
             this.label5.Name = "label5";
             this.label5.Size = new System.Drawing.Size(65, 12);
             this.label5.TabIndex = 83;
@@ -296,7 +380,7 @@
             // lbCX
             // 
             this.lbCX.AutoSize = true;
-            this.lbCX.Location = new System.Drawing.Point(91, 201);
+            this.lbCX.Location = new System.Drawing.Point(91, 213);
             this.lbCX.Name = "lbCX";
             this.lbCX.Size = new System.Drawing.Size(11, 12);
             this.lbCX.TabIndex = 84;
@@ -305,7 +389,7 @@
             // lbCY
             // 
             this.lbCY.AutoSize = true;
-            this.lbCY.Location = new System.Drawing.Point(146, 201);
+            this.lbCY.Location = new System.Drawing.Point(146, 213);
             this.lbCY.Name = "lbCY";
             this.lbCY.Size = new System.Drawing.Size(11, 12);
             this.lbCY.TabIndex = 85;
@@ -314,7 +398,7 @@
             // lbTransparency
             // 
             this.lbTransparency.AutoSize = true;
-            this.lbTransparency.Location = new System.Drawing.Point(195, 314);
+            this.lbTransparency.Location = new System.Drawing.Point(195, 322);
             this.lbTransparency.Name = "lbTransparency";
             this.lbTransparency.Size = new System.Drawing.Size(11, 12);
             this.lbTransparency.TabIndex = 82;
@@ -323,7 +407,7 @@
             // lbGlueWidth
             // 
             this.lbGlueWidth.AutoSize = true;
-            this.lbGlueWidth.Location = new System.Drawing.Point(195, 263);
+            this.lbGlueWidth.Location = new System.Drawing.Point(195, 271);
             this.lbGlueWidth.Name = "lbGlueWidth";
             this.lbGlueWidth.Size = new System.Drawing.Size(11, 12);
             this.lbGlueWidth.TabIndex = 81;
@@ -341,10 +425,11 @@
             this.btSaveGluePath.Size = new System.Drawing.Size(49, 49);
             this.btSaveGluePath.TabIndex = 73;
             this.btSaveGluePath.UseVisualStyleBackColor = true;
+            this.btSaveGluePath.Click += new System.EventHandler(this.btSaveGluePath_Click);
             // 
             // tkBGlueWidth
             // 
-            this.tkBGlueWidth.Location = new System.Drawing.Point(64, 260);
+            this.tkBGlueWidth.Location = new System.Drawing.Point(64, 268);
             this.tkBGlueWidth.Margin = new System.Windows.Forms.Padding(3, 1, 3, 1);
             this.tkBGlueWidth.Maximum = 50;
             this.tkBGlueWidth.Minimum = 1;
@@ -356,7 +441,7 @@
             // label2
             // 
             this.label2.AutoSize = true;
-            this.label2.Location = new System.Drawing.Point(19, 177);
+            this.label2.Location = new System.Drawing.Point(19, 166);
             this.label2.Name = "label2";
             this.label2.Size = new System.Drawing.Size(65, 12);
             this.label2.TabIndex = 67;
@@ -365,24 +450,24 @@
             // label3
             // 
             this.label3.AutoSize = true;
-            this.label3.Location = new System.Drawing.Point(19, 316);
+            this.label3.Location = new System.Drawing.Point(19, 324);
             this.label3.Name = "label3";
             this.label3.Size = new System.Drawing.Size(41, 12);
             this.label3.TabIndex = 79;
             this.label3.Text = "透明：";
             // 
-            // lbPX
+            // lbPixelX
             // 
-            this.lbPX.AutoSize = true;
-            this.lbPX.Location = new System.Drawing.Point(91, 177);
-            this.lbPX.Name = "lbPX";
-            this.lbPX.Size = new System.Drawing.Size(11, 12);
-            this.lbPX.TabIndex = 68;
-            this.lbPX.Text = "0";
+            this.lbPixelX.AutoSize = true;
+            this.lbPixelX.Location = new System.Drawing.Point(91, 166);
+            this.lbPixelX.Name = "lbPixelX";
+            this.lbPixelX.Size = new System.Drawing.Size(11, 12);
+            this.lbPixelX.TabIndex = 68;
+            this.lbPixelX.Text = "0";
             // 
             // tkBTransparency
             // 
-            this.tkBTransparency.Location = new System.Drawing.Point(64, 305);
+            this.tkBTransparency.Location = new System.Drawing.Point(64, 313);
             this.tkBTransparency.Margin = new System.Windows.Forms.Padding(3, 1, 3, 1);
             this.tkBTransparency.Maximum = 255;
             this.tkBTransparency.Name = "tkBTransparency";
@@ -390,19 +475,19 @@
             this.tkBTransparency.TabIndex = 78;
             this.tkBTransparency.Value = 255;
             // 
-            // lbPY
+            // lbPixelY
             // 
-            this.lbPY.AutoSize = true;
-            this.lbPY.Location = new System.Drawing.Point(146, 177);
-            this.lbPY.Name = "lbPY";
-            this.lbPY.Size = new System.Drawing.Size(11, 12);
-            this.lbPY.TabIndex = 69;
-            this.lbPY.Text = "0";
+            this.lbPixelY.AutoSize = true;
+            this.lbPixelY.Location = new System.Drawing.Point(146, 166);
+            this.lbPixelY.Name = "lbPixelY";
+            this.lbPixelY.Size = new System.Drawing.Size(11, 12);
+            this.lbPixelY.TabIndex = 69;
+            this.lbPixelY.Text = "0";
             // 
             // label1
             // 
             this.label1.AutoSize = true;
-            this.label1.Location = new System.Drawing.Point(19, 274);
+            this.label1.Location = new System.Drawing.Point(19, 282);
             this.label1.Name = "label1";
             this.label1.Size = new System.Drawing.Size(41, 12);
             this.label1.TabIndex = 77;
@@ -411,7 +496,7 @@
             // label4
             // 
             this.label4.AutoSize = true;
-            this.label4.Location = new System.Drawing.Point(19, 357);
+            this.label4.Location = new System.Drawing.Point(19, 364);
             this.label4.Name = "label4";
             this.label4.Size = new System.Drawing.Size(41, 12);
             this.label4.TabIndex = 70;
@@ -419,7 +504,7 @@
             // 
             // tbStandardX
             // 
-            this.tbStandardX.Location = new System.Drawing.Point(75, 353);
+            this.tbStandardX.Location = new System.Drawing.Point(75, 360);
             this.tbStandardX.Margin = new System.Windows.Forms.Padding(3, 1, 3, 1);
             this.tbStandardX.Name = "tbStandardX";
             this.tbStandardX.Size = new System.Drawing.Size(52, 21);
@@ -437,10 +522,11 @@
             this.btOpenGluePath.Size = new System.Drawing.Size(49, 49);
             this.btOpenGluePath.TabIndex = 76;
             this.btOpenGluePath.UseVisualStyleBackColor = true;
+            this.btOpenGluePath.Click += new System.EventHandler(this.btOpenGluePath_Click);
             // 
             // tbStandardY
             // 
-            this.tbStandardY.Location = new System.Drawing.Point(143, 353);
+            this.tbStandardY.Location = new System.Drawing.Point(143, 360);
             this.tbStandardY.Margin = new System.Windows.Forms.Padding(3, 1, 3, 1);
             this.tbStandardY.Name = "tbStandardY";
             this.tbStandardY.Size = new System.Drawing.Size(52, 21);
@@ -449,7 +535,7 @@
             // label6
             // 
             this.label6.AutoSize = true;
-            this.label6.Location = new System.Drawing.Point(21, 228);
+            this.label6.Location = new System.Drawing.Point(21, 242);
             this.label6.Name = "label6";
             this.label6.Size = new System.Drawing.Size(65, 12);
             this.label6.TabIndex = 75;
@@ -458,7 +544,7 @@
             // lbZoom
             // 
             this.lbZoom.AutoSize = true;
-            this.lbZoom.Location = new System.Drawing.Point(91, 228);
+            this.lbZoom.Location = new System.Drawing.Point(91, 242);
             this.lbZoom.Name = "lbZoom";
             this.lbZoom.Size = new System.Drawing.Size(11, 12);
             this.lbZoom.TabIndex = 74;
@@ -536,24 +622,6 @@
             this.ToolStripMenuItem_Clear.Text = "清除胶路";
             this.ToolStripMenuItem_Clear.Click += new System.EventHandler(this.ToolStripMenuItem_Clear_Click);
             // 
-            // label10
-            // 
-            this.label10.AutoSize = true;
-            this.label10.Location = new System.Drawing.Point(159, 109);
-            this.label10.Name = "label10";
-            this.label10.Size = new System.Drawing.Size(17, 12);
-            this.label10.TabIndex = 95;
-            this.label10.Text = "pt";
-            // 
-            // label11
-            // 
-            this.label11.AutoSize = true;
-            this.label11.Location = new System.Drawing.Point(159, 141);
-            this.label11.Name = "label11";
-            this.label11.Size = new System.Drawing.Size(17, 12);
-            this.label11.TabIndex = 96;
-            this.label11.Text = "mm";
-            // 
             // FormGluePath
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(96F, 96F);
@@ -613,9 +681,9 @@
         private System.Windows.Forms.TrackBar tkBGlueWidth;
         private System.Windows.Forms.Label label2;
         private System.Windows.Forms.Label label3;
-        private System.Windows.Forms.Label lbPX;
+        private System.Windows.Forms.Label lbPixelX;
         private System.Windows.Forms.TrackBar tkBTransparency;
-        private System.Windows.Forms.Label lbPY;
+        private System.Windows.Forms.Label lbPixelY;
         private System.Windows.Forms.Label label1;
         private System.Windows.Forms.Label label4;
         private System.Windows.Forms.TextBox tbStandardX;
@@ -629,6 +697,12 @@
         private System.Windows.Forms.TextBox tbPixelsNumber;
         private System.Windows.Forms.Label label11;
         private System.Windows.Forms.Label label10;
+        private System.Windows.Forms.Label label15;
+        private System.Windows.Forms.Label lbPhysicX;
+        private System.Windows.Forms.Label lbPhysicY;
+        private System.Windows.Forms.Label label12;
+        private System.Windows.Forms.Label lbPictureX;
+        private System.Windows.Forms.Label lbPictureY;
     }
 }
 

@@ -5,6 +5,7 @@ using System.ComponentModel;
 using System.Data;
 using System.Drawing;
 using System.Drawing.Drawing2D;
+using System.Dynamic;
 using System.Globalization;
 using System.IO;
 using System.Linq;
@@ -312,6 +313,7 @@ namespace GluePathReadWrite
                 MessageBox.Show(ex.ToString());
             }
             graph.DrawLine(penRed, 200, 200, 400, 400);
+            graph.DrawEllipse(penRed, 202, 450, 25, 25);
         }
 
         private void pictureBox_MouseUp(object sender, MouseEventArgs e)
@@ -326,6 +328,8 @@ namespace GluePathReadWrite
 
         private void pictureBox_MouseMove(object sender, MouseEventArgs e)
         {
+            GetPixelsNumberAndPhysicalLength();
+            double dx = GlueVariableDefine.PhysicalLength / GlueVariableDefine.PixelsNumber, dy = dx;
             if (bMoveFlag)
             {
                 if (e.Button == MouseButtons.Right)
@@ -337,8 +341,6 @@ namespace GluePathReadWrite
                 {
                     try
                     {
-                        double dx = 0.008, dy = 0.008;
-
                         if (dataGridView.Rows[_selectedRow].Cells[_selectedColumn].Selected || dataGridView.Rows[_selectedRow].Cells[_selectedColumn + 1].Selected)
                         {
                             dataGridView.Rows[_selectedRow].Cells[_selectedColumn].Value = Math.Round(e.X * _dRatio * dx - Convert.ToDouble(tbStandardX.Text) * dx, 3);
@@ -354,8 +356,12 @@ namespace GluePathReadWrite
                 DrawGuiLineNew();
             }
 
-            lbPX.Text = (e.X * dPictureBoxImageWidth / pictureBox.Width).ToString("0.000");
-            lbPY.Text = (e.Y * dPictureBoxImageHeight / pictureBox.Height).ToString("0.000");
+            lbPhysicX.Text = (e.X * _dRatio * dx - Convert.ToDouble(tbStandardX.Text) * dx).ToString("f3");
+            lbPhysicY.Text = (e.Y * _dRatio * dy - Convert.ToDouble(tbStandardY.Text) * dy).ToString("f3");
+            lbPixelX.Text = (e.X * _dRatio).ToString("0.000");
+            lbPixelY.Text = (e.Y * _dRatio).ToString("0.000");
+            lbPictureX.Text = e.X.ToString();
+            lbPictureY.Text = e.Y.ToString();
         }
 
         private void pictureBox_MouseDown(object sender, MouseEventArgs e)
@@ -404,49 +410,6 @@ namespace GluePathReadWrite
                         }
                         break;
                     }
-
-                    #region MyRegion
-
-
-                    //int transCoordinateX = (int)(e.X * dRatio);
-                    //int transCoordinateY = (int)(e.Y * dRatio);
-
-                    //pT.X = Convert.ToInt32((Convert.ToDouble(dataGridView.Rows[i].Cells[3].Value) + Convert.ToDouble(tbStandardX.Text)) / dRatio);
-                    //pT.Y = Convert.ToInt32((Convert.ToDouble(dataGridView.Rows[i].Cells[4].Value) + Convert.ToDouble(tbStandardY.Text)) / dRatio);
-                    //dataGridView.Rows[i].Cells[3].Value = Math.Round(e.X * dRatio, 3) - Convert.ToDouble(tbStandardX.Text);
-                    //dataGridView.Rows[i].Cells[4].Value = Math.Round(e.Y * dRatio, 3) - Convert.ToDouble(tbStandardY.Text);
-
-                    //if (GluePathForXAndY.IsNumberic(dataGridView.Rows[serial].Cells[3].Value) && GluePathForXAndY.IsNumberic(dataGridView.Rows[serial].Cells[4].Value))
-                    //{
-                    //    //var transCoordinateMX = xPos + Convert.ToInt32(Convert.ToDouble(tbStandardX.Text) / dRatio);
-                    //    //var transCoordinateMY = yPos + Convert.ToInt32(Convert.ToDouble(tbStandardY.Text) / dRatio);
-                    //    //if (item.Value.Contains(transCoordinateMX, transCoordinateMY))
-                    //    //{
-                    //    //    //dataGridView.Rows[serial].Cells[3].Selected = true;
-                    //    //    dataGridView_CellClick(dataGridView, new DataGridViewCellEventArgs(3, serial));
-                    //    //    //DrawGuiPointNew();
-                    //    //    //DrawGUILine();
-                    //    //}
-
-                    //}
-                    //if (GluePathForXAndY.IsNumberic(dataGridView.Rows[serial].Cells[6].Value) && GluePathForXAndY.IsNumberic(dataGridView.Rows[serial].Cells[7].Value))
-                    //{
-                    //    //var transCoordinateTX = xPos + Convert.ToInt32(Convert.ToDouble(tbStandardX.Text) / dRatio);
-                    //    //var transCoordinateTY = yPos + Convert.ToInt32(Convert.ToDouble(tbStandardY.Text) / dRatio);
-                    //    //if (item.Value.Contains(transCoordinateTX, transCoordinateTY))
-                    //    //{
-                    //    //    //dataGridView.Rows[serial].Cells[6].Selected = true;
-                    //    //    //DrawGuiPointNew();
-                    //    //    //DrawGUILine();
-                    //    //}
-                    //    //if (item.Value.Contains(xPos, yPos))
-                    //    //{
-                    //    //    dataGridView_CellClick(dataGridView, new DataGridViewCellEventArgs(6, serial));
-                    //    //}
-                    //}
-
-                    #endregion
-
                 }
             }
         }
@@ -1254,7 +1217,7 @@ namespace GluePathReadWrite
             _lastSelectedRow = _selectedRow;
             _lastSelectedColumn = _selectedColumn;
 
-            if (e.ColumnIndex == 5 || e.ColumnIndex == 8)
+            if (e.RowIndex != -1 && (e.ColumnIndex == 5 || e.ColumnIndex == 8))
             {
                 string strLabel;
                 if (dataGridView.Rows[e.RowIndex].Cells[1].Value.ToString() == EnumLineType.Line.ToString())
