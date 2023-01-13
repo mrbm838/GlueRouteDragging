@@ -312,15 +312,14 @@ namespace GluePathReadWrite
             {
                 MessageBox.Show(ex.ToString());
             }
-            graph.DrawLine(penRed, 200, 200, 400, 400);
-            graph.DrawEllipse(penRed, 202, 450, 25, 25);
         }
 
         private void pictureBox_MouseUp(object sender, MouseEventArgs e)
         {
-            if (e.Button == MouseButtons.Right || e.Button == MouseButtons.Left)
+            if (e.Button == MouseButtons.Left)//e.Button == MouseButtons.Right || 
             {
                 bMoveFlag = false;
+                this.Cursor = Cursors.Default;
                 _selectedRow = -1;
                 _selectedColumn = -1;
             }
@@ -330,20 +329,24 @@ namespace GluePathReadWrite
         {
             GetPixelsNumberAndPhysicalLength();
             double dx = GlueVariableDefine.PhysicalLength / GlueVariableDefine.PixelsNumber, dy = dx;
-            if (bMoveFlag)
+            //if (e.Button == MouseButtons.Right)
+            //{
+            //}
+            if (e.Button == MouseButtons.Left)
             {
-                if (e.Button == MouseButtons.Right)
+                if (bMoveFlag)
                 {
                     pictureBox.Left += Convert.ToInt16(e.X - xPos);
                     pictureBox.Top += Convert.ToInt16(e.Y - yPos);
                 }
-                if (e.Button == MouseButtons.Left)
+                else
                 {
                     try
                     {
-                        if (dataGridView.Rows[_selectedRow].Cells[_selectedColumn].Selected || dataGridView.Rows[_selectedRow].Cells[_selectedColumn + 1].Selected)
+                        if (dataGridView.Rows[_selectedRow].Cells[_selectedColumn].Selected ||
+                            dataGridView.Rows[_selectedRow].Cells[_selectedColumn + 1].Selected)
                         {
-                            dataGridView.Rows[_selectedRow].Cells[_selectedColumn].Value = Math.Round(e.X * _dRatio * dx - Convert.ToDouble(tbStandardX.Text) * dx, 3);
+                            dataGridView.Rows[_selectedRow].Cells[_selectedColumn].Value =Math.Round(e.X * _dRatio * dx - Convert.ToDouble(tbStandardX.Text) * dx, 3);
                             dataGridView.Rows[_selectedRow].Cells[_selectedColumn + 1].Value = Math.Round(e.Y * _dRatio * dy - Convert.ToDouble(tbStandardY.Text) * dy, 3);
                         }
                     }
@@ -352,9 +355,9 @@ namespace GluePathReadWrite
                         // ignored
                     }
                 }
-                DrawGuiPointNew();
-                DrawGuiLineNew();
             }
+            DrawGuiPointNew();
+            DrawGuiLineNew();
 
             lbPhysicX.Text = (e.X * _dRatio * dx - Convert.ToDouble(tbStandardX.Text) * dx).ToString("f3");
             lbPhysicY.Text = (e.Y * _dRatio * dy - Convert.ToDouble(tbStandardY.Text) * dy).ToString("f3");
@@ -367,10 +370,9 @@ namespace GluePathReadWrite
         private void pictureBox_MouseDown(object sender, MouseEventArgs e)
         {
             dataGridView.ClearSelection();
-            if (e.Button == MouseButtons.Right || e.Button == MouseButtons.Left)
+            if (e.Button == MouseButtons.Left)//e.Button == MouseButtons.Right || 
             {
                 this.pictureBox.Focus();
-                bMoveFlag = true;
                 xPos = e.X;
                 yPos = e.Y;
 
@@ -378,11 +380,12 @@ namespace GluePathReadWrite
                 //{
 
                 //}
-
+                bMoveFlag = true;
                 foreach (var rectangle in _dicRectangles)
                 {
                     if (rectangle.Value.Contains(xPos, yPos))
                     {
+                        bMoveFlag = false;
                         this.Cursor = Cursors.Cross;
                         if (cbWhole.Checked)
                         {
@@ -985,6 +988,7 @@ namespace GluePathReadWrite
             GetPixelsNumberAndPhysicalLength();
             penRed.Width = Convert.ToInt32(tkBGlueWidth.Value) / (float)_dRatio;
             penBlue.Width = Convert.ToInt32(tkBGlueWidth.Value) / (float)_dRatio;
+            graph = this.pictureBox.CreateGraphics();
             PointF pS = new PointF(), pM, pE;
 
             for (int i = 1; i < dataGridView.RowCount; i++)
@@ -1155,7 +1159,7 @@ namespace GluePathReadWrite
                         Convert.ToDouble(tbStandardY.Text),
                         _dRatio);
 
-                    Rectangle ellipse = new Rectangle(pT.X - 2, pT.Y - 2, 6, 6);// - 2
+                    Rectangle ellipse = new Rectangle(pT.X - 2, pT.Y - 2, 6, 6);
                     if (!_dicRectangles.Keys.Contains(i + (isArc ? "-2" : string.Empty)))
                         _dicRectangles.Add(i + (isArc ? "-2" : string.Empty), ellipse);
                     else _dicRectangles[i + (isArc ? "-2" : string.Empty)] = ellipse;
