@@ -29,14 +29,17 @@
         private void InitializeComponent()
         {
             this.components = new System.ComponentModel.Container();
-            System.Windows.Forms.DataVisualization.Charting.ChartArea chartArea1 = new System.Windows.Forms.DataVisualization.Charting.ChartArea();
-            System.Windows.Forms.DataVisualization.Charting.Legend legend1 = new System.Windows.Forms.DataVisualization.Charting.Legend();
-            System.Windows.Forms.DataVisualization.Charting.Series series1 = new System.Windows.Forms.DataVisualization.Charting.Series();
+            System.Windows.Forms.DataVisualization.Charting.ChartArea chartArea2 = new System.Windows.Forms.DataVisualization.Charting.ChartArea();
+            System.Windows.Forms.DataVisualization.Charting.Legend legend2 = new System.Windows.Forms.DataVisualization.Charting.Legend();
+            System.Windows.Forms.DataVisualization.Charting.Series series2 = new System.Windows.Forms.DataVisualization.Charting.Series();
             this.splitContainer1 = new System.Windows.Forms.SplitContainer();
             this.pictureBox = new System.Windows.Forms.PictureBox();
             this.splitter1 = new System.Windows.Forms.Splitter();
             this.chart = new System.Windows.Forms.DataVisualization.Charting.Chart();
             this.panel1 = new System.Windows.Forms.Panel();
+            this.label13 = new System.Windows.Forms.Label();
+            this.tbCompensationX = new System.Windows.Forms.TextBox();
+            this.tbCompensationY = new System.Windows.Forms.TextBox();
             this.label15 = new System.Windows.Forms.Label();
             this.lbPhysicX = new System.Windows.Forms.Label();
             this.lbPhysicY = new System.Windows.Forms.Label();
@@ -80,9 +83,6 @@
             this.ToolStripMenuItem_Insert = new System.Windows.Forms.ToolStripMenuItem();
             this.ToolStripMenuItem_Delete = new System.Windows.Forms.ToolStripMenuItem();
             this.ToolStripMenuItem_Clear = new System.Windows.Forms.ToolStripMenuItem();
-            this.label13 = new System.Windows.Forms.Label();
-            this.tbCompensationX = new System.Windows.Forms.TextBox();
-            this.tbCompensationY = new System.Windows.Forms.TextBox();
             ((System.ComponentModel.ISupportInitialize)(this.splitContainer1)).BeginInit();
             this.splitContainer1.Panel1.SuspendLayout();
             this.splitContainer1.Panel2.SuspendLayout();
@@ -147,18 +147,18 @@
             // 
             // chart
             // 
-            chartArea1.Name = "ChartArea1";
-            this.chart.ChartAreas.Add(chartArea1);
+            chartArea2.Name = "ChartArea1";
+            this.chart.ChartAreas.Add(chartArea2);
             this.chart.Dock = System.Windows.Forms.DockStyle.Left;
-            legend1.Name = "Legend1";
-            this.chart.Legends.Add(legend1);
+            legend2.Name = "Legend1";
+            this.chart.Legends.Add(legend2);
             this.chart.Location = new System.Drawing.Point(0, 0);
             this.chart.Margin = new System.Windows.Forms.Padding(1);
             this.chart.Name = "chart";
-            series1.ChartArea = "ChartArea1";
-            series1.Legend = "Legend1";
-            series1.Name = "Series1";
-            this.chart.Series.Add(series1);
+            series2.ChartArea = "ChartArea1";
+            series2.Legend = "Legend1";
+            series2.Name = "Series1";
+            this.chart.Series.Add(series2);
             this.chart.Size = new System.Drawing.Size(569, 495);
             this.chart.TabIndex = 1;
             this.chart.Text = "chart1";
@@ -213,6 +213,33 @@
             this.panel1.Name = "panel1";
             this.panel1.Size = new System.Drawing.Size(225, 495);
             this.panel1.TabIndex = 6;
+            // 
+            // label13
+            // 
+            this.label13.AutoSize = true;
+            this.label13.Location = new System.Drawing.Point(19, 403);
+            this.label13.Name = "label13";
+            this.label13.Size = new System.Drawing.Size(65, 12);
+            this.label13.TabIndex = 103;
+            this.label13.Text = "补偿(mm)：";
+            // 
+            // tbCompensationX
+            // 
+            this.tbCompensationX.Location = new System.Drawing.Point(85, 399);
+            this.tbCompensationX.Margin = new System.Windows.Forms.Padding(3, 1, 3, 1);
+            this.tbCompensationX.Name = "tbCompensationX";
+            this.tbCompensationX.Size = new System.Drawing.Size(52, 21);
+            this.tbCompensationX.TabIndex = 104;
+            this.tbCompensationX.Text = "0";
+            // 
+            // tbCompensationY
+            // 
+            this.tbCompensationY.Location = new System.Drawing.Point(153, 399);
+            this.tbCompensationY.Margin = new System.Windows.Forms.Padding(3, 1, 3, 1);
+            this.tbCompensationY.Name = "tbCompensationY";
+            this.tbCompensationY.Size = new System.Drawing.Size(52, 21);
+            this.tbCompensationY.TabIndex = 105;
+            this.tbCompensationY.Text = "0";
             // 
             // label15
             // 
@@ -515,6 +542,7 @@
             this.tbStandardX.Name = "tbStandardX";
             this.tbStandardX.Size = new System.Drawing.Size(52, 21);
             this.tbStandardX.TabIndex = 71;
+            this.tbStandardX.Text = "0";
             // 
             // btOpenGluePath
             // 
@@ -537,6 +565,7 @@
             this.tbStandardY.Name = "tbStandardY";
             this.tbStandardY.Size = new System.Drawing.Size(52, 21);
             this.tbStandardY.TabIndex = 72;
+            this.tbStandardY.Text = "0";
             // 
             // label6
             // 
@@ -627,31 +656,6 @@
             this.ToolStripMenuItem_Clear.Size = new System.Drawing.Size(124, 22);
             this.ToolStripMenuItem_Clear.Text = "清除胶路";
             this.ToolStripMenuItem_Clear.Click += new System.EventHandler(this.ToolStripMenuItem_Clear_Click);
-            // 
-            // label13
-            // 
-            this.label13.AutoSize = true;
-            this.label13.Location = new System.Drawing.Point(19, 403);
-            this.label13.Name = "label13";
-            this.label13.Size = new System.Drawing.Size(65, 12);
-            this.label13.TabIndex = 103;
-            this.label13.Text = "补偿(mm)：";
-            // 
-            // tbCompensationX
-            // 
-            this.tbCompensationX.Location = new System.Drawing.Point(85, 399);
-            this.tbCompensationX.Margin = new System.Windows.Forms.Padding(3, 1, 3, 1);
-            this.tbCompensationX.Name = "tbCompensationX";
-            this.tbCompensationX.Size = new System.Drawing.Size(52, 21);
-            this.tbCompensationX.TabIndex = 104;
-            // 
-            // tbCompensationY
-            // 
-            this.tbCompensationY.Location = new System.Drawing.Point(153, 399);
-            this.tbCompensationY.Margin = new System.Windows.Forms.Padding(3, 1, 3, 1);
-            this.tbCompensationY.Name = "tbCompensationY";
-            this.tbCompensationY.Size = new System.Drawing.Size(52, 21);
-            this.tbCompensationY.TabIndex = 105;
             // 
             // FormGluePath
             // 

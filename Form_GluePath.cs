@@ -620,7 +620,7 @@ namespace GluePathReadWrite
                         //if (GluePathForXAndY.IsNumberic(strings[j]))
                         //    dataGridView.Rows[i].Cells[j].Value = Convert.ToDouble(strings[j]).ToString("f3");
                         //else
-                            dataGridView.Rows[i].Cells[j].Value = strings[j];
+                        dataGridView.Rows[i].Cells[j].Value = strings[j];
                     }
                     //strPathData[i, j] = strings[j];
                 }
@@ -997,100 +997,97 @@ namespace GluePathReadWrite
             {
                 try
                 {
-                    if (dataGridView.Rows[0] != null)
+                    if (dataGridView.Rows[i].Cells[1].Value?.ToString() == EnumLineType.Line.ToString())
                     {
-                        if (dataGridView.Rows[i].Cells[1].Value?.ToString() == EnumLineType.Line.ToString())
+                        if (GluePathForXAndY.IsNumberic(dataGridView.Rows[i].Cells[6].Value) && GluePathForXAndY.IsNumberic(dataGridView.Rows[i].Cells[7].Value) &&
+                            GluePathForXAndY.IsNumberic(dataGridView.Rows[i - 1].Cells[6].Value) && GluePathForXAndY.IsNumberic(dataGridView.Rows[i - 1].Cells[7].Value))
                         {
-                            if (GluePathForXAndY.IsNumberic(dataGridView.Rows[i].Cells[6].Value) && GluePathForXAndY.IsNumberic(dataGridView.Rows[i].Cells[7].Value) &&
-                                GluePathForXAndY.IsNumberic(dataGridView.Rows[i - 1].Cells[6].Value) && GluePathForXAndY.IsNumberic(dataGridView.Rows[i - 1].Cells[7].Value))
+                            pS = GluePathForXAndY.TransformToPixelsF(
+                                Convert.ToDouble(dataGridView.Rows[i - 1].Cells[6].Value),
+                                Convert.ToDouble(dataGridView.Rows[i - 1].Cells[7].Value),
+                                Convert.ToDouble(tbStandardX.Text),
+                                Convert.ToDouble(tbStandardY.Text),
+                                _dRatio);
+                            pE = GluePathForXAndY.TransformToPixelsF(
+                                Convert.ToDouble(dataGridView.Rows[i].Cells[6].Value),
+                                Convert.ToDouble(dataGridView.Rows[i].Cells[7].Value),
+                                Convert.ToDouble(tbStandardX.Text),
+                                Convert.ToDouble(tbStandardY.Text),
+                                _dRatio);
+                            if (dataGridView.Rows[i].Cells[6].Selected || dataGridView.Rows[i].Cells[7].Selected)
                             {
-                                pS = GluePathForXAndY.TransformToPixelsF(
-                                    Convert.ToDouble(dataGridView.Rows[i - 1].Cells[6].Value),
-                                    Convert.ToDouble(dataGridView.Rows[i - 1].Cells[7].Value),
-                                    Convert.ToDouble(tbStandardX.Text),
-                                    Convert.ToDouble(tbStandardY.Text),
-                                    _dRatio);
-                                pE = GluePathForXAndY.TransformToPixelsF(
-                                    Convert.ToDouble(dataGridView.Rows[i].Cells[6].Value),
-                                    Convert.ToDouble(dataGridView.Rows[i].Cells[7].Value),
-                                    Convert.ToDouble(tbStandardX.Text),
-                                    Convert.ToDouble(tbStandardY.Text),
-                                    _dRatio);
-                                if (dataGridView.Rows[i].Cells[6].Selected || dataGridView.Rows[i].Cells[7].Selected)
-                                {
-                                    graph.DrawLine(penBlue, pS, pE);
-                                }
-                                else
-                                {
-                                    graph.DrawLine(penRed, pS, pE);
-                                }
+                                graph.DrawLine(penBlue, pS, pE);
+                            }
+                            else
+                            {
+                                graph.DrawLine(penRed, pS, pE);
+                            }
 
-                                GraphicsPath gp = new GraphicsPath();
-                                string key = (i + 1).ToString();
-                                if (_dicGraphicsPaths.Keys.Contains(key))
-                                {
-                                    _dicGraphicsPaths[key] = gp;
-                                }
-                                else
-                                {
-                                    gp.AddLine(pS, pE);
-                                    _dicGraphicsPaths.Add((i + 1).ToString(), gp);
-                                }
+                            GraphicsPath gp = new GraphicsPath();
+                            string key = (i + 1).ToString();
+                            if (_dicGraphicsPaths.Keys.Contains(key))
+                            {
+                                _dicGraphicsPaths[key] = gp;
+                            }
+                            else
+                            {
+                                gp.AddLine(pS, pE);
+                                _dicGraphicsPaths.Add((i + 1).ToString(), gp);
                             }
                         }
-                        else if (dataGridView.Rows[i].Cells[1].Value?.ToString() == EnumLineType.Arc.ToString())
+                    }
+                    else if (dataGridView.Rows[i].Cells[1].Value?.ToString() == EnumLineType.Arc.ToString())
+                    {
+                        if (GluePathForXAndY.IsNumberic(dataGridView.Rows[i].Cells[3].Value) && GluePathForXAndY.IsNumberic(dataGridView.Rows[i].Cells[4].Value) &&
+                            GluePathForXAndY.IsNumberic(dataGridView.Rows[i].Cells[6].Value) && GluePathForXAndY.IsNumberic(dataGridView.Rows[i].Cells[7].Value) &&
+                            GluePathForXAndY.IsNumberic(dataGridView.Rows[i - 1].Cells[6].Value) && GluePathForXAndY.IsNumberic(dataGridView.Rows[i - 1].Cells[7].Value))
                         {
-                            if (GluePathForXAndY.IsNumberic(dataGridView.Rows[i].Cells[3].Value) && GluePathForXAndY.IsNumberic(dataGridView.Rows[i].Cells[4].Value) &&
-                                GluePathForXAndY.IsNumberic(dataGridView.Rows[i].Cells[6].Value) && GluePathForXAndY.IsNumberic(dataGridView.Rows[i].Cells[7].Value) &&
-                                GluePathForXAndY.IsNumberic(dataGridView.Rows[i - 1].Cells[6].Value) && GluePathForXAndY.IsNumberic(dataGridView.Rows[i - 1].Cells[7].Value))
+                            pS = GluePathForXAndY.TransformToPixelsF(
+                                Convert.ToDouble(dataGridView.Rows[i - 1].Cells[6].Value),
+                                Convert.ToDouble(dataGridView.Rows[i - 1].Cells[7].Value),
+                                Convert.ToDouble(tbStandardX.Text),
+                                Convert.ToDouble(tbStandardY.Text),
+                                _dRatio);
+                            pM = GluePathForXAndY.TransformToPixelsF(
+                                Convert.ToDouble(dataGridView.Rows[i].Cells[3].Value),
+                                Convert.ToDouble(dataGridView.Rows[i].Cells[4].Value),
+                                Convert.ToDouble(tbStandardX.Text),
+                                Convert.ToDouble(tbStandardY.Text),
+                                _dRatio);
+                            pE = GluePathForXAndY.TransformToPixelsF(
+                                Convert.ToDouble(dataGridView.Rows[i].Cells[6].Value),
+                                Convert.ToDouble(dataGridView.Rows[i].Cells[7].Value),
+                                Convert.ToDouble(tbStandardX.Text),
+                                Convert.ToDouble(tbStandardY.Text),
+                                _dRatio);
+
+                            float[] drawArc = GluePathForXAndY.DrawArcNew(pS.X, pS.Y, pM.X, pM.Y, pE.X, pE.Y);
+                            graph = this.pictureBox.CreateGraphics();
+                            if (dataGridView.Rows[i].Cells[3].Selected || dataGridView.Rows[i].Cells[4].Selected ||
+                                dataGridView.Rows[i].Cells[6].Selected || dataGridView.Rows[i].Cells[7].Selected)
                             {
-                                pS = GluePathForXAndY.TransformToPixelsF(
-                                    Convert.ToDouble(dataGridView.Rows[i - 1].Cells[6].Value),
-                                    Convert.ToDouble(dataGridView.Rows[i - 1].Cells[7].Value),
-                                    Convert.ToDouble(tbStandardX.Text),
-                                    Convert.ToDouble(tbStandardY.Text),
-                                    _dRatio);
-                                pM = GluePathForXAndY.TransformToPixelsF(
-                                    Convert.ToDouble(dataGridView.Rows[i].Cells[3].Value),
-                                    Convert.ToDouble(dataGridView.Rows[i].Cells[4].Value),
-                                    Convert.ToDouble(tbStandardX.Text),
-                                    Convert.ToDouble(tbStandardY.Text),
-                                    _dRatio);
-                                pE = GluePathForXAndY.TransformToPixelsF(
-                                    Convert.ToDouble(dataGridView.Rows[i].Cells[6].Value),
-                                    Convert.ToDouble(dataGridView.Rows[i].Cells[7].Value),
-                                    Convert.ToDouble(tbStandardX.Text),
-                                    Convert.ToDouble(tbStandardY.Text),
-                                    _dRatio);
-
-                                float[] drawArc = GluePathForXAndY.DrawArcNew(pS.X, pS.Y, pM.X, pM.Y, pE.X, pE.Y);
-                                graph = this.pictureBox.CreateGraphics();
-                                if (dataGridView.Rows[i].Cells[3].Selected || dataGridView.Rows[i].Cells[4].Selected ||
-                                    dataGridView.Rows[i].Cells[6].Selected || dataGridView.Rows[i].Cells[7].Selected)
-                                {
-                                    graph.DrawArc(penBlue, drawArc[0], drawArc[1], drawArc[2], drawArc[3], drawArc[4], drawArc[5]);
-                                }
-                                else
-                                {
-                                    graph.DrawArc(penRed, drawArc[0], drawArc[1], drawArc[2], drawArc[3], drawArc[4], drawArc[5]);
-                                }
-
-                                GraphicsPath gp = new GraphicsPath();
-                                string keyFirst = i + 1 + "-1";
-                                string keyLast = i + 1 + "-2";
-                                if (_dicGraphicsPaths.Keys.Contains(keyFirst))
-                                {
-                                    _dicGraphicsPaths[keyFirst] = gp;
-                                    _dicGraphicsPaths[keyLast] = gp;
-                                }
-                                else
-                                {
-                                    gp.AddArc(drawArc[0], drawArc[1], drawArc[2], drawArc[3], drawArc[4], drawArc[5]);
-                                    _dicGraphicsPaths.Add(keyFirst, gp);
-                                    _dicGraphicsPaths.Add(keyLast, gp);
-                                }
-
+                                graph.DrawArc(penBlue, drawArc[0], drawArc[1], drawArc[2], drawArc[3], drawArc[4], drawArc[5]);
                             }
+                            else
+                            {
+                                graph.DrawArc(penRed, drawArc[0], drawArc[1], drawArc[2], drawArc[3], drawArc[4], drawArc[5]);
+                            }
+
+                            GraphicsPath gp = new GraphicsPath();
+                            string keyFirst = i + 1 + "-1";
+                            string keyLast = i + 1 + "-2";
+                            if (_dicGraphicsPaths.Keys.Contains(keyFirst))
+                            {
+                                _dicGraphicsPaths[keyFirst] = gp;
+                                _dicGraphicsPaths[keyLast] = gp;
+                            }
+                            else
+                            {
+                                gp.AddArc(drawArc[0], drawArc[1], drawArc[2], drawArc[3], drawArc[4], drawArc[5]);
+                                _dicGraphicsPaths.Add(keyFirst, gp);
+                                _dicGraphicsPaths.Add(keyLast, gp);
+                            }
+
                         }
                     }
                 }

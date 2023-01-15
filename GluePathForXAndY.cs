@@ -107,8 +107,7 @@ namespace GlueReadWrite
                 startAngle = (int)(dK1 < dK3 ? dK3 : dK1);//数值较大的为起始点
                 sweepAngle = 360 - ((int)(dK1 < dK3 ? dK3 : dK1) - (int)(dK1 < dK3 ? dK1 : dK3));
             }
-
-            //graph = this.pictureBox.CreateGraphics();
+            
             return new float[] { fTemp[0] - fTemp[2], fTemp[1] - fTemp[2], Math.Abs(fTemp[2] * 2), Math.Abs(fTemp[2] * 2), startAngle, sweepAngle };
         }
 
