@@ -55,7 +55,7 @@ namespace GlueReadWrite
             }
 
             //graph = this.pictureBox.CreateGraphics();
-            return new float[] {fTemp[0] - fTemp[2], fTemp[1] - fTemp[2], Math.Abs(fTemp[2] * 2), Math.Abs(fTemp[2] * 2), startAngle, sweepAngle};
+            return new float[] { fTemp[0] - fTemp[2], fTemp[1] - fTemp[2], Math.Abs(fTemp[2] * 2), Math.Abs(fTemp[2] * 2), startAngle, sweepAngle };
         }
 
         /// <summary>
@@ -89,10 +89,59 @@ namespace GlueReadWrite
             return new float[] { (float)xc, (float)yc, (float)rc };
         }
 
+        public static float[] DrawArcNew(float dX1, float dY1, float dX2, float dY2, float dX3, float dY3)
+        {
+            float[] fTemp = GetCircleNew(dX1, dY1, dX2, dY2, dX3, dY3);
+            double dK1 = ReturnCircleK((float)dX1, (float)dY1, fTemp[0], fTemp[1]);
+            double dK2 = ReturnCircleK((float)dX2, (float)dY2, fTemp[0], fTemp[1]);
+            double dK3 = ReturnCircleK((float)dX3, (float)dY3, fTemp[0], fTemp[1]);
+
+            float startAngle, sweepAngle;
+            if ((dK1 < dK2 && dK3 > dK2) || (dK1 > dK2 && dK3 < dK2))//未横跨X轴正方向
+            {
+                startAngle = (int)(dK1 < dK3 ? dK1 : dK3); //数值较小的为起始点
+                sweepAngle = (int)(dK1 < dK3 ? dK3 : dK1) - (int)(dK1 < dK3 ? dK1 : dK3);
+            }
+            else
+            {
+                startAngle = (int)(dK1 < dK3 ? dK3 : dK1);//数值较大的为起始点
+                sweepAngle = 360 - ((int)(dK1 < dK3 ? dK3 : dK1) - (int)(dK1 < dK3 ? dK1 : dK3));
+            }
+
+            //graph = this.pictureBox.CreateGraphics();
+            return new float[] { fTemp[0] - fTemp[2], fTemp[1] - fTemp[2], Math.Abs(fTemp[2] * 2), Math.Abs(fTemp[2] * 2), startAngle, sweepAngle };
+        }
+
+        /// <summary>
+        /// 三点法计算圆心坐标和圆半径
+        /// </summary>
+        /// <param name="x1">第一点的X坐标</param>
+        /// <param name="y1">第一点的Y坐标</param>
+        /// <param name="x2">第二点的X坐标</param>
+        /// <param name="y2">第二点的Y坐标</param>
+        /// <param name="x3">第三点的X坐标</param>
+        /// <param name="y3">第三点的Y坐标</param>
+        /// <returns>圆参数float数组：圆心X坐标、圆心Y坐标、圆半径</returns>
+        public static float[] GetCircleNew(float x1, float y1, float x2, float y2, float x3, float y3)
+        {
+            float a, b, c, g, e, f;
+            float X, Y, R;
+            e = 2 * (x2 - x1);
+            f = 2 * (y2 - y1);
+            g = x2 * x2 - x1 * x1 + y2 * y2 - y1 * y1;
+            a = 2 * (x3 - x2);
+            b = 2 * (y3 - y2);
+            c = x3 * x3 - x2 * x2 + y3 * y3 - y2 * y2;
+            X = (g * b - c * f) / (e * b - a * f);
+            Y = (a * g - c * e) / (a * f - b * e);
+            R = (float)Math.Sqrt((X - x1) * (X - x1) + (Y - y1) * (Y - y1));
+            return new[] { X, Y, R };
+        }
+
         public static double ReturnCircleK(float fx1, float fy1, float fx2, float fy2)
         {
             double fA = Math.Atan2(fy1 - fy2, fx1 - fx2) / Math.PI * 180;
-            if (fA < 0) fA += 360;  
+            if (fA < 0) fA += 360;
             return fA;
         }
 

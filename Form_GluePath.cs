@@ -116,7 +116,7 @@ namespace GluePathReadWrite
 
             #region MyRegion
 
-            _glueFilePath = Application.StartupPath + @"\File\1111.csv";
+            _glueFilePath = Application.StartupPath + @"\File\jiaolu.csv";
             //@"E:\Cowain\2169\GlueReadWrite\bin\Debug\File\jiaolu.csv";
 
             LoadToDataGridViewCsv(ReadGluePathFile(_glueFilePath));
@@ -1062,7 +1062,8 @@ namespace GluePathReadWrite
                                     Convert.ToDouble(tbStandardX.Text),
                                     Convert.ToDouble(tbStandardY.Text),
                                     _dRatio);
-                                float[] drawArc = GluePathForXAndY.DrawArc(pS.X, pS.Y, pM.X, pM.Y, pE.X, pE.Y);
+
+                                float[] drawArc = GluePathForXAndY.DrawArcNew(pS.X, pS.Y, pM.X, pM.Y, pE.X, pE.Y);
                                 graph = this.pictureBox.CreateGraphics();
                                 if (dataGridView.Rows[i].Cells[3].Selected || dataGridView.Rows[i].Cells[4].Selected ||
                                     dataGridView.Rows[i].Cells[6].Selected || dataGridView.Rows[i].Cells[7].Selected)
