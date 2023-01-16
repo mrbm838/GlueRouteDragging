@@ -1,4 +1,5 @@
 ﻿using GlueReadWrite;
+using Sunny.UI;
 using System;
 using System.Collections.Generic;
 using System.ComponentModel;
@@ -16,13 +17,9 @@ using System.Threading.Tasks;
 using System.Windows.Forms;
 using System.Windows.Forms.DataVisualization.Charting;
 using System.Windows.Media.Imaging;
-//using System.Windows.Shapes;
 
 namespace GluePathReadWrite
 {
-    //(x1,y1) wraps (x2,y2) θ to get (x,y)
-    //x = (x1 - x2)* cos(pi / 180.0 * θ) - (y1 - y2)* sin(pi / 180.0 * θ) + x2;
-    //y = (x1 - x2)* sin(pi / 180.0 * θ) + (y1 - y2)* cos(pi / 180.0 * θ) + y2;
 
     public partial class FormGluePath : Form
     {
@@ -48,7 +45,6 @@ namespace GluePathReadWrite
 
         private readonly Dictionary<string, Rectangle> _dicRectangles = new Dictionary<string, Rectangle>();
         private readonly Dictionary<string, GraphicsPath> _dicGraphicsPaths = new Dictionary<string, GraphicsPath>();
-        //private readonly GraphicsPath _dicGraphicsPaths = new GraphicsPath();
 
         private int _selectedRow;
         private int _selectedColumn;
@@ -68,6 +64,8 @@ namespace GluePathReadWrite
         private string _strGlueFileTail;
 
         private bool _bMovePath;
+        private int _lastMoveX;
+        private int _lastMoveY;
 
         public FormGluePath()
         {
@@ -83,10 +81,10 @@ namespace GluePathReadWrite
             tbRotation.AutoSize = false;
             tbRotation.Height = 28;
             tbRotation.Font = new Font("宋体", 12);
-            button1.Height = 16;
-            button2.Height = 17;
-            button1.Text = string.Empty;
-            button2.Text = string.Empty;
+            btClockWise.Height = 16;
+            btCounterClockWise.Height = 17;
+            btClockWise.Text = string.Empty;
+            btCounterClockWise.Text = string.Empty;
 
             _bmp = ReadImageFile(Application.StartupPath + @"\File\1.BMP");
             pictureBox.Image = _bmp;
@@ -118,7 +116,6 @@ namespace GluePathReadWrite
             #region MyRegion
 
             _glueFilePath = Application.StartupPath + @"\File\jiaolu.csv";
-            //@"E:\Cowain\2169\GlueReadWrite\bin\Debug\File\jiaolu.csv";
 
             LoadToDataGridViewCsv(ReadGluePathFile(_glueFilePath));
             DrawGuiPointNew();
@@ -326,18 +323,16 @@ namespace GluePathReadWrite
             }
         }
 
-        private int lastMoveX;
-        private int lastMoveY;
         private void pictureBox_MouseMove(object sender, MouseEventArgs e)
         {
             GetPixelsNumberAndPhysicalLength();
             double dx = GlueVariableDefine.PhysicalLength / GlueVariableDefine.PixelsNumber, dy = dx;
             if (e.Button == MouseButtons.Left)
             {
-                int diffX = ;
-                int diffY = ;
-                lastMoveX = e.X;
-                lastMoveY = e.Y;
+                int diffX = e.X - _lastMoveX;
+                int diffY = e.Y - _lastMoveY;
+                _lastMoveX = e.X;
+                _lastMoveY = e.Y;
                 if (_bMovePicture)
                 {
                     pictureBox.Left += e.X - _xPos;
@@ -349,10 +344,10 @@ namespace GluePathReadWrite
                     {
                         if (cbWhole.Checked && _bMovePath)
                         {
+                            double dMoveX = Math.Round(diffX * _dRatio * dx, 3);
+                            double dMoveY = Math.Round(diffY * _dRatio * dy, 3);
                             for (int i = 0; i < dataGridView.RowCount; i++)
                             {
-                                double dMoveX = Math.Round(diffX * _dRatio * dx, 3);// - Convert.ToDouble(tbStandardX.Text) * dx
-                                double dMoveY = Math.Round(diffY * _dRatio * dy, 3);// - Convert.ToDouble(tbStandardY.Text) * dy
                                 if (dataGridView.Rows[i].Cells[1].Value.ToString() == EnumLineType.Arc.ToString())
                                 {
                                     dataGridView.Rows[i].Cells[3].Value = Convert.ToDouble(dataGridView.Rows[i].Cells[3].Value) + dMoveX;
@@ -388,58 +383,54 @@ namespace GluePathReadWrite
         private void pictureBox_MouseDown(object sender, MouseEventArgs e)
         {
             dataGridView.ClearSelection();
-            if (e.Button == MouseButtons.Left)//e.Button == MouseButtons.Right || 
+            if (e.Button == MouseButtons.Left)
             {
                 this.pictureBox.Focus();
                 _xPos = e.X;
                 _yPos = e.Y;
+                _lastMoveX = e.X;
+                _lastMoveY = e.Y;
                 _bMovePicture = true;
                 _bMovePath = false;
 
-                //if (cbWhole.Checked)
+                foreach (var graphicsPath in _dicGraphicsPaths)
                 {
-                    foreach (var graphicsPath in _dicGraphicsPaths)
+                    if (graphicsPath.Value.IsOutlineVisible(e.X, e.Y, PenRed) || graphicsPath.Value.IsOutlineVisible(e.X, e.Y, PenBlue))
                     {
-                        if (graphicsPath.Value.IsOutlineVisible(e.X, e.Y, PenRed))
-                        {
-                            _bMovePicture = false;
-                            _bMovePath = true;
-                            this.Cursor = Cursors.Cross;
+                        _bMovePicture = false;
+                        _bMovePath = true;
+                        this.Cursor = Cursors.Cross;
 
-                            int serial = Convert.ToInt32(graphicsPath.Key.Split('-')[0]);
-                            dataGridView.Rows[Convert.ToInt32(graphicsPath.Key)].Selected = true;
-                            _pointIndex = _dicGraphicsPaths.Keys.ToList().IndexOf(graphicsPath.Key) + 1;
-                            dataGridView_CellClick(dataGridView, new DataGridViewCellEventArgs(3, serial));
-                            break;
-                        }
+                        int serial = Convert.ToInt32(graphicsPath.Key.Split('-')[0]);
+                        dataGridView.Rows[Convert.ToInt32(graphicsPath.Key)].Selected = true;
+                        _pointIndex = _dicGraphicsPaths.Keys.ToList().IndexOf(graphicsPath.Key) + 1;
+                        dataGridView_CellClick(dataGridView, new DataGridViewCellEventArgs(3, serial));
+                        break;
                     }
                 }
-                //else
+                foreach (var rectangle in _dicRectangles)
                 {
-                    foreach (var rectangle in _dicRectangles)
+                    if (rectangle.Value.Contains(_xPos, _yPos))
                     {
-                        if (rectangle.Value.Contains(_xPos, _yPos))
-                        {
-                            _bMovePicture = false;
-                            _bMovePath = true;
-                            this.Cursor = Cursors.Cross;
+                        _bMovePicture = false;
+                        _bMovePath = true;
+                        this.Cursor = Cursors.Cross;
 
-                            string[] strings = rectangle.Key.Split('-');
-                            int serial = Convert.ToInt32(strings[0]);
-                            if (strings.Length == 1 || strings[1].Equals("2"))
-                            {
-                                dataGridView.Rows[serial].Cells[6].Selected = true;
-                                _pointIndex = _dicRectangles.Keys.ToList().IndexOf(rectangle.Key);
-                                dataGridView_CellClick(dataGridView, new DataGridViewCellEventArgs(6, serial));
-                            }
-                            else
-                            {
-                                dataGridView.Rows[serial].Cells[3].Selected = true;
-                                _pointIndex = Array.IndexOf(_dicRectangles.Keys.ToArray(), rectangle.Key);
-                                dataGridView_CellClick(dataGridView, new DataGridViewCellEventArgs(3, serial));
-                            }
-                            break;
+                        string[] strings = rectangle.Key.Split('-');
+                        int serial = Convert.ToInt32(strings[0]);
+                        if (strings.Length == 1 || strings[1].Equals("2"))
+                        {
+                            dataGridView.Rows[serial].Cells[6].Selected = true;
+                            _pointIndex = _dicRectangles.Keys.ToList().IndexOf(rectangle.Key);
+                            dataGridView_CellClick(dataGridView, new DataGridViewCellEventArgs(6, serial));
                         }
+                        else
+                        {
+                            dataGridView.Rows[serial].Cells[3].Selected = true;
+                            _pointIndex = Array.IndexOf(_dicRectangles.Keys.ToArray(), rectangle.Key);
+                            dataGridView_CellClick(dataGridView, new DataGridViewCellEventArgs(3, serial));
+                        }
+                        break;
                     }
                 }
             }
@@ -1448,6 +1439,39 @@ namespace GluePathReadWrite
         private void chart_Validated(object sender, EventArgs e)
         {
 
+        }
+        
+        private void btClockWise_Click(object sender, EventArgs e)
+        {
+            //(x1,y1) wraps (x2,y2) θ to get (x,y)
+            //x = (x1 - x2)* cos(pi / 180.0 * θ) - (y1 - y2)* sin(pi / 180.0 * θ) + x2;
+            //y = (x1 - x2)* sin(pi / 180.0 * θ) + (y1 - y2)* cos(pi / 180.0 * θ) + y2
+            double θ = Convert.ToDouble(tbRotation.Text);
+            double x = 0, y = 0;
+
+            double x1 = 3, y1 = 3;
+            double dMoveX1 = (x1 - x) * Math.Cos(Math.PI / 180.0 * θ) - (y1 - y) * Math.Sin(Math.PI / 180.0 * θ) + x;
+            double dMoveY1 = (x1 - x) * Math.Sin(Math.PI / 180.0 * θ) + (y1 - y) * Math.Cos(Math.PI / 180.0 * θ) + y;
+            double x2 = -3, y2 = 3;
+            double dMoveX2 = (x2 - x) * Math.Cos(Math.PI / 180.0 * θ) - (y2 - y) * Math.Sin(Math.PI / 180.0 * θ) + x;
+            double dMoveY2 = (x2 - x) * Math.Sin(Math.PI / 180.0 * θ) + (y2 - y) * Math.Cos(Math.PI / 180.0 * θ) + y;
+            double x3 = -3, y3 = -3;
+            double dMoveX3 = (x3 - x) * Math.Cos(Math.PI / 180.0 * θ) - (y3 - y) * Math.Sin(Math.PI / 180.0 * θ) + x;
+            double dMoveY3 = (x3 - x) * Math.Sin(Math.PI / 180.0 * θ) + (y3 - y) * Math.Cos(Math.PI / 180.0 * θ) + y;
+            double x4 = 3, y4 = -3;
+            double dMoveX4 = (x4 - x) * Math.Cos(Math.PI / 180.0 * θ) - (y4 - y) * Math.Sin(Math.PI / 180.0 * θ) + x;
+            double dMoveY4 = (x4 - x) * Math.Sin(Math.PI / 180.0 * θ) + (y4 - y) * Math.Cos(Math.PI / 180.0 * θ) + y;
+
+            //for (int i = 0; i < dataGridView.RowCount; i++)
+            //{
+            //    if (dataGridView.Rows[i].Cells[1].Value.ToString() == EnumLineType.Arc.ToString())
+            //    {
+            //        dataGridView.Rows[i].Cells[3].Value = Convert.ToDouble(dataGridView.Rows[i].Cells[3].Value) + dMoveX;
+            //        dataGridView.Rows[i].Cells[4].Value = Convert.ToDouble(dataGridView.Rows[i].Cells[4].Value) + dMoveY;
+            //    }
+            //    dataGridView.Rows[i].Cells[6].Value = Convert.ToDouble(dataGridView.Rows[i].Cells[6].Value) + dMoveX;
+            //    dataGridView.Rows[i].Cells[7].Value = Convert.ToDouble(dataGridView.Rows[i].Cells[7].Value) + dMoveY;
+            //}
         }
     }
 }

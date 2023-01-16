@@ -53,8 +53,8 @@
             this.label8 = new System.Windows.Forms.Label();
             this.tbPixelsNumber = new System.Windows.Forms.TextBox();
             this.label7 = new System.Windows.Forms.Label();
-            this.button2 = new System.Windows.Forms.Button();
-            this.button1 = new System.Windows.Forms.Button();
+            this.btCounterClockWise = new System.Windows.Forms.Button();
+            this.btClockWise = new System.Windows.Forms.Button();
             this.tbRotation = new System.Windows.Forms.TextBox();
             this.cbWhole = new System.Windows.Forms.CheckBox();
             this.label5 = new System.Windows.Forms.Label();
@@ -185,8 +185,8 @@
             this.panel1.Controls.Add(this.label8);
             this.panel1.Controls.Add(this.tbPixelsNumber);
             this.panel1.Controls.Add(this.label7);
-            this.panel1.Controls.Add(this.button2);
-            this.panel1.Controls.Add(this.button1);
+            this.panel1.Controls.Add(this.btCounterClockWise);
+            this.panel1.Controls.Add(this.btClockWise);
             this.panel1.Controls.Add(this.tbRotation);
             this.panel1.Controls.Add(this.cbWhole);
             this.panel1.Controls.Add(this.label5);
@@ -358,29 +358,28 @@
             this.label7.TabIndex = 90;
             this.label7.Text = "旋转角度：";
             // 
-            // button2
+            // btCounterClockWise
             // 
-            this.button2.BackgroundImage = global::GlueReadWrite.Properties.Resources.xiangxia;
-            this.button2.BackgroundImageLayout = System.Windows.Forms.ImageLayout.Zoom;
-            this.button2.Location = new System.Drawing.Point(161, 28);
-            this.button2.Margin = new System.Windows.Forms.Padding(2);
-            this.button2.Name = "button2";
-            this.button2.Size = new System.Drawing.Size(27, 11);
-            this.button2.TabIndex = 89;
-            this.button2.Text = "b";
-            this.button2.UseVisualStyleBackColor = true;
+            this.btCounterClockWise.BackgroundImage = global::GlueReadWrite.Properties.Resources.xiangxia;
+            this.btCounterClockWise.BackgroundImageLayout = System.Windows.Forms.ImageLayout.Zoom;
+            this.btCounterClockWise.Location = new System.Drawing.Point(161, 28);
+            this.btCounterClockWise.Margin = new System.Windows.Forms.Padding(2);
+            this.btCounterClockWise.Name = "btCounterClockWise";
+            this.btCounterClockWise.Size = new System.Drawing.Size(27, 11);
+            this.btCounterClockWise.TabIndex = 89;
+            this.btCounterClockWise.UseVisualStyleBackColor = true;
             // 
-            // button1
+            // btClockWise
             // 
-            this.button1.BackgroundImage = global::GlueReadWrite.Properties.Resources.xiangshang;
-            this.button1.BackgroundImageLayout = System.Windows.Forms.ImageLayout.Zoom;
-            this.button1.Location = new System.Drawing.Point(161, 13);
-            this.button1.Margin = new System.Windows.Forms.Padding(2);
-            this.button1.Name = "button1";
-            this.button1.Size = new System.Drawing.Size(27, 10);
-            this.button1.TabIndex = 88;
-            this.button1.Text = "b";
-            this.button1.UseVisualStyleBackColor = true;
+            this.btClockWise.BackgroundImage = global::GlueReadWrite.Properties.Resources.xiangshang;
+            this.btClockWise.BackgroundImageLayout = System.Windows.Forms.ImageLayout.Zoom;
+            this.btClockWise.Location = new System.Drawing.Point(161, 13);
+            this.btClockWise.Margin = new System.Windows.Forms.Padding(2);
+            this.btClockWise.Name = "btClockWise";
+            this.btClockWise.Size = new System.Drawing.Size(27, 10);
+            this.btClockWise.TabIndex = 88;
+            this.btClockWise.UseVisualStyleBackColor = true;
+            this.btClockWise.Click += new System.EventHandler(this.btClockWise_Click);
             // 
             // tbRotation
             // 
@@ -388,7 +387,7 @@
             this.tbRotation.Name = "tbRotation";
             this.tbRotation.Size = new System.Drawing.Size(87, 21);
             this.tbRotation.TabIndex = 87;
-            this.tbRotation.Text = "0.1";
+            this.tbRotation.Text = "1";
             // 
             // cbWhole
             // 
@@ -705,8 +704,8 @@
         private System.Windows.Forms.Splitter splitter1;
         private System.Windows.Forms.Panel panel1;
         private System.Windows.Forms.Label label7;
-        private System.Windows.Forms.Button button2;
-        private System.Windows.Forms.Button button1;
+        private System.Windows.Forms.Button btCounterClockWise;
+        private System.Windows.Forms.Button btClockWise;
         private System.Windows.Forms.TextBox tbRotation;
         private System.Windows.Forms.CheckBox cbWhole;
         private System.Windows.Forms.Label label5;
