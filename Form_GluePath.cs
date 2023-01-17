@@ -71,7 +71,6 @@ namespace GluePathReadWrite
         {
             InitializeComponent();
             pictureBox.MouseWheel += new MouseEventHandler(pbxDrawing_MouseWheel);
-            //pictureBox.Paint += new PaintEventHandler(pictureBox_Paint);
             dataGridView.AllowUserToAddRows = false;
             dataGridView.DefaultCellStyle = new DataGridViewCellStyle() { Alignment = DataGridViewContentAlignment.MiddleCenter };
         }
@@ -201,7 +200,6 @@ namespace GluePathReadWrite
             catch (Exception e)
             {
                 MessageBox.Show(e.ToString(), "错误", MessageBoxButtons.OK, MessageBoxIcon.Error);
-                //throw;
             }
 
         }
@@ -1130,7 +1128,7 @@ namespace GluePathReadWrite
                 Convert.ToDouble(tbStandardX.Text),
                 Convert.ToDouble(tbStandardY.Text),
                 _dRatio);
-            _homeRectangle = new Rectangle(pH.X, pH.Y, 10, 10);
+            _homeRectangle = new Rectangle(pH.X - 3, pH.Y - 3, 10, 10);
             _graph.FillEllipse(Brushes.Green, _homeRectangle);
             //graph.DrawArc(penGreen, iStandardX - 30, iStandardY - 30, 6, 6, 0, 360);
             _graph.DrawString("0", new Font("Verdana", 10), new SolidBrush(Color.Green), new PointF(iStandardX, iStandardY));
@@ -1440,38 +1438,56 @@ namespace GluePathReadWrite
         {
 
         }
-        
+
         private void btClockWise_Click(object sender, EventArgs e)
         {
-            //(x1,y1) wraps (x2,y2) θ to get (x,y)
-            //x = (x1 - x2)* cos(pi / 180.0 * θ) - (y1 - y2)* sin(pi / 180.0 * θ) + x2;
-            //y = (x1 - x2)* sin(pi / 180.0 * θ) + (y1 - y2)* cos(pi / 180.0 * θ) + y2
-            double θ = Convert.ToDouble(tbRotation.Text);
-            double x = 0, y = 0;
+            RealizePathRotation(-Convert.ToDouble(tbRotation.Text));
+        }
 
-            double x1 = 3, y1 = 3;
-            double dMoveX1 = (x1 - x) * Math.Cos(Math.PI / 180.0 * θ) - (y1 - y) * Math.Sin(Math.PI / 180.0 * θ) + x;
-            double dMoveY1 = (x1 - x) * Math.Sin(Math.PI / 180.0 * θ) + (y1 - y) * Math.Cos(Math.PI / 180.0 * θ) + y;
-            double x2 = -3, y2 = 3;
-            double dMoveX2 = (x2 - x) * Math.Cos(Math.PI / 180.0 * θ) - (y2 - y) * Math.Sin(Math.PI / 180.0 * θ) + x;
-            double dMoveY2 = (x2 - x) * Math.Sin(Math.PI / 180.0 * θ) + (y2 - y) * Math.Cos(Math.PI / 180.0 * θ) + y;
-            double x3 = -3, y3 = -3;
-            double dMoveX3 = (x3 - x) * Math.Cos(Math.PI / 180.0 * θ) - (y3 - y) * Math.Sin(Math.PI / 180.0 * θ) + x;
-            double dMoveY3 = (x3 - x) * Math.Sin(Math.PI / 180.0 * θ) + (y3 - y) * Math.Cos(Math.PI / 180.0 * θ) + y;
-            double x4 = 3, y4 = -3;
-            double dMoveX4 = (x4 - x) * Math.Cos(Math.PI / 180.0 * θ) - (y4 - y) * Math.Sin(Math.PI / 180.0 * θ) + x;
-            double dMoveY4 = (x4 - x) * Math.Sin(Math.PI / 180.0 * θ) + (y4 - y) * Math.Cos(Math.PI / 180.0 * θ) + y;
+        private void btCounterClockWise_Click(object sender, EventArgs e)
+        {
+            RealizePathRotation(Convert.ToDouble(tbRotation.Text));
+        }
 
-            //for (int i = 0; i < dataGridView.RowCount; i++)
-            //{
-            //    if (dataGridView.Rows[i].Cells[1].Value.ToString() == EnumLineType.Arc.ToString())
-            //    {
-            //        dataGridView.Rows[i].Cells[3].Value = Convert.ToDouble(dataGridView.Rows[i].Cells[3].Value) + dMoveX;
-            //        dataGridView.Rows[i].Cells[4].Value = Convert.ToDouble(dataGridView.Rows[i].Cells[4].Value) + dMoveY;
-            //    }
-            //    dataGridView.Rows[i].Cells[6].Value = Convert.ToDouble(dataGridView.Rows[i].Cells[6].Value) + dMoveX;
-            //    dataGridView.Rows[i].Cells[7].Value = Convert.ToDouble(dataGridView.Rows[i].Cells[7].Value) + dMoveY;
-            //}
+        private void RealizePathRotation(double rotation)
+        {
+            GetPixelsNumberAndPhysicalLength();
+            for (int i = 0; i < dataGridView.RowCount; i++)
+            {
+                if (dataGridView.Rows[i].Cells[1].Value.ToString() == EnumLineType.Arc.ToString())
+                {
+                    double[] arcPoint = GluePathForXAndY.GetRotatedPoint(
+                        Convert.ToDouble(dataGridView.Rows[i].Cells[3].Value),
+                        Convert.ToDouble(dataGridView.Rows[i].Cells[4].Value),
+                        Convert.ToDouble(tbStandardX.Text),
+                        Convert.ToDouble(tbStandardY.Text),
+                        rotation);
+                    dataGridView.Rows[i].Cells[3].Value = arcPoint[0];
+                    dataGridView.Rows[i].Cells[4].Value = arcPoint[1];
+                }
+                double[] linePoint = GluePathForXAndY.GetRotatedPoint(
+                    Convert.ToDouble(dataGridView.Rows[i].Cells[6].Value),
+                    Convert.ToDouble(dataGridView.Rows[i].Cells[7].Value),
+                    Convert.ToDouble(tbStandardX.Text),
+                    Convert.ToDouble(tbStandardY.Text),
+                    rotation);
+                dataGridView.Rows[i].Cells[6].Value = linePoint[0];
+                dataGridView.Rows[i].Cells[7].Value = linePoint[1];
+            }
+            DrawGuiPointNew();
+            DrawGuiLineNew();
+        }
+
+        private void tbPhyscialLength_Leave(object sender, EventArgs e)
+        {
+            try
+            {
+                GlueVariableDefine.PhysicalLength = Convert.ToDouble(tbPhyscialLength.Text);
+            }
+            catch (FormatException exception)
+            {
+                MessageBox.Show(e.ToString(), "错误", MessageBoxButtons.OK, MessageBoxIcon.Error);
+            }
         }
     }
 }

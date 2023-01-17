@@ -271,7 +271,7 @@
             // label12
             // 
             this.label12.AutoSize = true;
-            this.label12.Location = new System.Drawing.Point(19, 189);
+            this.label12.Location = new System.Drawing.Point(19, 191);
             this.label12.Name = "label12";
             this.label12.Size = new System.Drawing.Size(65, 12);
             this.label12.TabIndex = 97;
@@ -280,7 +280,7 @@
             // lbPictureX
             // 
             this.lbPictureX.AutoSize = true;
-            this.lbPictureX.Location = new System.Drawing.Point(91, 189);
+            this.lbPictureX.Location = new System.Drawing.Point(91, 191);
             this.lbPictureX.Name = "lbPictureX";
             this.lbPictureX.Size = new System.Drawing.Size(11, 12);
             this.lbPictureX.TabIndex = 98;
@@ -289,7 +289,7 @@
             // lbPictureY
             // 
             this.lbPictureY.AutoSize = true;
-            this.lbPictureY.Location = new System.Drawing.Point(146, 189);
+            this.lbPictureY.Location = new System.Drawing.Point(146, 191);
             this.lbPictureY.Name = "lbPictureY";
             this.lbPictureY.Size = new System.Drawing.Size(11, 12);
             this.lbPictureY.TabIndex = 99;
@@ -329,6 +329,7 @@
             this.tbPhyscialLength.Size = new System.Drawing.Size(43, 21);
             this.tbPhyscialLength.TabIndex = 93;
             this.tbPhyscialLength.Text = "20";
+            this.tbPhyscialLength.Leave += new System.EventHandler(this.tbPhyscialLength_Leave);
             // 
             // label8
             // 
@@ -368,6 +369,7 @@
             this.btCounterClockWise.Size = new System.Drawing.Size(27, 11);
             this.btCounterClockWise.TabIndex = 89;
             this.btCounterClockWise.UseVisualStyleBackColor = true;
+            this.btCounterClockWise.Click += new System.EventHandler(this.btCounterClockWise_Click);
             // 
             // btClockWise
             // 
@@ -403,7 +405,7 @@
             // label5
             // 
             this.label5.AutoSize = true;
-            this.label5.Location = new System.Drawing.Point(19, 212);
+            this.label5.Location = new System.Drawing.Point(19, 216);
             this.label5.Name = "label5";
             this.label5.Size = new System.Drawing.Size(65, 12);
             this.label5.TabIndex = 83;
@@ -412,7 +414,7 @@
             // lbCX
             // 
             this.lbCX.AutoSize = true;
-            this.lbCX.Location = new System.Drawing.Point(91, 212);
+            this.lbCX.Location = new System.Drawing.Point(91, 216);
             this.lbCX.Name = "lbCX";
             this.lbCX.Size = new System.Drawing.Size(11, 12);
             this.lbCX.TabIndex = 84;
@@ -421,7 +423,7 @@
             // lbCY
             // 
             this.lbCY.AutoSize = true;
-            this.lbCY.Location = new System.Drawing.Point(146, 212);
+            this.lbCY.Location = new System.Drawing.Point(146, 216);
             this.lbCY.Name = "lbCY";
             this.lbCY.Size = new System.Drawing.Size(11, 12);
             this.lbCY.TabIndex = 85;
@@ -451,7 +453,7 @@
             this.btSaveGluePath.BackgroundImageLayout = System.Windows.Forms.ImageLayout.Stretch;
             this.btSaveGluePath.FlatAppearance.BorderSize = 0;
             this.btSaveGluePath.FlatStyle = System.Windows.Forms.FlatStyle.Flat;
-            this.btSaveGluePath.Location = new System.Drawing.Point(139, 442);
+            this.btSaveGluePath.Location = new System.Drawing.Point(127, 442);
             this.btSaveGluePath.Margin = new System.Windows.Forms.Padding(3, 1, 3, 1);
             this.btSaveGluePath.Name = "btSaveGluePath";
             this.btSaveGluePath.Size = new System.Drawing.Size(49, 49);
@@ -474,7 +476,7 @@
             // label2
             // 
             this.label2.AutoSize = true;
-            this.label2.Location = new System.Drawing.Point(19, 165);
+            this.label2.Location = new System.Drawing.Point(19, 166);
             this.label2.Name = "label2";
             this.label2.Size = new System.Drawing.Size(65, 12);
             this.label2.TabIndex = 67;
@@ -492,7 +494,7 @@
             // lbPixelX
             // 
             this.lbPixelX.AutoSize = true;
-            this.lbPixelX.Location = new System.Drawing.Point(91, 165);
+            this.lbPixelX.Location = new System.Drawing.Point(91, 166);
             this.lbPixelX.Name = "lbPixelX";
             this.lbPixelX.Size = new System.Drawing.Size(11, 12);
             this.lbPixelX.TabIndex = 68;
@@ -512,7 +514,7 @@
             // lbPixelY
             // 
             this.lbPixelY.AutoSize = true;
-            this.lbPixelY.Location = new System.Drawing.Point(146, 165);
+            this.lbPixelY.Location = new System.Drawing.Point(146, 166);
             this.lbPixelY.Name = "lbPixelY";
             this.lbPixelY.Size = new System.Drawing.Size(11, 12);
             this.lbPixelY.TabIndex = 69;
@@ -551,7 +553,7 @@
             this.btOpenGluePath.BackgroundImageLayout = System.Windows.Forms.ImageLayout.Stretch;
             this.btOpenGluePath.FlatAppearance.BorderSize = 0;
             this.btOpenGluePath.FlatStyle = System.Windows.Forms.FlatStyle.Flat;
-            this.btOpenGluePath.Location = new System.Drawing.Point(48, 442);
+            this.btOpenGluePath.Location = new System.Drawing.Point(46, 442);
             this.btOpenGluePath.Margin = new System.Windows.Forms.Padding(3, 1, 3, 1);
             this.btOpenGluePath.Name = "btOpenGluePath";
             this.btOpenGluePath.Size = new System.Drawing.Size(49, 49);
@@ -571,7 +573,7 @@
             // label6
             // 
             this.label6.AutoSize = true;
-            this.label6.Location = new System.Drawing.Point(21, 241);
+            this.label6.Location = new System.Drawing.Point(19, 241);
             this.label6.Name = "label6";
             this.label6.Size = new System.Drawing.Size(65, 12);
             this.label6.TabIndex = 75;

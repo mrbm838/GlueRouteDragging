@@ -6,6 +6,7 @@ using System.Text;
 using System.Threading.Tasks;
 using static System.Windows.Forms.VisualStyles.VisualStyleElement.TreeView;
 using System.Windows.Forms;
+using System.Windows.Media.Imaging;
 
 namespace GlueReadWrite
 {
@@ -89,6 +90,15 @@ namespace GlueReadWrite
             return new float[] { (float)xc, (float)yc, (float)rc };
         }
 
+        /// <summary>
+        /// 根据三点画圆弧
+        /// </summary>
+        /// <param name="dX1">第一个点的X坐标</param>
+        /// <param name="dY1">第一个点的Y坐标</param>
+        /// <param name="dX2">第二个点的X坐标</param>
+        /// <param name="dY2">第二个点的Y坐标</param>
+        /// <param name="dX3">第三个点的X坐标</param>
+        /// <param name="dY3">第三个点的Y坐标</param>
         public static float[] DrawArcNew(float dX1, float dY1, float dX2, float dY2, float dX3, float dY3)
         {
             float[] fTemp = GetCircleNew(dX1, dY1, dX2, dY2, dX3, dY3);
@@ -107,7 +117,7 @@ namespace GlueReadWrite
                 startAngle = (int)(dK1 < dK3 ? dK3 : dK1);//数值较大的为起始点
                 sweepAngle = 360 - ((int)(dK1 < dK3 ? dK3 : dK1) - (int)(dK1 < dK3 ? dK1 : dK3));
             }
-            
+
             return new float[] { fTemp[0] - fTemp[2], fTemp[1] - fTemp[2], Math.Abs(fTemp[2] * 2), Math.Abs(fTemp[2] * 2), startAngle, sweepAngle };
         }
 
@@ -152,14 +162,15 @@ namespace GlueReadWrite
         public static Point TransformToPixels(params double[] doubles)//(double unitX, double unitY, double originX, double originY, double radio)
         {
             double dx = GlueVariableDefine.PhysicalLength / GlueVariableDefine.PixelsNumber, dy = dx;
-            int picX = Convert.ToInt32((doubles[0] + doubles[2] * dx) / dx);
-            int picY = Convert.ToInt32((doubles[1] + doubles[3] * dy) / dy);
+            int pixelX = Convert.ToInt32((doubles[0] + doubles[2] * dx) / dx);
+            int pixelY = Convert.ToInt32((doubles[1] + doubles[3] * dy) / dy);
             if (doubles.Length > 4)
             {
-                picX = Convert.ToInt32((doubles[0] + doubles[2] * dx) / dx / doubles[4]);
-                picY = Convert.ToInt32((doubles[1] + doubles[3] * dy) / dy / doubles[4]);
+                int picX = Convert.ToInt32(pixelX / doubles[4]);
+                int picY = Convert.ToInt32(pixelY / doubles[4]);
+                return new Point { X = picX, Y = picY };
             }
-            return new Point { X = picX, Y = picY };
+            return new Point { X = pixelX, Y = pixelY };
         }
 
         /// <summary>
@@ -170,14 +181,48 @@ namespace GlueReadWrite
         public static PointF TransformToPixelsF(params double[] doubles)//(double unitX, double unitY, double originX, double originY, double radio)
         {
             double dx = GlueVariableDefine.PhysicalLength / GlueVariableDefine.PixelsNumber, dy = dx;
-            float picX = Convert.ToInt64((doubles[0] + doubles[2] * dx) / dx);
-            float picY = Convert.ToInt64((doubles[1] + doubles[3] * dy) / dy);
+            float pixelX = Convert.ToInt64((doubles[0] + doubles[2] * dx) / dx);
+            float pixelY = Convert.ToInt64((doubles[1] + doubles[3] * dy) / dy);
             if (doubles.Length > 4)
             {
-                picX /= (float)doubles[4];
-                picY /= (float)doubles[4];
+                float picX = pixelX / (float)doubles[4];
+                float picY = pixelY / (float)doubles[4];
+                return new PointF { X = picX, Y = picY };
             }
-            return new PointF { X = picX, Y = picY };
+            return new PointF { X = pixelX, Y = pixelY };
+        }
+
+        /// <summary>
+        /// 获取旋转后的物理坐标
+        /// </summary>
+        /// <param name="x">物理坐标X</param>
+        /// <param name="y">物理坐标Y</param>
+        /// <param name="originX">基准点坐标X</param>
+        /// <param name="originY">基准点坐标Y</param>
+        /// <param name="θ">旋转角度</param>
+        /// <returns></returns>
+        public static double[] GetRotatedPoint(double x, double y, double originX, double originY, double θ)
+        {
+            Point pixelPoint = TransformToPixels(x, y, originX, originY);
+
+            //图像的宽度x高度为col x row,图像中某个像素P(x1, y1)，绕某个像素点Q(x2, y2)旋转θ角度后,则该像素点的新坐标位置为(x, y)
+            //x1 = x1; 
+            //y1 = row - y1; 
+            //x2 = x2; 
+            //y2 = row - y2; 
+            //x = (x1 - x2)*cos(pi / 180.0 * θ) - (y1 - y2)*sin(pi / 180.0 * θ) + x2; 
+            //y = (x1 - x2)*sin(pi / 180.0 * θ) + (y1 - y2)*cos(pi / 180.0 * θ) + y2; 
+            //x=x; 
+            //y = row - y;
+            int beforeX = pixelPoint.X, beforeY = pixelPoint.Y;
+            var afterX = (int)((beforeX - originX) * Math.Cos(Math.PI / 180.0 * θ) - (beforeY - originY) * Math.Sin(Math.PI / 180.0 * θ) + originX);
+            var afterY = (int)((beforeX - originX) * Math.Sin(Math.PI / 180.0 * θ) + (beforeY - originY) * Math.Cos(Math.PI / 180.0 * θ) + originY);
+
+            double dx = GlueVariableDefine.PhysicalLength / GlueVariableDefine.PixelsNumber, dy = dx;
+            double xRound = Math.Round(Convert.ToDouble((afterX - originX) * dx), 3);
+            double yRound = Math.Round(Convert.ToDouble((afterY - originY) * dy), 3);
+
+            return new[] { xRound, yRound };
         }
     }
 }
