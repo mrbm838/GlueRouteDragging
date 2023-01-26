@@ -29,9 +29,9 @@
         private void InitializeComponent()
         {
             this.components = new System.ComponentModel.Container();
-            System.Windows.Forms.DataVisualization.Charting.ChartArea chartArea1 = new System.Windows.Forms.DataVisualization.Charting.ChartArea();
-            System.Windows.Forms.DataVisualization.Charting.Legend legend1 = new System.Windows.Forms.DataVisualization.Charting.Legend();
-            System.Windows.Forms.DataVisualization.Charting.Series series1 = new System.Windows.Forms.DataVisualization.Charting.Series();
+            System.Windows.Forms.DataVisualization.Charting.ChartArea chartArea2 = new System.Windows.Forms.DataVisualization.Charting.ChartArea();
+            System.Windows.Forms.DataVisualization.Charting.Legend legend2 = new System.Windows.Forms.DataVisualization.Charting.Legend();
+            System.Windows.Forms.DataVisualization.Charting.Series series2 = new System.Windows.Forms.DataVisualization.Charting.Series();
             this.splitContainer1 = new System.Windows.Forms.SplitContainer();
             this.pictureBox = new System.Windows.Forms.PictureBox();
             this.splitter1 = new System.Windows.Forms.Splitter();
@@ -83,6 +83,8 @@
             this.ToolStripMenuItem_Insert = new System.Windows.Forms.ToolStripMenuItem();
             this.ToolStripMenuItem_Delete = new System.Windows.Forms.ToolStripMenuItem();
             this.ToolStripMenuItem_Clear = new System.Windows.Forms.ToolStripMenuItem();
+            this.cms_LoadPicture = new System.Windows.Forms.ContextMenuStrip(this.components);
+            this.ToolStripMenuItem_LoadPic = new System.Windows.Forms.ToolStripMenuItem();
             ((System.ComponentModel.ISupportInitialize)(this.splitContainer1)).BeginInit();
             this.splitContainer1.Panel1.SuspendLayout();
             this.splitContainer1.Panel2.SuspendLayout();
@@ -98,6 +100,7 @@
             this.splitContainer2.SuspendLayout();
             ((System.ComponentModel.ISupportInitialize)(this.dataGridView)).BeginInit();
             this.cms_DataGridView.SuspendLayout();
+            this.cms_LoadPicture.SuspendLayout();
             this.SuspendLayout();
             // 
             // splitContainer1
@@ -110,6 +113,7 @@
             // splitContainer1.Panel1
             // 
             this.splitContainer1.Panel1.BackColor = System.Drawing.SystemColors.WindowFrame;
+            this.splitContainer1.Panel1.ContextMenuStrip = this.cms_LoadPicture;
             this.splitContainer1.Panel1.Controls.Add(this.pictureBox);
             // 
             // splitContainer1.Panel2
@@ -147,18 +151,18 @@
             // 
             // chart
             // 
-            chartArea1.Name = "ChartArea1";
-            this.chart.ChartAreas.Add(chartArea1);
+            chartArea2.Name = "ChartArea1";
+            this.chart.ChartAreas.Add(chartArea2);
             this.chart.Dock = System.Windows.Forms.DockStyle.Left;
-            legend1.Name = "Legend1";
-            this.chart.Legends.Add(legend1);
+            legend2.Name = "Legend1";
+            this.chart.Legends.Add(legend2);
             this.chart.Location = new System.Drawing.Point(0, 0);
             this.chart.Margin = new System.Windows.Forms.Padding(1);
             this.chart.Name = "chart";
-            series1.ChartArea = "ChartArea1";
-            series1.Legend = "Legend1";
-            series1.Name = "Series1";
-            this.chart.Series.Add(series1);
+            series2.ChartArea = "ChartArea1";
+            series2.Legend = "Legend1";
+            series2.Name = "Series1";
+            this.chart.Series.Add(series2);
             this.chart.Size = new System.Drawing.Size(569, 495);
             this.chart.TabIndex = 1;
             this.chart.Text = "chart1";
@@ -351,7 +355,7 @@
             // label7
             // 
             this.label7.AutoSize = true;
-            this.label7.Font = new System.Drawing.Font("宋体", 10.5F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(134)));
+            this.label7.Font = new System.Drawing.Font("SimSun", 10.5F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(134)));
             this.label7.Location = new System.Drawing.Point(18, 19);
             this.label7.Margin = new System.Windows.Forms.Padding(2, 0, 2, 0);
             this.label7.Name = "label7";
@@ -394,7 +398,7 @@
             // cbWhole
             // 
             this.cbWhole.AutoSize = true;
-            this.cbWhole.Font = new System.Drawing.Font("宋体", 12F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(134)));
+            this.cbWhole.Font = new System.Drawing.Font("SimSun", 12F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(134)));
             this.cbWhole.Location = new System.Drawing.Point(18, 50);
             this.cbWhole.Name = "cbWhole";
             this.cbWhole.Size = new System.Drawing.Size(90, 20);
@@ -660,6 +664,20 @@
             this.ToolStripMenuItem_Clear.Text = "清除胶路";
             this.ToolStripMenuItem_Clear.Click += new System.EventHandler(this.ToolStripMenuItem_Clear_Click);
             // 
+            // cms_LoadPicture
+            // 
+            this.cms_LoadPicture.Items.AddRange(new System.Windows.Forms.ToolStripItem[] {
+            this.ToolStripMenuItem_LoadPic});
+            this.cms_LoadPicture.Name = "cms_LoadPicture";
+            this.cms_LoadPicture.Size = new System.Drawing.Size(181, 48);
+            // 
+            // ToolStripMenuItem_LoadPic
+            // 
+            this.ToolStripMenuItem_LoadPic.Name = "ToolStripMenuItem_LoadPic";
+            this.ToolStripMenuItem_LoadPic.Size = new System.Drawing.Size(180, 22);
+            this.ToolStripMenuItem_LoadPic.Text = "加载图片";
+            this.ToolStripMenuItem_LoadPic.Click += new System.EventHandler(this.ToolStripMenuItem_LoadPic_Click);
+            // 
             // FormGluePath
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(96F, 96F);
@@ -687,6 +705,7 @@
             this.splitContainer2.ResumeLayout(false);
             ((System.ComponentModel.ISupportInitialize)(this.dataGridView)).EndInit();
             this.cms_DataGridView.ResumeLayout(false);
+            this.cms_LoadPicture.ResumeLayout(false);
             this.ResumeLayout(false);
 
         }
@@ -744,6 +763,8 @@
         private System.Windows.Forms.Label label13;
         private System.Windows.Forms.TextBox tbCompensationX;
         private System.Windows.Forms.TextBox tbCompensationY;
+        private System.Windows.Forms.ContextMenuStrip cms_LoadPicture;
+        private System.Windows.Forms.ToolStripMenuItem ToolStripMenuItem_LoadPic;
     }
 }
 

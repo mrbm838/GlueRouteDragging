@@ -1,5 +1,4 @@
 ﻿using GlueReadWrite;
-using Sunny.UI;
 using System;
 using System.Collections.Generic;
 using System.ComponentModel;
@@ -1488,6 +1487,11 @@ namespace GluePathReadWrite
             {
                 MessageBox.Show(e.ToString(), "错误", MessageBoxButtons.OK, MessageBoxIcon.Error);
             }
+        }
+
+        private void ToolStripMenuItem_LoadPic_Click(object sender, EventArgs e)
+        {
+
         }
     }
 }
