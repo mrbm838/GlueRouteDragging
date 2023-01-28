@@ -22,10 +22,14 @@ namespace GlueReadWrite
         XYZRA
     }
 
-    public class GlueVariableDefine
+    public static class GlueVariableDefine
     {
         public static double PhysicalLength { get; set; }
 
         public static int PixelsNumber { get; set; }
+
+        public static double OffsetX { get; set; }
+
+        public static double OffsetY { get; set; }
     }
 }

@@ -84,6 +84,7 @@ namespace GluePathReadWrite
             btClockWise.Text = string.Empty;
             btCounterClockWise.Text = string.Empty;
 
+            #region ToolStripMenuItem_LoadPic_Click(splitContainer1.Panel1, EventArgs.Empty);
             _bmp = ReadImageFile(Application.StartupPath + @"\File\1.BMP");
             pictureBox.Image = _bmp;
             pictureBox.SizeMode = PictureBoxSizeMode.Zoom;
@@ -95,10 +96,16 @@ namespace GluePathReadWrite
             _dPictureBoxImageWidth = pictureBox.Image.Width;
             _dPictureBoxImageHeight = pictureBox.Image.Height;
 
+            _graph = this.pictureBox.CreateGraphics();
+            #endregion
+
             tbStandardX.Text = "1232";//"1160";
             tbStandardY.Text = "1422";//"1280";
 
-            _graph = this.pictureBox.CreateGraphics();
+            tbCompensationX.Text = "3";
+            tbCompensationY.Text = "-2";
+            GlueVariableDefine.OffsetX = 3;
+            GlueVariableDefine.OffsetY = -2;
 
             tkBGlueWidth.TickFrequency = 2;
             tkBGlueWidth.SmallChange = 1;
@@ -1491,7 +1498,52 @@ namespace GluePathReadWrite
 
         private void ToolStripMenuItem_LoadPic_Click(object sender, EventArgs e)
         {
+            OpenFileDialog ofd = new OpenFileDialog()
+            {
+                Title = "请选择图片",
+                InitialDirectory = Environment.CurrentDirectory + "\\File",//Environment.GetFolderPath(Environment.SpecialFolder.MyPictures),
+                Filter = "BMP|*.bmp",//"(*jpg)(*png)(*bmp)|*.jpg;*.png;*.bmp",
+                RestoreDirectory = true
+            };
+            if (ofd.ShowDialog() == DialogResult.OK)
+            {
+                _bmp = ReadImageFile(ofd.FileName);
+                pictureBox.Image = _bmp;
+                pictureBox.SizeMode = PictureBoxSizeMode.Zoom;
 
+                SetPictureBox();
+
+                _dPictureBoxWidth = pictureBox.Width;
+                _dPictureBoxHeight = pictureBox.Height;
+                _dPictureBoxImageWidth = pictureBox.Image.Width;
+                _dPictureBoxImageHeight = pictureBox.Image.Height;
+
+                _graph = this.pictureBox.CreateGraphics();
+            }
+        }
+
+        private void tbCompensationX_Leave(object sender, EventArgs e)
+        {
+            try
+            {
+                GlueVariableDefine.OffsetX = Convert.ToDouble(tbCompensationX.Text);
+            }
+            catch (FormatException exception)
+            {
+                MessageBox.Show(e.ToString(), "错误", MessageBoxButtons.OK, MessageBoxIcon.Error);
+            }
+        }
+
+        private void tbCompensationY_Leave(object sender, EventArgs e)
+        {
+            if (Double.TryParse(tbCompensationY.Text, out double dOffsetY))
+            {
+                GlueVariableDefine.OffsetY = dOffsetY;
+            }
+            else
+            {
+                MessageBox.Show("格式错误！", "错误", MessageBoxButtons.OK, MessageBoxIcon.Error);
+            }
         }
     }
 }
