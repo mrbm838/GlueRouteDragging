@@ -72,6 +72,19 @@ namespace GluePathReadWrite
             pictureBox.MouseWheel += new MouseEventHandler(pbxDrawing_MouseWheel);
             dataGridView.AllowUserToAddRows = false;
             dataGridView.DefaultCellStyle = new DataGridViewCellStyle() { Alignment = DataGridViewContentAlignment.MiddleCenter };
+            dataGridView.CellEndEdit += DataGridView_CellEndEdit;
+        }
+
+        private void DataGridView_CellEndEdit(object sender, DataGridViewCellEventArgs e)
+        {
+            if (e.ColumnIndex == 1)
+                dataGridView.Rows[e.RowIndex].Cells[e.ColumnIndex].Value =
+                    Enum.Parse(typeof(EnumLineType), dataGridView.Rows[e.RowIndex].Cells[e.ColumnIndex].Value.ToString());
+
+            if ((EnumLineType)dataGridView.Rows[e.RowIndex].Cells[e.ColumnIndex].Value == EnumLineType.Line)
+            {
+
+            }
         }
 
         private void Form_GluePath_Load(object sender, EventArgs e)
@@ -157,7 +170,7 @@ namespace GluePathReadWrite
             {
                 for (int i = 0; i < dataGridView.Rows.Count; i++)
                 {
-                    if (dataGridView.Rows[i].Cells[1].Value.ToString() == EnumLineType.Line.ToString())
+                    if ((EnumLineType)dataGridView.Rows[i].Cells[1].Value == EnumLineType.Line)
                     {
                         _listCoorXAndZ.Add(new Coordination
                         {
@@ -352,7 +365,7 @@ namespace GluePathReadWrite
                             double dMoveY = Math.Round(diffY * _dRatio * dy, 3);
                             for (int i = 0; i < dataGridView.RowCount; i++)
                             {
-                                if (dataGridView.Rows[i].Cells[1].Value.ToString() == EnumLineType.Arc.ToString())
+                                if ((EnumLineType)dataGridView.Rows[i].Cells[1].Value == EnumLineType.Arc)
                                 {
                                     dataGridView.Rows[i].Cells[3].Value = Convert.ToDouble(dataGridView.Rows[i].Cells[3].Value) + dMoveX;
                                     dataGridView.Rows[i].Cells[4].Value = Convert.ToDouble(dataGridView.Rows[i].Cells[4].Value) + dMoveY;
@@ -363,8 +376,9 @@ namespace GluePathReadWrite
                         }
                         else if (dataGridView.Rows[_selectedRow].Cells[_selectedColumn].Selected || dataGridView.Rows[_selectedRow].Cells[_selectedColumn + 1].Selected)
                         {
-                            dataGridView.Rows[_selectedRow].Cells[_selectedColumn].Value = Math.Round(e.X * _dRatio * dx - Convert.ToDouble(tbStandardX.Text) * dx, 3);
-                            dataGridView.Rows[_selectedRow].Cells[_selectedColumn + 1].Value = Math.Round(e.Y * _dRatio * dy - Convert.ToDouble(tbStandardY.Text) * dy, 3);
+                            //dataGridView.Rows[_selectedRow].Cells[1].Value = EnumLineType.Arc.ToString();
+                            dataGridView.Rows[_selectedRow].Cells[_selectedColumn].Value = Math.Round(e.X * _dRatio * dx - Convert.ToDouble(tbStandardX.Text) * dx, 3) - GlueVariableDefine.OffsetX;
+                            dataGridView.Rows[_selectedRow].Cells[_selectedColumn + 1].Value = Math.Round(e.Y * _dRatio * dy - Convert.ToDouble(tbStandardY.Text) * dy, 3) - GlueVariableDefine.OffsetY;
                         }
                     }
                     catch
@@ -406,6 +420,7 @@ namespace GluePathReadWrite
                         this.Cursor = Cursors.Cross;
 
                         int serial = Convert.ToInt32(graphicsPath.Key.Split('-')[0]);
+                        dataGridView.ClearSelection();
                         dataGridView.Rows[serial].Selected = true;
                         _pointIndex = _dicGraphicsPaths.Keys.ToList().IndexOf(graphicsPath.Key) + 1;
                         dataGridView_CellClick(dataGridView, new DataGridViewCellEventArgs(3, serial));
@@ -554,39 +569,7 @@ namespace GluePathReadWrite
                         strGlueData.Append(dataGridView.Columns[j].HeaderText + (j != dataGridView.Columns.Count - 1 ? "," : "\r\n"));
                         continue;
                     }
-
-                    if (dataGridView.Rows[i].Cells[j].Value != null)
-                    {
-                        switch (j)
-                        {
-                            case 1:
-                                if (dataGridView.Rows[i].Cells[1].Value.ToString() == EnumLineType.Line.ToString())
-                                    strGlueData.Append("0");
-                                else if (dataGridView.Rows[i].Cells[1].Value.ToString() == EnumLineType.Arc.ToString())
-                                    strGlueData.Append("2");
-                                break;
-                            case 2:
-                                try
-                                {
-                                    strGlueData.Append((int)(EnumCircleMode)Enum.Parse(typeof(EnumCircleMode), dataGridView.Rows[i].Cells[2].Value.ToString()));
-                                }
-                                catch (ArgumentException)
-                                {
-                                    strGlueData.Append("-1");
-                                }
-                                break;
-                            case 13:
-                                if ((bool)dataGridView.Rows[i].Cells[13].Value)
-                                    strGlueData.Append("1");
-                                else
-                                    strGlueData.Append("0");
-                                break;
-                            default:
-                                strGlueData.Append(dataGridView.Rows[i].Cells[j].Value);
-                                break;
-                        }
-                    }
-                    strGlueData.Append(j != dataGridView.Columns.Count - 1 ? "," : "\r\n");
+                    DataGridViewSaveRow(i, j, ref strGlueData);
                 }
             }
             strGlueData.Append(_strGlueFileTail);
@@ -594,6 +577,42 @@ namespace GluePathReadWrite
             {
                 sw.Write(strGlueData);
             }
+        }
+
+        private void DataGridViewSaveRow(int i, int j, ref StringBuilder strGlueData)
+        {
+            if (dataGridView.Rows[i].Cells[j].Value != null)
+            {
+                switch (j)
+                {
+                    case 1:
+                        if ((EnumLineType)dataGridView.Rows[i].Cells[1].Value == EnumLineType.Line)
+                            strGlueData.Append("0");
+                        else if ((EnumLineType)dataGridView.Rows[i].Cells[1].Value == EnumLineType.Arc)
+                            strGlueData.Append("2");
+                        break;
+                    case 2:
+                        try
+                        {
+                            strGlueData.Append((int)(EnumCircleMode)Enum.Parse(typeof(EnumCircleMode), dataGridView.Rows[i].Cells[2].Value.ToString()));
+                        }
+                        catch (ArgumentException)
+                        {
+                            strGlueData.Append("-1");
+                        }
+                        break;
+                    case 13:
+                        if ((bool)dataGridView.Rows[i].Cells[13].Value)
+                            strGlueData.Append("1");
+                        else
+                            strGlueData.Append("0");
+                        break;
+                    default:
+                        strGlueData.Append(dataGridView.Rows[i].Cells[j].Value);
+                        break;
+                }
+            }
+            strGlueData.Append(j != dataGridView.Columns.Count - 1 ? "," : "\r\n");
         }
 
         private void LoadToDataGridViewCsv(string[] strTxt)
@@ -607,72 +626,105 @@ namespace GluePathReadWrite
 
             for (int i = 0; i < strHead.Length; i++)//添加列
             {
-                if (i == 13)
-                {
-                    DataGridViewCheckBoxColumn dgvCheckBoxColumn = new DataGridViewCheckBoxColumn();
-                    dgvCheckBoxColumn.Name = "column" + strHead[i].Split(',')[0];
-                    dgvCheckBoxColumn.HeaderText = strHead[i].Split(',')[0];
-                    dgvCheckBoxColumn.Width = 50;
-                    dataGridView.Columns.Add(dgvCheckBoxColumn);
-                    continue;
-                }
-                dataGridView.Columns.Add("column" + strHead[i].Split(',')[0], strHead[i].Split(',')[0]);
-                dataGridView.Columns[i].Width = 70;
+                DataGridViewAddColumn(i, strHead[i]);
             }
 
+            string[] strTail = strTxt.Skip(1).ToArray();
             for (int i = 0; i < strTxt.Length - 2; i++)//添加行
             {
-                var strings = strTxt[i + 1].Split(',');
-                this.dataGridView.Rows.Add();
-                for (int j = 0; j < strings.Length; j++)
+                DataGridViewAddRow(i, strTail[i]);
+            }
+            dataGridView.ClearSelection();
+        }
+
+        private void DataGridViewAddColumn(int i, string strHead)
+        {
+            if (i == 13)
+            {
+                DataGridViewCheckBoxColumn dgvCheckBoxColumn = new DataGridViewCheckBoxColumn
                 {
-                    if (j == 1)
-                    {
-                        DataGridViewComboBoxCell dgvComboBoxCellOfType = new DataGridViewComboBoxCell();
-                        dgvComboBoxCellOfType.DataSource = Enum.GetValues(typeof(EnumLineType));
-                        dataGridView.Rows[i].Cells[1] = dgvComboBoxCellOfType;
-                    }
-                    else if (j == 2)
+                    Name = "column" + strHead,
+                    HeaderText = strHead,
+                    Width = 50
+                };
+                dataGridView.Columns.Add(dgvCheckBoxColumn);
+            }
+            else
+            {
+                dataGridView.Columns.Add("column" + strHead, strHead);
+                dataGridView.Columns[i].Width = 70;
+            }
+        }
+
+        private void DataGridViewAddRow(int i, string strTxt)
+        {
+            var strings = strTxt.Trim().Split(',');
+            this.dataGridView.Rows.Add();
+            for (int j = 0; j < strings.Length; j++)
+            {
+                if (j == 1)
+                {
+                    DataGridViewComboBoxCell dgvComboBoxCellOfType = new DataGridViewComboBoxCell();
+                    dgvComboBoxCellOfType.DataSource = Enum.GetValues(typeof(EnumLineType));
+                    //dgvComboBoxCellOfType.ValueType = typeof(EnumLineType);
+                    dataGridView.Rows[i].Cells[1] = dgvComboBoxCellOfType;
+                }
+                else
+                {
+                    var value = strings[j];
+                    if (j == 2)
                     {
                         DataGridViewComboBoxCell dgvComboBoxCellOfCircleMode = new DataGridViewComboBoxCell();
                         dgvComboBoxCellOfCircleMode.DataSource = Enum.GetValues(typeof(EnumCircleMode));
+                        //dgvComboBoxCellOfCircleMode.ValueType = typeof(EnumCircleMode);
                         dataGridView.Rows[i].Cells[2] = dgvComboBoxCellOfCircleMode;
+                        //dataGridView.Rows[i].Cells[2]
                     }
                     else
                     {
                         //if (GluePathForXAndY.IsNumberic(strings[j]))
                         //    dataGridView.Rows[i].Cells[j].Value = Convert.ToDouble(strings[j]).ToString("f3");
-                        //else
-                        dataGridView.Rows[i].Cells[j].Value = strings[j];
+                        dataGridView.Rows[i].Cells[j].Value = value;
                     }
-                    //strPathData[i, j] = strings[j];
                 }
-
-                if (strings[1] == "0")
-                {
-                    dataGridView.Rows[i].Cells[1].Value = EnumLineType.Line;
-                    dataGridView.Rows[i].Cells[2].ReadOnly = true;
-                    dataGridView.Rows[i].Cells[3].ReadOnly = true;
-                    dataGridView.Rows[i].Cells[4].ReadOnly = true;
-                    dataGridView.Rows[i].Cells[5].ReadOnly = true;
-                    dataGridView.Rows[i].Cells[3].Style.BackColor = Color.Pink;
-                    dataGridView.Rows[i].Cells[4].Style.BackColor = Color.Pink;
-                    dataGridView.Rows[i].Cells[5].Style.BackColor = Color.Pink;
-                }
-                else
-                {
-                    dataGridView.Rows[i].Cells[1].Value = EnumLineType.Arc;
-                    dataGridView.Rows[i].Cells[2].Value = EnumCircleMode.XY;
-                }
-
-                if (strings[2] == "-1")
-                {
-                    dataGridView.Rows[i].Cells[2].Value = string.Empty;
-                }
-
-                dataGridView.Rows[i].Cells[13].Value = strings[13] == "1";
+                //strPathData[i, j] = strings[j];
             }
-            dataGridView.ClearSelection();
+
+            if (strings[1] == "0")
+            {
+                LineTypeCellStyleChange(i, true);
+            }
+            else
+            {
+                LineTypeCellStyleChange(i, false);
+            }
+
+            if (strings[2] == "-1")
+            {
+                dataGridView.Rows[i].Cells[2].Value = string.Empty;
+            }
+
+            dataGridView.Rows[i].Cells[13].Value = strings[13] == "1";
+        }
+
+        private void LineTypeCellStyleChange(int rowNum, bool isLine)
+        {
+            if (isLine)
+            {
+                dataGridView.Rows[rowNum].Cells[1].Value = EnumLineType.Line;
+                dataGridView.Rows[rowNum].Cells[2].ReadOnly = true;
+                dataGridView.Rows[rowNum].Cells[3].ReadOnly = true;
+                dataGridView.Rows[rowNum].Cells[4].ReadOnly = true;
+                dataGridView.Rows[rowNum].Cells[5].ReadOnly = true;
+                dataGridView.Rows[rowNum].Cells[3].Style.BackColor = Color.Pink;
+                dataGridView.Rows[rowNum].Cells[4].Style.BackColor = Color.Pink;
+                dataGridView.Rows[rowNum].Cells[5].Style.BackColor = Color.Pink;
+            }
+            else
+            {
+                dataGridView.Rows[rowNum].Cells[1].Value = EnumLineType.Arc;
+                dataGridView.Rows[rowNum].Cells[2].Value = EnumCircleMode.XY;
+            }
         }
 
         public string[] ReadGluePathFile(string path)
@@ -1266,34 +1318,54 @@ namespace GluePathReadWrite
 
         private void ToolStripMenuItem_Append_Click(object sender, EventArgs e)
         {
+            StringBuilder strAppend = new StringBuilder();
             if (dataGridView.ColumnCount == 0)
             {
-                string strHeader = "ID:,Type:,CircleMode:,MX:,MY:,MZ:,TX:,TY:,TZ:,TR:,TA:,Speed:,AccSpeed:,IOStatus:,StartDelay:,EndDelay:,StartDelayIOStatus:,EndDelayIOStatus:";
+                string strHeader = "ID,Type,CircleMode,MX,MY,MZ,TX,TY,TZ,TR,TA,Speed,AccSpeed,IOStatus,StartDelay,EndDelay,StartDelayIOStatus,EndDelayIOStatus";
                 string[] strings = strHeader.Split(',');
                 for (int i = 0; i < strings.Length; i++)//添加列
                 {
-                    dataGridView.Columns.Add("column" + strings[i].Split(':')[0], strings[i].Split(':')[0]);
-                    dataGridView.Columns[i].Width = 70;
+                    DataGridViewAddColumn(i, strings[i]);
                 }
+                DataGridViewAddRow(0, "1,0,-1,-,-,-,0,0,0,0,0,0,0,0,0,0,0,0");
             }
-
-            dataGridView.Rows.Add();
-            dataGridView.Rows[dataGridView.RowCount - 1].Cells[0].Value = dataGridView.RowCount.ToString();
-
-            DataGridViewComboBoxCell dgvComboBoxCellOfType = new DataGridViewComboBoxCell();
-            dgvComboBoxCellOfType.DataSource = Enum.GetValues(typeof(EnumLineType));
-            dataGridView.Rows[dataGridView.Rows.Count - 1].Cells[1] = dgvComboBoxCellOfType;
-
-            DataGridViewComboBoxCell dgvComboBoxCellOfCircleMode = new DataGridViewComboBoxCell();
-            dgvComboBoxCellOfCircleMode.Items.Add("");
-            dgvComboBoxCellOfCircleMode.Items.Add("XY");
-            dgvComboBoxCellOfCircleMode.Items.Add("XYZ");
-            dataGridView.Rows[dataGridView.Rows.Count - 1].Cells[2] = dgvComboBoxCellOfCircleMode;
-
-            for (int i = 3; i < dataGridView.ColumnCount; i++)
+            else
             {
-                dataGridView.Rows[dataGridView.RowCount - 1].Cells[i].Value = string.Empty;
+                for (int index = 0; index < dataGridView.Rows[dataGridView.RowCount - 1].Cells.Count; index++)
+                {
+                    if (index == 0)
+                    {
+                        strAppend.Append(dataGridView.RowCount + 1 + ",");
+                    }
+                    else if ((index == 3 || index == 4 || index == 6 || index == 7) &&
+                             GluePathForXAndY.IsNumberic(dataGridView.Rows[dataGridView.RowCount - 1].Cells[index].Value))
+                    {
+                        strAppend.Append(Convert.ToDouble(dataGridView.Rows[dataGridView.RowCount - 1].Cells[index].Value) + 0.3 + ",");
+                    }
+                    else
+                    {
+                        DataGridViewSaveRow(dataGridView.RowCount - 1, index, ref strAppend);
+                    }
+                }
+                DataGridViewAddRow(dataGridView.RowCount, strAppend.ToString().Remove(strAppend.Length - 1));
             }
+            //strAppend.Append(dataGridView.Rows[dataGridView.RowCount - 1].Cells[index].Value + ",");
+
+            //dataGridView.Rows.Add();
+            //dataGridView.Rows[dataGridView.RowCount - 1].Cells[0].Value = dataGridView.RowCount.ToString();
+
+            //DataGridViewComboBoxCell dgvComboBoxCellOfType = new DataGridViewComboBoxCell();
+            //dgvComboBoxCellOfType.DataSource = Enum.GetValues(typeof(EnumLineType));
+            //dataGridView.Rows[dataGridView.Rows.Count - 1].Cells[1] = dgvComboBoxCellOfType;
+
+            //DataGridViewComboBoxCell dgvComboBoxCellOfCircleMode = new DataGridViewComboBoxCell();
+            //dgvComboBoxCellOfCircleMode.DataSource = Enum.GetValues(typeof(EnumCircleMode));
+            //dataGridView.Rows[dataGridView.Rows.Count - 1].Cells[2] = dgvComboBoxCellOfCircleMode;
+
+            //for (int i = 3; i < dataGridView.ColumnCount; i++)
+            //{
+            //    dataGridView.Rows[dataGridView.RowCount - 1].Cells[i].Value = string.Empty;
+            //}
         }
 
         private void ToolStripMenuItem_Insert_Click(object sender, EventArgs e)
@@ -1447,12 +1519,26 @@ namespace GluePathReadWrite
 
         private void btClockWise_Click(object sender, EventArgs e)
         {
-            RealizePathRotation(-Convert.ToDouble(tbRotation.Text));
+            try
+            {
+                RealizePathRotation(-Convert.ToDouble(tbRotation.Text));
+            }
+            catch (FormatException exception)
+            {
+                MessageBox.Show(e.ToString(), "错误", MessageBoxButtons.OK, MessageBoxIcon.Error);
+            }
         }
 
         private void btCounterClockWise_Click(object sender, EventArgs e)
         {
-            RealizePathRotation(Convert.ToDouble(tbRotation.Text));
+            try
+            {
+                RealizePathRotation(Convert.ToDouble(tbRotation.Text));
+            }
+            catch (FormatException exception)
+            {
+                MessageBox.Show(e.ToString(), "错误", MessageBoxButtons.OK, MessageBoxIcon.Error);
+            }
         }
 
         private void RealizePathRotation(double rotation)
@@ -1460,7 +1546,7 @@ namespace GluePathReadWrite
             GetPixelsNumberAndPhysicalLength();
             for (int i = 0; i < dataGridView.RowCount; i++)
             {
-                if (dataGridView.Rows[i].Cells[1].Value.ToString() == EnumLineType.Arc.ToString())
+                if ((EnumLineType)dataGridView.Rows[i].Cells[1].Value == EnumLineType.Arc)
                 {
                     double[] arcPoint = GluePathForXAndY.GetRotatedPoint(
                         Convert.ToDouble(dataGridView.Rows[i].Cells[3].Value) + GlueVariableDefine.OffsetX,
