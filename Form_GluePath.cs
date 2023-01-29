@@ -406,7 +406,7 @@ namespace GluePathReadWrite
                         this.Cursor = Cursors.Cross;
 
                         int serial = Convert.ToInt32(graphicsPath.Key.Split('-')[0]);
-                        dataGridView.Rows[Convert.ToInt32(graphicsPath.Key)].Selected = true;
+                        dataGridView.Rows[serial].Selected = true;
                         _pointIndex = _dicGraphicsPaths.Keys.ToList().IndexOf(graphicsPath.Key) + 1;
                         dataGridView_CellClick(dataGridView, new DataGridViewCellEventArgs(3, serial));
                         break;
@@ -1026,14 +1026,14 @@ namespace GluePathReadWrite
                             GluePathForXAndY.IsNumberic(dataGridView.Rows[i - 1].Cells[6].Value) && GluePathForXAndY.IsNumberic(dataGridView.Rows[i - 1].Cells[7].Value))
                         {
                             pS = GluePathForXAndY.TransformToPixelsF(
-                                Convert.ToDouble(dataGridView.Rows[i - 1].Cells[6].Value),
-                                Convert.ToDouble(dataGridView.Rows[i - 1].Cells[7].Value),
+                                Convert.ToDouble(dataGridView.Rows[i - 1].Cells[6].Value) + GlueVariableDefine.OffsetX,
+                                Convert.ToDouble(dataGridView.Rows[i - 1].Cells[7].Value) + GlueVariableDefine.OffsetY,
                                 Convert.ToDouble(tbStandardX.Text),
                                 Convert.ToDouble(tbStandardY.Text),
                                 _dRatio);
                             pE = GluePathForXAndY.TransformToPixelsF(
-                                Convert.ToDouble(dataGridView.Rows[i].Cells[6].Value),
-                                Convert.ToDouble(dataGridView.Rows[i].Cells[7].Value),
+                                Convert.ToDouble(dataGridView.Rows[i].Cells[6].Value) + GlueVariableDefine.OffsetX,
+                                Convert.ToDouble(dataGridView.Rows[i].Cells[7].Value) + GlueVariableDefine.OffsetY,
                                 Convert.ToDouble(tbStandardX.Text),
                                 Convert.ToDouble(tbStandardY.Text),
                                 _dRatio);
@@ -1066,20 +1066,20 @@ namespace GluePathReadWrite
                             GluePathForXAndY.IsNumberic(dataGridView.Rows[i - 1].Cells[6].Value) && GluePathForXAndY.IsNumberic(dataGridView.Rows[i - 1].Cells[7].Value))
                         {
                             pS = GluePathForXAndY.TransformToPixelsF(
-                                Convert.ToDouble(dataGridView.Rows[i - 1].Cells[6].Value),
-                                Convert.ToDouble(dataGridView.Rows[i - 1].Cells[7].Value),
+                                Convert.ToDouble(dataGridView.Rows[i - 1].Cells[6].Value) + GlueVariableDefine.OffsetX,
+                                Convert.ToDouble(dataGridView.Rows[i - 1].Cells[7].Value) + GlueVariableDefine.OffsetY,
                                 Convert.ToDouble(tbStandardX.Text),
                                 Convert.ToDouble(tbStandardY.Text),
                                 _dRatio);
                             pM = GluePathForXAndY.TransformToPixelsF(
-                                Convert.ToDouble(dataGridView.Rows[i].Cells[3].Value),
-                                Convert.ToDouble(dataGridView.Rows[i].Cells[4].Value),
+                                Convert.ToDouble(dataGridView.Rows[i].Cells[3].Value) + GlueVariableDefine.OffsetX,
+                                Convert.ToDouble(dataGridView.Rows[i].Cells[4].Value) + GlueVariableDefine.OffsetY,
                                 Convert.ToDouble(tbStandardX.Text),
                                 Convert.ToDouble(tbStandardY.Text),
                                 _dRatio);
                             pE = GluePathForXAndY.TransformToPixelsF(
-                                Convert.ToDouble(dataGridView.Rows[i].Cells[6].Value),
-                                Convert.ToDouble(dataGridView.Rows[i].Cells[7].Value),
+                                Convert.ToDouble(dataGridView.Rows[i].Cells[6].Value) + GlueVariableDefine.OffsetX,
+                                Convert.ToDouble(dataGridView.Rows[i].Cells[7].Value) + GlueVariableDefine.OffsetY,
                                 Convert.ToDouble(tbStandardX.Text),
                                 Convert.ToDouble(tbStandardY.Text),
                                 _dRatio);
@@ -1148,8 +1148,8 @@ namespace GluePathReadWrite
                 {
                     isArc = true;
                     pT = GluePathForXAndY.TransformToPixels(
-                        Convert.ToDouble(dataGridView.Rows[i].Cells[3].Value),
-                        Convert.ToDouble(dataGridView.Rows[i].Cells[4].Value),
+                        Convert.ToDouble(dataGridView.Rows[i].Cells[3].Value) + GlueVariableDefine.OffsetX,
+                        Convert.ToDouble(dataGridView.Rows[i].Cells[4].Value) + GlueVariableDefine.OffsetY,
                         Convert.ToDouble(tbStandardX.Text),
                         Convert.ToDouble(tbStandardY.Text),
                         _dRatio);
@@ -1175,8 +1175,8 @@ namespace GluePathReadWrite
                 if (GluePathForXAndY.IsNumberic(dataGridView.Rows[i].Cells[6].Value) && GluePathForXAndY.IsNumberic(dataGridView.Rows[i].Cells[7].Value))
                 {
                     pT = GluePathForXAndY.TransformToPixels(
-                        Convert.ToDouble(dataGridView.Rows[i].Cells[6].Value),
-                        Convert.ToDouble(dataGridView.Rows[i].Cells[7].Value),
+                        Convert.ToDouble(dataGridView.Rows[i].Cells[6].Value) + GlueVariableDefine.OffsetX,
+                        Convert.ToDouble(dataGridView.Rows[i].Cells[7].Value) + GlueVariableDefine.OffsetY,
                         Convert.ToDouble(tbStandardX.Text),
                         Convert.ToDouble(tbStandardY.Text),
                         _dRatio);
@@ -1382,7 +1382,7 @@ namespace GluePathReadWrite
                     _pointIndex = hit.PointIndex;
                     //chart.Series[0].Points[hit.PointIndex].Color = Color.Blue;
 
-                    var strings = _listCoorXAndZ[hit.PointIndex].StrLabel.Split('_');
+                    var strings = _listCoorXAndZ[hit.PointIndex].StrLabel.Split('-');
                     int id = Convert.ToInt32(strings[0]) - 1;
                     if (strings.Length == 1 || strings[1] == "2")
                     {
@@ -1463,22 +1463,22 @@ namespace GluePathReadWrite
                 if (dataGridView.Rows[i].Cells[1].Value.ToString() == EnumLineType.Arc.ToString())
                 {
                     double[] arcPoint = GluePathForXAndY.GetRotatedPoint(
-                        Convert.ToDouble(dataGridView.Rows[i].Cells[3].Value),
-                        Convert.ToDouble(dataGridView.Rows[i].Cells[4].Value),
+                        Convert.ToDouble(dataGridView.Rows[i].Cells[3].Value) + GlueVariableDefine.OffsetX,
+                        Convert.ToDouble(dataGridView.Rows[i].Cells[4].Value) + GlueVariableDefine.OffsetY,
                         Convert.ToDouble(tbStandardX.Text),
                         Convert.ToDouble(tbStandardY.Text),
                         rotation);
-                    dataGridView.Rows[i].Cells[3].Value = arcPoint[0];
-                    dataGridView.Rows[i].Cells[4].Value = arcPoint[1];
+                    dataGridView.Rows[i].Cells[3].Value = arcPoint[0] - GlueVariableDefine.OffsetX;
+                    dataGridView.Rows[i].Cells[4].Value = arcPoint[1] - GlueVariableDefine.OffsetY;
                 }
                 double[] linePoint = GluePathForXAndY.GetRotatedPoint(
-                    Convert.ToDouble(dataGridView.Rows[i].Cells[6].Value),
-                    Convert.ToDouble(dataGridView.Rows[i].Cells[7].Value),
+                    Convert.ToDouble(dataGridView.Rows[i].Cells[6].Value) + GlueVariableDefine.OffsetX,
+                    Convert.ToDouble(dataGridView.Rows[i].Cells[7].Value) + GlueVariableDefine.OffsetY,
                     Convert.ToDouble(tbStandardX.Text),
                     Convert.ToDouble(tbStandardY.Text),
                     rotation);
-                dataGridView.Rows[i].Cells[6].Value = linePoint[0];
-                dataGridView.Rows[i].Cells[7].Value = linePoint[1];
+                dataGridView.Rows[i].Cells[6].Value = linePoint[0] - GlueVariableDefine.OffsetX;
+                dataGridView.Rows[i].Cells[7].Value = linePoint[1] - GlueVariableDefine.OffsetY;
             }
             DrawGuiPointNew();
             DrawGuiLineNew();
