@@ -35,6 +35,7 @@
             this.splitContainer1 = new System.Windows.Forms.SplitContainer();
             this.cms_LoadPicture = new System.Windows.Forms.ContextMenuStrip(this.components);
             this.ToolStripMenuItem_LoadPic = new System.Windows.Forms.ToolStripMenuItem();
+            this.ToolStripMenuItem_Fit = new System.Windows.Forms.ToolStripMenuItem();
             this.pictureBox = new System.Windows.Forms.PictureBox();
             this.splitter1 = new System.Windows.Forms.Splitter();
             this.chart = new System.Windows.Forms.DataVisualization.Charting.Chart();
@@ -131,16 +132,24 @@
             // 
             this.cms_LoadPicture.ImageScalingSize = new System.Drawing.Size(24, 24);
             this.cms_LoadPicture.Items.AddRange(new System.Windows.Forms.ToolStripItem[] {
-            this.ToolStripMenuItem_LoadPic});
+            this.ToolStripMenuItem_LoadPic,
+            this.ToolStripMenuItem_Fit});
             this.cms_LoadPicture.Name = "cms_LoadPicture";
-            this.cms_LoadPicture.Size = new System.Drawing.Size(125, 26);
+            this.cms_LoadPicture.Size = new System.Drawing.Size(137, 48);
             // 
             // ToolStripMenuItem_LoadPic
             // 
             this.ToolStripMenuItem_LoadPic.Name = "ToolStripMenuItem_LoadPic";
-            this.ToolStripMenuItem_LoadPic.Size = new System.Drawing.Size(124, 22);
+            this.ToolStripMenuItem_LoadPic.Size = new System.Drawing.Size(136, 22);
             this.ToolStripMenuItem_LoadPic.Text = "加载图片";
             this.ToolStripMenuItem_LoadPic.Click += new System.EventHandler(this.ToolStripMenuItem_LoadPic_Click);
+            // 
+            // ToolStripMenuItem_Fit
+            // 
+            this.ToolStripMenuItem_Fit.Name = "ToolStripMenuItem_Fit";
+            this.ToolStripMenuItem_Fit.Size = new System.Drawing.Size(136, 22);
+            this.ToolStripMenuItem_Fit.Text = "图像自适应";
+            this.ToolStripMenuItem_Fit.Click += new System.EventHandler(this.ToolStripMenuItem_Fit_Click);
             // 
             // pictureBox
             // 
@@ -151,7 +160,6 @@
             this.pictureBox.Size = new System.Drawing.Size(509, 352);
             this.pictureBox.TabIndex = 0;
             this.pictureBox.TabStop = false;
-            this.pictureBox.MouseDoubleClick += new System.Windows.Forms.MouseEventHandler(this.ToolStripMenuItem_Fit_Click);
             this.pictureBox.MouseDown += new System.Windows.Forms.MouseEventHandler(this.pictureBox_MouseDown);
             this.pictureBox.MouseMove += new System.Windows.Forms.MouseEventHandler(this.pictureBox_MouseMove);
             this.pictureBox.MouseUp += new System.Windows.Forms.MouseEventHandler(this.pictureBox_MouseUp);
@@ -768,6 +776,7 @@
         private System.Windows.Forms.TextBox tbCompensationY;
         private System.Windows.Forms.ContextMenuStrip cms_LoadPicture;
         private System.Windows.Forms.ToolStripMenuItem ToolStripMenuItem_LoadPic;
+        private System.Windows.Forms.ToolStripMenuItem ToolStripMenuItem_Fit;
     }
 }
 

@@ -459,17 +459,6 @@ namespace GluePathReadWrite
             }
         }
 
-        private void ToolStripMenuItem_Fit_Click(object sender, MouseEventArgs e)
-        {
-            if (e.Button == MouseButtons.Left)
-            {
-                SetPictureBox();
-                DMultiplyingG = 1;
-                DrawGuiPointNew();
-                DrawGuiLineNew();
-            }
-        }
-
         private void SetPictureBox()
         {
             splitContainer1.Panel1.AutoScroll = false;
@@ -1652,6 +1641,14 @@ namespace GluePathReadWrite
             {
                 MessageBox.Show("格式错误！", "错误", MessageBoxButtons.OK, MessageBoxIcon.Error);
             }
+        }
+
+        private void ToolStripMenuItem_Fit_Click(object sender, EventArgs e)
+        {
+            SetPictureBox();
+            DMultiplyingG = 1;
+            DrawGuiPointNew();
+            DrawGuiLineNew();
         }
     }
 }
