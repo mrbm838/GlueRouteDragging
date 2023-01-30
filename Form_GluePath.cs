@@ -79,7 +79,11 @@ namespace GluePathReadWrite
 
         private void DataGridView_CellEndEdit(object sender, DataGridViewCellEventArgs e)
         {
-            if (e.ColumnIndex == 1)
+            if (e.ColumnIndex == 1 && e.RowIndex == 0)
+            {
+                dataGridView.Rows[e.RowIndex].Cells[e.ColumnIndex].Value = EnumLineType.Line;
+            }
+            else if (e.ColumnIndex == 1 && e.RowIndex != 0)
             {
                 dataGridView.Rows[e.RowIndex].Cells[e.ColumnIndex].Value =
                     Enum.Parse(typeof(EnumLineType), dataGridView.Rows[e.RowIndex].Cells[e.ColumnIndex].Value.ToString());
@@ -97,17 +101,18 @@ namespace GluePathReadWrite
             btClockWise.Text = string.Empty;
             btCounterClockWise.Text = string.Empty;
 
-            #region ToolStripMenuItem_LoadPic_Click(splitContainer1.Panel1, EventArgs.Empty);
-            _bmp = ReadImageFile(Application.StartupPath + @"\File\1.BMP");
-            pictureBox.Image = _bmp;
-            pictureBox.SizeMode = PictureBoxSizeMode.Zoom;
+            ToolStripMenuItem_LoadPic_Click(splitContainer1.Panel1, EventArgs.Empty);
+            #region 
+            //_bmp = ReadImageFile(Application.StartupPath + @"\File\1.BMP");
+            //pictureBox.Image = _bmp;
+            //pictureBox.SizeMode = PictureBoxSizeMode.Zoom;
 
-            SetPictureBox();
+            //SetPictureBox();
 
-            _dPictureBoxWidth = pictureBox.Width;
-            _dPictureBoxHeight = pictureBox.Height;
-            _dPictureBoxImageWidth = pictureBox.Image.Width;
-            _dPictureBoxImageHeight = pictureBox.Image.Height;
+            //_dPictureBoxWidth = pictureBox.Width;
+            //_dPictureBoxHeight = pictureBox.Height;
+            //_dPictureBoxImageWidth = pictureBox.Image.Width;
+            //_dPictureBoxImageHeight = pictureBox.Image.Height;
 
             _graph = this.pictureBox.CreateGraphics();
             #endregion
@@ -131,12 +136,12 @@ namespace GluePathReadWrite
 
             #region MyRegion
 
-            _glueFilePath = Application.StartupPath + @"\File\jiaolu.csv";
+            //_glueFilePath = Application.StartupPath + @"\File\jiaolu.csv";
 
-            LoadToDataGridViewCsv(ReadGluePathFile(_glueFilePath));
-            DrawGuiPointNew();
-            DrawGuiLineNew();
-            DrawChartLine();
+            //LoadToDataGridViewCsv(ReadGluePathFile(_glueFilePath));
+            //DrawGuiPointNew();
+            //DrawGuiLineNew();
+            //DrawChartLine();
 
             #endregion
 
@@ -254,12 +259,13 @@ namespace GluePathReadWrite
             if (_glueFilePath != "")
             {
                 this.Text = Path.GetFileName(_glueFilePath);
-                LoadToDataGridViewCsv(ReadGluePathFile(_glueFilePath));
+                var fileData = ReadGluePathFile(_glueFilePath);
+                if (fileData == null) return;
+                LoadToDataGridViewCsv(fileData);
                 DrawGuiPointNew();
                 DrawGuiLineNew();
                 DrawChartLine();
             }
-            _graph.DrawLine(PenRed, 200, 200, 400, 400);
         }
 
         private string OpenFileDialog(string strPath)
@@ -557,23 +563,34 @@ namespace GluePathReadWrite
                 return;
 
             //string strFolderPath = _glueFilePath;
-            StringBuilder strGlueData = new StringBuilder();
-            for (int i = -1; i < dataGridView.Rows.Count; i++)
+            try
             {
-                for (int j = 0; j < dataGridView.Columns.Count; j++)
+                StringBuilder strGlueData = new StringBuilder();
+                for (int i = -1; i < dataGridView.Rows.Count; i++)
                 {
-                    if (i == -1)
+                    for (int j = 0; j < dataGridView.Columns.Count; j++)
                     {
-                        strGlueData.Append(dataGridView.Columns[j].HeaderText + (j != dataGridView.Columns.Count - 1 ? "," : "\r\n"));
-                        continue;
+                        if (i == -1)
+                        {
+                            strGlueData.Append(dataGridView.Columns[j].HeaderText + (j != dataGridView.Columns.Count - 1 ? "," : "\r\n"));
+                            continue;
+                        }
+                        DataGridViewSaveRow(i, j, ref strGlueData);
                     }
-                    DataGridViewSaveRow(i, j, ref strGlueData);
+                }
+                strGlueData.Append(_strGlueFileTail);
+                using (StreamWriter sw = new StreamWriter(_glueFilePath, false, Encoding.Default))
+                {
+                    sw.Write(strGlueData);
                 }
             }
-            strGlueData.Append(_strGlueFileTail);
-            using (StreamWriter sw = new StreamWriter(_glueFilePath, false, Encoding.Default))
+            catch (ArgumentNullException argumentNullException)
             {
-                sw.Write(strGlueData);
+                MessageBox.Show(argumentNullException.Message, "错误", MessageBoxButtons.OK, MessageBoxIcon.Error);
+            }
+            catch (IOException ioException)
+            {
+                MessageBox.Show(ioException.Message, "错误", MessageBoxButtons.OK, MessageBoxIcon.Error);
             }
         }
 
@@ -688,12 +705,12 @@ namespace GluePathReadWrite
             if (strings[1] == "0")
             {
                 dataGridView.Rows[i].Cells[1].Value = EnumLineType.Line;
-                LineTypeCellStyleChange(i, true);
+                LineTypeCellStyleChange(i, true, true);
             }
             else
             {
                 dataGridView.Rows[i].Cells[1].Value = EnumLineType.Arc;
-                LineTypeCellStyleChange(i, false);
+                LineTypeCellStyleChange(i, false, true);
             }
 
             if (strings[2] == "-1")
@@ -704,7 +721,7 @@ namespace GluePathReadWrite
             dataGridView.Rows[i].Cells[13].Value = strings[13] == "1";
         }
 
-        private void LineTypeCellStyleChange(int rowNum, bool isLine)
+        private void LineTypeCellStyleChange(int rowNum, bool isLine, bool isFirstLoad = default)
         {
             if (isLine)
             {
@@ -730,24 +747,36 @@ namespace GluePathReadWrite
                 dataGridView.Rows[rowNum].Cells[4].Style.BackColor = Color.White;
                 dataGridView.Rows[rowNum].Cells[5].Style.BackColor = Color.White;
                 dataGridView.Rows[rowNum].Cells[2].Value = EnumCircleMode.XY;
-                dataGridView.Rows[rowNum].Cells[3].Value = Convert.ToDouble(dataGridView.Rows[rowNum - 1].Cells[6].Value) + 0.3;
-                dataGridView.Rows[rowNum].Cells[4].Value = Convert.ToDouble(dataGridView.Rows[rowNum - 1].Cells[7].Value) + 0.35;
-                dataGridView.Rows[rowNum].Cells[5].Value = Convert.ToDouble(dataGridView.Rows[rowNum - 1].Cells[8].Value);
+                if (!isFirstLoad)
+                {
+                    dataGridView.Rows[rowNum].Cells[3].Value = Convert.ToDouble(dataGridView.Rows[rowNum - 1].Cells[6].Value) + 0.3;
+                    dataGridView.Rows[rowNum].Cells[4].Value = Convert.ToDouble(dataGridView.Rows[rowNum - 1].Cells[7].Value) + 0.35;
+                    dataGridView.Rows[rowNum].Cells[5].Value = Convert.ToDouble(dataGridView.Rows[rowNum - 1].Cells[8].Value);
+                }
             }
         }
 
         public string[] ReadGluePathFile(string path)
         {
-            StreamReader sr = new StreamReader(path, Encoding.Default);
-            List<string> list = new List<string>();
-            string line;
-            while ((line = sr.ReadLine()) != null)
+            try
             {
-                list.Add(line);
+                StreamReader sr = new StreamReader(path, Encoding.Default);
+                List<string> list = new List<string>();
+                string line;
+                while ((line = sr.ReadLine()) != null)
+                {
+                    list.Add(line);
+                }
+
+                sr.Close();
+                sr.Dispose();
+                return list.ToArray();
             }
-            sr.Close();
-            sr.Dispose();
-            return list.ToArray();
+            catch (IOException ioException)
+            {
+                MessageBox.Show(ioException.Message, "错误", MessageBoxButtons.OK, MessageBoxIcon.Error);
+                return null;
+            }
         }
 
         public void DrawGuiLine(bool isChange = true, bool bDrawSingle = false)
@@ -1345,19 +1374,19 @@ namespace GluePathReadWrite
                 {
                     if (index == 0)
                     {
-                        strAppend.Append(dataGridView.RowCount + 1 + ",");
+                        strAppend.Append(dataGridView.RowCount + ",");
                     }
                     else if ((index == 3 || index == 4 || index == 6 || index == 7) &&
-                             GluePathForXAndY.IsNumberic(dataGridView.Rows[dataGridView.RowCount - 1].Cells[index].Value))
+                             GluePathForXAndY.IsNumberic(dataGridView.Rows[dataGridView.RowCount - 2].Cells[index].Value))
                     {
-                        strAppend.Append(Convert.ToDouble(dataGridView.Rows[dataGridView.RowCount - 1].Cells[index].Value) + 0.3 + ",");
+                        strAppend.Append(Convert.ToDouble(dataGridView.Rows[dataGridView.RowCount - 2].Cells[index].Value) + 0.3 + ",");
                     }
                     else
                     {
-                        DataGridViewSaveRow(dataGridView.RowCount - 1, index, ref strAppend);
+                        DataGridViewSaveRow(dataGridView.RowCount - 2, index, ref strAppend);
                     }
                 }
-                DataGridViewAddRow(dataGridView.RowCount, strAppend.ToString().Remove(strAppend.Length - 1));
+                DataGridViewAddRow(dataGridView.RowCount - 1, strAppend.ToString().Remove(strAppend.Length - 1));
             }
         }
 
@@ -1365,7 +1394,7 @@ namespace GluePathReadWrite
         {
             if (dataGridView.SelectedRows.Count < 1)
                 return;
-            
+
             int rowIndex = dataGridView.Rows.IndexOf(dataGridView.SelectedRows[0]);
             dataGridView.Rows.Insert(rowIndex + 1, new DataGridViewRow());
 
@@ -1388,18 +1417,6 @@ namespace GluePathReadWrite
             }
             DataGridViewAddRow(rowIndex + 1, strAppend.ToString().Remove(strAppend.Length - 1));
 
-            //DataGridViewComboBoxCell dgvComboBoxCellOfType = new DataGridViewComboBoxCell();
-            //dgvComboBoxCellOfType.DataSource = Enum.GetValues(typeof(EnumLineType));
-            //dataGridView.Rows[index].Cells[1] = dgvComboBoxCellOfType;
-
-            //DataGridViewComboBoxCell dgvComboBoxCellOfCircleMode = new DataGridViewComboBoxCell();
-            //dgvComboBoxCellOfCircleMode.DataSource = Enum.GetValues(typeof(EnumLineType));
-            //dataGridView.Rows[index].Cells[2] = dgvComboBoxCellOfCircleMode;
-
-            //for (int i = 3; i < dataGridView.ColumnCount; i++)
-            //{
-            //    dataGridView.Rows[index].Cells[i].Value = string.Empty;
-            //}
             for (int i = rowIndex + 2; i < dataGridView.RowCount; i++)
             {
                 dataGridView.Rows[i].Cells[0].Value = i + 1;
@@ -1408,13 +1425,15 @@ namespace GluePathReadWrite
 
         private void ToolStripMenuItem_Delete_Click(object sender, EventArgs e)
         {
+            if (dataGridView.SelectedRows.Count == 0) return;
+            var startIndex = dataGridView.Rows.IndexOf(dataGridView.SelectedRows[0]);
             foreach (DataGridViewRow item in dataGridView.SelectedRows)
             {
                 dataGridView.Rows.Remove(item);
             }
-            for (int i = 0; i < dataGridView.RowCount; i++)
+            for (int i = startIndex; i < dataGridView.RowCount; i++)
             {
-                dataGridView.Rows[i].Cells[0].Value = (i + 1).ToString();
+                dataGridView.Rows[i].Cells[0].Value = i + 1;
             }
         }
 
@@ -1424,6 +1443,7 @@ namespace GluePathReadWrite
             dataGridView.Columns.Clear();
             this.Text = string.Empty;
             pictureBox.Refresh();
+            chart.Series.Clear();
         }
 
         private void tkBTransparency_ValueChanged(object sender, EventArgs e)
@@ -1460,12 +1480,12 @@ namespace GluePathReadWrite
                     if (strings.Length == 1 || strings[1] == "2")
                     {
                         dataGridView.Rows[id].Cells[8].Selected = true;
-                        dataGridView_CellClick(dataGridView, new DataGridViewCellEventArgs(id, 8));
+                        dataGridView_CellClick(dataGridView, new DataGridViewCellEventArgs(8, id));
                     }
                     else
                     {
                         dataGridView.Rows[id].Cells[5].Selected = true;
-                        dataGridView_CellClick(dataGridView, new DataGridViewCellEventArgs(id, 5));
+                        dataGridView_CellClick(dataGridView, new DataGridViewCellEventArgs(5, id));
                     }
                 }
             }
@@ -1480,7 +1500,7 @@ namespace GluePathReadWrite
 
             if (e.Button == MouseButtons.Left && _pointIndex != -1)
             {
-                var strings = _listCoorXAndZ[_pointIndex].StrLabel.Split('_');
+                var strings = _listCoorXAndZ[_pointIndex].StrLabel.Split('-');
                 int id = Convert.ToInt32(strings[0]) - 1;
                 if (dataGridView.Rows[id].Cells[5].Selected || dataGridView.Rows[id].Cells[8].Selected)
                 {
@@ -1505,7 +1525,7 @@ namespace GluePathReadWrite
             if (e.HitTestResult.ChartElementType == ChartElementType.DataPoint)
             {
                 DataPoint dataPoint = e.HitTestResult.Series.Points[e.HitTestResult.PointIndex];
-                e.Text = $"({dataPoint.XValue}_{dataPoint.YValues[0]})";
+                e.Text = $"({dataPoint.XValue}, {dataPoint.YValues[0]})";
             }
             else
             {
@@ -1607,6 +1627,7 @@ namespace GluePathReadWrite
 
                 _graph = this.pictureBox.CreateGraphics();
             }
+            this.Activate();
         }
 
         private void tbCompensationX_Leave(object sender, EventArgs e)
