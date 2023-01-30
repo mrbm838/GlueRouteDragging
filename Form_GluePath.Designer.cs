@@ -172,7 +172,7 @@
             legend1.Name = "Legend1";
             this.chart.Legends.Add(legend1);
             this.chart.Location = new System.Drawing.Point(0, 0);
-            this.chart.Margin = new System.Windows.Forms.Padding(1, 1, 1, 1);
+            this.chart.Margin = new System.Windows.Forms.Padding(1);
             this.chart.Name = "chart";
             series1.ChartArea = "ChartArea1";
             series1.Legend = "Legend1";
@@ -385,7 +385,7 @@
             this.btCounterClockWise.BackgroundImage = global::GlueReadWrite.Properties.Resources.xiangxia;
             this.btCounterClockWise.BackgroundImageLayout = System.Windows.Forms.ImageLayout.Zoom;
             this.btCounterClockWise.Location = new System.Drawing.Point(161, 28);
-            this.btCounterClockWise.Margin = new System.Windows.Forms.Padding(2, 2, 2, 2);
+            this.btCounterClockWise.Margin = new System.Windows.Forms.Padding(2);
             this.btCounterClockWise.Name = "btCounterClockWise";
             this.btCounterClockWise.Size = new System.Drawing.Size(27, 11);
             this.btCounterClockWise.TabIndex = 89;
@@ -397,7 +397,7 @@
             this.btClockWise.BackgroundImage = global::GlueReadWrite.Properties.Resources.xiangshang;
             this.btClockWise.BackgroundImageLayout = System.Windows.Forms.ImageLayout.Zoom;
             this.btClockWise.Location = new System.Drawing.Point(161, 13);
-            this.btClockWise.Margin = new System.Windows.Forms.Padding(2, 2, 2, 2);
+            this.btClockWise.Margin = new System.Windows.Forms.Padding(2);
             this.btClockWise.Name = "btClockWise";
             this.btClockWise.Size = new System.Drawing.Size(27, 10);
             this.btClockWise.TabIndex = 88;
@@ -690,7 +690,7 @@
             this.Margin = new System.Windows.Forms.Padding(3, 1, 3, 1);
             this.Name = "FormGluePath";
             this.StartPosition = System.Windows.Forms.FormStartPosition.CenterScreen;
-            this.Text = "Form11";
+            this.Text = "Form";
             this.Load += new System.EventHandler(this.Form_GluePath_Load);
             this.splitContainer1.Panel1.ResumeLayout(false);
             this.splitContainer1.Panel2.ResumeLayout(false);
