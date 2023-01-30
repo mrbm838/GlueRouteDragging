@@ -113,9 +113,9 @@ namespace GluePathReadWrite
             //_dPictureBoxHeight = pictureBox.Height;
             //_dPictureBoxImageWidth = pictureBox.Image.Width;
             //_dPictureBoxImageHeight = pictureBox.Image.Height;
+            #endregion
 
             _graph = this.pictureBox.CreateGraphics();
-            #endregion
 
             tbStandardX.Text = "1232";//"1160";
             tbStandardY.Text = "1422";//"1280";
@@ -461,7 +461,7 @@ namespace GluePathReadWrite
 
         private void ToolStripMenuItem_Fit_Click(object sender, MouseEventArgs e)
         {
-            if (e.Button == MouseButtons.Right)
+            if (e.Button == MouseButtons.Left)
             {
                 SetPictureBox();
                 DMultiplyingG = 1;
@@ -1105,6 +1105,7 @@ namespace GluePathReadWrite
             PenRed.Width = Convert.ToInt32(tkBGlueWidth.Value) / (float)_dRatio;
             PenBlue.Width = Convert.ToInt32(tkBGlueWidth.Value) / (float)_dRatio;
             PointF pS = new PointF(), pM, pE;
+            _graph = this.pictureBox.CreateGraphics();
 
             for (int i = 1; i < dataGridView.RowCount; i++)
             {
@@ -1175,7 +1176,6 @@ namespace GluePathReadWrite
                                 _dRatio);
 
                             float[] drawArc = GluePathForXAndY.DrawArcNew(pS.X, pS.Y, pM.X, pM.Y, pE.X, pE.Y);
-                            _graph = this.pictureBox.CreateGraphics();
                             if (dataGridView.Rows[i].Cells[3].Selected || dataGridView.Rows[i].Cells[4].Selected ||
                                 dataGridView.Rows[i].Cells[6].Selected || dataGridView.Rows[i].Cells[7].Selected)
                             {
@@ -1244,7 +1244,7 @@ namespace GluePathReadWrite
                         Convert.ToDouble(tbStandardY.Text),
                         _dRatio);
 
-                    Rectangle ellipse = new Rectangle(pT.X - 3, pT.Y - 3, 8, 8);
+                    Rectangle ellipse = new Rectangle(pT.X - 4, pT.Y - 4, 9, 9);
                     if (!_dicRectangles.Keys.Contains(i + "-1")) _dicRectangles.Add(i + "-1", ellipse);
                     else _dicRectangles[i + "-1"] = ellipse;
 
@@ -1271,7 +1271,7 @@ namespace GluePathReadWrite
                         Convert.ToDouble(tbStandardY.Text),
                         _dRatio);
 
-                    Rectangle ellipse = new Rectangle(pT.X - 3, pT.Y - 3, 8, 8);
+                    Rectangle ellipse = new Rectangle(pT.X - 4, pT.Y - 4, 9, 9);
                     if (!_dicRectangles.Keys.Contains(i + (isArc ? "-2" : string.Empty)))
                         _dicRectangles.Add(i + (isArc ? "-2" : string.Empty), ellipse);
                     else _dicRectangles[i + (isArc ? "-2" : string.Empty)] = ellipse;

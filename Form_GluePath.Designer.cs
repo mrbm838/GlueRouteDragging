@@ -123,8 +123,8 @@
             this.splitContainer1.Panel2.Controls.Add(this.chart);
             this.splitContainer1.Panel2.Controls.Add(this.panel1);
             this.splitContainer1.Panel2.Cursor = System.Windows.Forms.Cursors.Arrow;
-            this.splitContainer1.Size = new System.Drawing.Size(1340, 494);
-            this.splitContainer1.SplitterDistance = 539;
+            this.splitContainer1.Size = new System.Drawing.Size(1484, 494);
+            this.splitContainer1.SplitterDistance = 596;
             this.splitContainer1.TabIndex = 0;
             // 
             // cms_LoadPicture
@@ -158,7 +158,7 @@
             // 
             // splitter1
             // 
-            this.splitter1.Location = new System.Drawing.Point(569, 0);
+            this.splitter1.Location = new System.Drawing.Point(655, 0);
             this.splitter1.Name = "splitter1";
             this.splitter1.Size = new System.Drawing.Size(3, 494);
             this.splitter1.TabIndex = 2;
@@ -178,7 +178,7 @@
             series1.Legend = "Legend1";
             series1.Name = "Series1";
             this.chart.Series.Add(series1);
-            this.chart.Size = new System.Drawing.Size(569, 494);
+            this.chart.Size = new System.Drawing.Size(655, 494);
             this.chart.TabIndex = 1;
             this.chart.Text = "chart1";
             this.chart.GetToolTipText += new System.EventHandler<System.Windows.Forms.DataVisualization.Charting.ToolTipEventArgs>(this.chart_GetToolTipText);
@@ -228,7 +228,7 @@
             this.panel1.Controls.Add(this.label6);
             this.panel1.Controls.Add(this.lbZoom);
             this.panel1.Dock = System.Windows.Forms.DockStyle.Right;
-            this.panel1.Location = new System.Drawing.Point(572, 0);
+            this.panel1.Location = new System.Drawing.Point(659, 0);
             this.panel1.Name = "panel1";
             this.panel1.Size = new System.Drawing.Size(225, 494);
             this.panel1.TabIndex = 6;
@@ -624,7 +624,7 @@
             // splitContainer2.Panel2
             // 
             this.splitContainer2.Panel2.Controls.Add(this.dataGridView);
-            this.splitContainer2.Size = new System.Drawing.Size(1340, 759);
+            this.splitContainer2.Size = new System.Drawing.Size(1484, 759);
             this.splitContainer2.SplitterDistance = 494;
             this.splitContainer2.TabIndex = 1;
             // 
@@ -638,7 +638,7 @@
             this.dataGridView.Name = "dataGridView";
             this.dataGridView.RowHeadersWidth = 60;
             this.dataGridView.RowTemplate.Height = 23;
-            this.dataGridView.Size = new System.Drawing.Size(1340, 261);
+            this.dataGridView.Size = new System.Drawing.Size(1484, 261);
             this.dataGridView.TabIndex = 5;
             this.dataGridView.CellClick += new System.Windows.Forms.DataGridViewCellEventHandler(this.dataGridView_CellClick);
             // 
@@ -685,7 +685,7 @@
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(96F, 96F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Dpi;
-            this.ClientSize = new System.Drawing.Size(1340, 759);
+            this.ClientSize = new System.Drawing.Size(1484, 759);
             this.Controls.Add(this.splitContainer2);
             this.Margin = new System.Windows.Forms.Padding(3, 1, 3, 1);
             this.Name = "FormGluePath";
