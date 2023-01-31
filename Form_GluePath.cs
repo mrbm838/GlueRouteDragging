@@ -16,6 +16,7 @@ using System.Threading.Tasks;
 using System.Windows.Forms;
 using System.Windows.Forms.DataVisualization.Charting;
 using System.Windows.Media.Imaging;
+using static GlueReadWrite.GluePathForXAndY;
 
 namespace GluePathReadWrite
 {
@@ -73,8 +74,6 @@ namespace GluePathReadWrite
             dataGridView.AllowUserToAddRows = false;
             dataGridView.DefaultCellStyle = new DataGridViewCellStyle() { Alignment = DataGridViewContentAlignment.MiddleCenter };
             dataGridView.CellEndEdit += DataGridView_CellEndEdit;
-            GlueVariableDefine.OffsetX = 3;
-            GlueVariableDefine.OffsetY = -2;
         }
 
         private void DataGridView_CellEndEdit(object sender, DataGridViewCellEventArgs e)
@@ -120,8 +119,12 @@ namespace GluePathReadWrite
             tbStandardX.Text = "1232";//"1160";
             tbStandardY.Text = "1422";//"1280";
 
+            GlueVariableDefine.OffsetX = 0.018;
+            GlueVariableDefine.OffsetY = -0.06;
             tbCompensationX.Text = GlueVariableDefine.OffsetX.ToString();
             tbCompensationY.Text = GlueVariableDefine.OffsetY.ToString();
+
+            tbPhyscialLength.Text = "17";
 
             tkBGlueWidth.TickFrequency = 2;
             tkBGlueWidth.SmallChange = 1;
@@ -256,7 +259,7 @@ namespace GluePathReadWrite
         private void btOpenGluePath_Click(object sender, EventArgs e)
         {
             _glueFilePath = OpenFileDialog(Application.StartupPath + "\\File");
-            if (_glueFilePath != "")
+            if (_glueFilePath != string.Empty && pictureBox.Image != null)
             {
                 this.Text = Path.GetFileName(_glueFilePath);
                 var fileData = ReadGluePathFile(_glueFilePath);
@@ -329,7 +332,7 @@ namespace GluePathReadWrite
             }
             catch (Exception ex)
             {
-                MessageBox.Show(ex.ToString());
+                MessageBox.Show(ex.Message, "错误", MessageBoxButtons.OK, MessageBoxIcon.Error);
             }
         }
 
@@ -380,7 +383,6 @@ namespace GluePathReadWrite
                         }
                         else if (dataGridView.Rows[_selectedRow].Cells[_selectedColumn].Selected || dataGridView.Rows[_selectedRow].Cells[_selectedColumn + 1].Selected)
                         {
-                            //dataGridView.Rows[_selectedRow].Cells[1].Value = EnumLineType.Arc.ToString();
                             dataGridView.Rows[_selectedRow].Cells[_selectedColumn].Value = Math.Round(e.X * _dRatio * dx - Convert.ToDouble(tbStandardX.Text) * dx, 3) - GlueVariableDefine.OffsetX;
                             dataGridView.Rows[_selectedRow].Cells[_selectedColumn + 1].Value = Math.Round(e.Y * _dRatio * dy - Convert.ToDouble(tbStandardY.Text) * dy, 3) - GlueVariableDefine.OffsetY;
                         }
@@ -551,7 +553,6 @@ namespace GluePathReadWrite
             if (DialogResult.OK != MessageBox.Show("是否保存胶路？", "提示", MessageBoxButtons.OKCancel, MessageBoxIcon.Information))
                 return;
 
-            //string strFolderPath = _glueFilePath;
             try
             {
                 StringBuilder strGlueData = new StringBuilder();
@@ -683,7 +684,7 @@ namespace GluePathReadWrite
                     }
                     else
                     {
-                        //if (GluePathForXAndY.IsNumberic(strings[j]))
+                        //if (IsNumberic(strings[j]))
                         //    dataGridView.Rows[i].Cells[j].Value = Convert.ToDouble(strings[j]).ToString("f3");
                         dataGridView.Rows[i].Cells[j].Value = value;
                     }
@@ -805,8 +806,8 @@ namespace GluePathReadWrite
                 {
                     if (dataGridView.Rows[_selectedRow].Cells[1].Value?.ToString() == EnumLineType.Line.ToString())
                     {
-                        if (GluePathForXAndY.IsNumberic(dataGridView.Rows[_selectedRow].Cells[6].Value) && GluePathForXAndY.IsNumberic(dataGridView.Rows[_selectedRow].Cells[7].Value) &&
-                            GluePathForXAndY.IsNumberic(dataGridView.Rows[_selectedRow - 1].Cells[6].Value) && GluePathForXAndY.IsNumberic(dataGridView.Rows[_selectedRow - 1].Cells[7].Value))
+                        if (IsNumberic(dataGridView.Rows[_selectedRow].Cells[6].Value) && IsNumberic(dataGridView.Rows[_selectedRow].Cells[7].Value) &&
+                            IsNumberic(dataGridView.Rows[_selectedRow - 1].Cells[6].Value) && IsNumberic(dataGridView.Rows[_selectedRow - 1].Cells[7].Value))
                         {
                             pS.X = Convert.ToInt32((Convert.ToDouble(dataGridView.Rows[_selectedRow - 1].Cells[6].Value) + Convert.ToDouble(tbStandardX.Text)) / _dRatio);
                             pS.Y = Convert.ToInt32((Convert.ToDouble(dataGridView.Rows[_selectedRow - 1].Cells[7].Value) + Convert.ToDouble(tbStandardY.Text)) / _dRatio);
@@ -827,9 +828,9 @@ namespace GluePathReadWrite
                     }
                     else if (dataGridView.Rows[_selectedRow].Cells[1].Value?.ToString() == EnumLineType.Arc.ToString())
                     {
-                        if (GluePathForXAndY.IsNumberic(dataGridView.Rows[_selectedRow].Cells[3].Value) && GluePathForXAndY.IsNumberic(dataGridView.Rows[_selectedRow].Cells[4].Value) &&
-                            GluePathForXAndY.IsNumberic(dataGridView.Rows[_selectedRow].Cells[6].Value) && GluePathForXAndY.IsNumberic(dataGridView.Rows[_selectedRow].Cells[7].Value) &&
-                            GluePathForXAndY.IsNumberic(dataGridView.Rows[_selectedRow - 1].Cells[6].Value) && GluePathForXAndY.IsNumberic(dataGridView.Rows[_selectedRow - 1].Cells[7].Value))
+                        if (IsNumberic(dataGridView.Rows[_selectedRow].Cells[3].Value) && IsNumberic(dataGridView.Rows[_selectedRow].Cells[4].Value) &&
+                            IsNumberic(dataGridView.Rows[_selectedRow].Cells[6].Value) && IsNumberic(dataGridView.Rows[_selectedRow].Cells[7].Value) &&
+                            IsNumberic(dataGridView.Rows[_selectedRow - 1].Cells[6].Value) && IsNumberic(dataGridView.Rows[_selectedRow - 1].Cells[7].Value))
                         {
                             pS.X = Convert.ToInt32((Convert.ToDouble(dataGridView.Rows[_selectedRow - 1].Cells[6].Value) + Convert.ToDouble(tbStandardX.Text)) / _dRatio);
                             pS.Y = Convert.ToInt32((Convert.ToDouble(dataGridView.Rows[_selectedRow - 1].Cells[7].Value) + Convert.ToDouble(tbStandardY.Text)) / _dRatio);
@@ -837,7 +838,7 @@ namespace GluePathReadWrite
                             pM.Y = Convert.ToInt32((Convert.ToDouble(dataGridView.Rows[_selectedRow].Cells[4].Value) + Convert.ToDouble(tbStandardY.Text)) / _dRatio);
                             pE.X = Convert.ToInt32((Convert.ToDouble(dataGridView.Rows[_selectedRow].Cells[6].Value) + Convert.ToDouble(tbStandardX.Text)) / _dRatio);
                             pE.Y = Convert.ToInt32((Convert.ToDouble(dataGridView.Rows[_selectedRow].Cells[7].Value) + Convert.ToDouble(tbStandardY.Text)) / _dRatio);
-                            float[] drawArc = GluePathForXAndY.DrawArc(pS.X, pS.Y, pM.X, pM.Y, pE.X, pE.Y);
+                            float[] drawArc = DrawArc(pS.X, pS.Y, pM.X, pM.Y, pE.X, pE.Y);
                             if (dataGridView.Rows[_selectedRow].Cells[3].Selected || dataGridView.Rows[_selectedRow].Cells[4].Selected ||
                                 dataGridView.Rows[_selectedRow].Cells[6].Selected || dataGridView.Rows[_selectedRow].Cells[7].Selected)
                             {
@@ -867,8 +868,8 @@ namespace GluePathReadWrite
                         {
                             if (dataGridView.Rows[i].Cells[1].Value?.ToString() == EnumLineType.Line.ToString())
                             {
-                                if (GluePathForXAndY.IsNumberic(dataGridView.Rows[i].Cells[6].Value) && GluePathForXAndY.IsNumberic(dataGridView.Rows[i].Cells[7].Value) &&
-                                    GluePathForXAndY.IsNumberic(dataGridView.Rows[i - 1].Cells[6].Value) && GluePathForXAndY.IsNumberic(dataGridView.Rows[i - 1].Cells[7].Value))
+                                if (IsNumberic(dataGridView.Rows[i].Cells[6].Value) && IsNumberic(dataGridView.Rows[i].Cells[7].Value) &&
+                                    IsNumberic(dataGridView.Rows[i - 1].Cells[6].Value) && IsNumberic(dataGridView.Rows[i - 1].Cells[7].Value))
                                 {
                                     pS.X = Convert.ToInt32((Convert.ToDouble(dataGridView.Rows[i - 1].Cells[6].Value) * 100 + Convert.ToDouble(tbStandardX.Text)) / _dRatio);
                                     pS.Y = Convert.ToInt32((Convert.ToDouble(dataGridView.Rows[i - 1].Cells[7].Value) * 100 + Convert.ToDouble(tbStandardY.Text)) / _dRatio);
@@ -912,9 +913,9 @@ namespace GluePathReadWrite
                             }
                             else if (dataGridView.Rows[i].Cells[1].Value?.ToString() == EnumLineType.Arc.ToString())
                             {
-                                if (GluePathForXAndY.IsNumberic(dataGridView.Rows[i].Cells[3].Value) && GluePathForXAndY.IsNumberic(dataGridView.Rows[i].Cells[4].Value) &&
-                                    GluePathForXAndY.IsNumberic(dataGridView.Rows[i].Cells[6].Value) && GluePathForXAndY.IsNumberic(dataGridView.Rows[i].Cells[7].Value) &&
-                                    GluePathForXAndY.IsNumberic(dataGridView.Rows[i - 1].Cells[6].Value) && GluePathForXAndY.IsNumberic(dataGridView.Rows[i - 1].Cells[7].Value))
+                                if (IsNumberic(dataGridView.Rows[i].Cells[3].Value) && IsNumberic(dataGridView.Rows[i].Cells[4].Value) &&
+                                    IsNumberic(dataGridView.Rows[i].Cells[6].Value) && IsNumberic(dataGridView.Rows[i].Cells[7].Value) &&
+                                    IsNumberic(dataGridView.Rows[i - 1].Cells[6].Value) && IsNumberic(dataGridView.Rows[i - 1].Cells[7].Value))
                                 {
                                     pS.X = Convert.ToInt32((Convert.ToDouble(dataGridView.Rows[i - 1].Cells[6].Value) * 100 + Convert.ToDouble(tbStandardX.Text)) / _dRatio);
                                     pS.Y = Convert.ToInt32((Convert.ToDouble(dataGridView.Rows[i - 1].Cells[7].Value) * 100 + Convert.ToDouble(tbStandardY.Text)) / _dRatio);
@@ -922,7 +923,7 @@ namespace GluePathReadWrite
                                     pM.Y = Convert.ToInt32((Convert.ToDouble(dataGridView.Rows[i].Cells[4].Value) * 100 + Convert.ToDouble(tbStandardY.Text)) / _dRatio);
                                     pE.X = Convert.ToInt32((Convert.ToDouble(dataGridView.Rows[i].Cells[6].Value) * 100 + Convert.ToDouble(tbStandardX.Text)) / _dRatio);
                                     pE.Y = Convert.ToInt32((Convert.ToDouble(dataGridView.Rows[i].Cells[7].Value) * 100 + Convert.ToDouble(tbStandardY.Text)) / _dRatio);
-                                    float[] drawArc = GluePathForXAndY.DrawArc(pS.X, pS.Y, pM.X, pM.Y, pE.X, pE.Y);
+                                    float[] drawArc = DrawArc(pS.X, pS.Y, pM.X, pM.Y, pE.X, pE.Y);
                                     if (dataGridView.Rows[i].Cells[3].Selected || dataGridView.Rows[i].Cells[4].Selected ||
                                         dataGridView.Rows[i].Cells[6].Selected || dataGridView.Rows[i].Cells[7].Selected)
                                     {
@@ -1010,7 +1011,7 @@ namespace GluePathReadWrite
                         new Font("Verdana", 10), new SolidBrush(Color.Red), new PointF(pT.X, pT.Y - 20));
                 }
 
-                if (GluePathForXAndY.IsNumberic(dataGridView.Rows[_selectedRow].Cells[_selectedColumn].Value) && GluePathForXAndY.IsNumberic(dataGridView.Rows[_selectedRow].Cells[_selectedColumn + 1].Value))
+                if (IsNumberic(dataGridView.Rows[_selectedRow].Cells[_selectedColumn].Value) && IsNumberic(dataGridView.Rows[_selectedRow].Cells[_selectedColumn + 1].Value))
                 {
                     int x = Convert.ToInt32(Convert.ToDouble(dataGridView.Rows[_selectedRow].Cells[_selectedColumn].Value));
                     int y = Convert.ToInt32(Convert.ToDouble(dataGridView.Rows[_selectedRow].Cells[_selectedColumn + 1].Value));
@@ -1031,7 +1032,7 @@ namespace GluePathReadWrite
                 for (int i = 0; i < dataGridView.RowCount; i++)
                 {
                     isArc = false;
-                    if (GluePathForXAndY.IsNumberic(dataGridView.Rows[i].Cells[3].Value) && GluePathForXAndY.IsNumberic(dataGridView.Rows[i].Cells[4].Value))
+                    if (IsNumberic(dataGridView.Rows[i].Cells[3].Value) && IsNumberic(dataGridView.Rows[i].Cells[4].Value))
                     {
                         isArc = true;
                         pT.X = Convert.ToInt32((Convert.ToDouble(dataGridView.Rows[i].Cells[3].Value) * 100 + Convert.ToDouble(tbStandardX.Text)) / _dRatio);
@@ -1058,7 +1059,7 @@ namespace GluePathReadWrite
                         }
                     }
 
-                    if (GluePathForXAndY.IsNumberic(dataGridView.Rows[i].Cells[6].Value) && GluePathForXAndY.IsNumberic(dataGridView.Rows[i].Cells[7].Value))
+                    if (IsNumberic(dataGridView.Rows[i].Cells[6].Value) && IsNumberic(dataGridView.Rows[i].Cells[7].Value))
                     {
                         pT.X = Convert.ToInt32((Convert.ToDouble(dataGridView.Rows[i].Cells[6].Value) * 100 + Convert.ToDouble(tbStandardX.Text)) / _dRatio);
                         pT.Y = Convert.ToInt32((Convert.ToDouble(dataGridView.Rows[i].Cells[7].Value) * 100 + Convert.ToDouble(tbStandardY.Text)) / _dRatio);
@@ -1088,7 +1089,7 @@ namespace GluePathReadWrite
             }
         }
 
-        public void DrawGuiLineNew()
+        private void DrawGuiLineNew()
         {
             GetPixelsNumberAndPhysicalLength();
             PenRed.Width = Convert.ToInt32(tkBGlueWidth.Value) / (float)_dRatio;
@@ -1102,16 +1103,16 @@ namespace GluePathReadWrite
                 {
                     if (dataGridView.Rows[i].Cells[1].Value?.ToString() == EnumLineType.Line.ToString())
                     {
-                        if (GluePathForXAndY.IsNumberic(dataGridView.Rows[i].Cells[6].Value) && GluePathForXAndY.IsNumberic(dataGridView.Rows[i].Cells[7].Value) &&
-                            GluePathForXAndY.IsNumberic(dataGridView.Rows[i - 1].Cells[6].Value) && GluePathForXAndY.IsNumberic(dataGridView.Rows[i - 1].Cells[7].Value))
+                        if (IsNumberic(dataGridView.Rows[i].Cells[6].Value) && IsNumberic(dataGridView.Rows[i].Cells[7].Value) &&
+                            IsNumberic(dataGridView.Rows[i - 1].Cells[6].Value) && IsNumberic(dataGridView.Rows[i - 1].Cells[7].Value))
                         {
-                            pS = GluePathForXAndY.TransformToPixelsF(
+                            pS = TransformToPixelsF(
                                 Convert.ToDouble(dataGridView.Rows[i - 1].Cells[6].Value) + GlueVariableDefine.OffsetX,
                                 Convert.ToDouble(dataGridView.Rows[i - 1].Cells[7].Value) + GlueVariableDefine.OffsetY,
                                 Convert.ToDouble(tbStandardX.Text),
                                 Convert.ToDouble(tbStandardY.Text),
                                 _dRatio);
-                            pE = GluePathForXAndY.TransformToPixelsF(
+                            pE = TransformToPixelsF(
                                 Convert.ToDouble(dataGridView.Rows[i].Cells[6].Value) + GlueVariableDefine.OffsetX,
                                 Convert.ToDouble(dataGridView.Rows[i].Cells[7].Value) + GlueVariableDefine.OffsetY,
                                 Convert.ToDouble(tbStandardX.Text),
@@ -1141,30 +1142,30 @@ namespace GluePathReadWrite
                     }
                     else if (dataGridView.Rows[i].Cells[1].Value?.ToString() == EnumLineType.Arc.ToString())
                     {
-                        if (GluePathForXAndY.IsNumberic(dataGridView.Rows[i].Cells[3].Value) && GluePathForXAndY.IsNumberic(dataGridView.Rows[i].Cells[4].Value) &&
-                            GluePathForXAndY.IsNumberic(dataGridView.Rows[i].Cells[6].Value) && GluePathForXAndY.IsNumberic(dataGridView.Rows[i].Cells[7].Value) &&
-                            GluePathForXAndY.IsNumberic(dataGridView.Rows[i - 1].Cells[6].Value) && GluePathForXAndY.IsNumberic(dataGridView.Rows[i - 1].Cells[7].Value))
+                        if (IsNumberic(dataGridView.Rows[i].Cells[3].Value) && IsNumberic(dataGridView.Rows[i].Cells[4].Value) &&
+                            IsNumberic(dataGridView.Rows[i].Cells[6].Value) && IsNumberic(dataGridView.Rows[i].Cells[7].Value) &&
+                            IsNumberic(dataGridView.Rows[i - 1].Cells[6].Value) && IsNumberic(dataGridView.Rows[i - 1].Cells[7].Value))
                         {
-                            pS = GluePathForXAndY.TransformToPixelsF(
+                            pS = TransformToPixelsF(
                                 Convert.ToDouble(dataGridView.Rows[i - 1].Cells[6].Value) + GlueVariableDefine.OffsetX,
                                 Convert.ToDouble(dataGridView.Rows[i - 1].Cells[7].Value) + GlueVariableDefine.OffsetY,
                                 Convert.ToDouble(tbStandardX.Text),
                                 Convert.ToDouble(tbStandardY.Text),
                                 _dRatio);
-                            pM = GluePathForXAndY.TransformToPixelsF(
+                            pM = TransformToPixelsF(
                                 Convert.ToDouble(dataGridView.Rows[i].Cells[3].Value) + GlueVariableDefine.OffsetX,
                                 Convert.ToDouble(dataGridView.Rows[i].Cells[4].Value) + GlueVariableDefine.OffsetY,
                                 Convert.ToDouble(tbStandardX.Text),
                                 Convert.ToDouble(tbStandardY.Text),
                                 _dRatio);
-                            pE = GluePathForXAndY.TransformToPixelsF(
+                            pE = TransformToPixelsF(
                                 Convert.ToDouble(dataGridView.Rows[i].Cells[6].Value) + GlueVariableDefine.OffsetX,
                                 Convert.ToDouble(dataGridView.Rows[i].Cells[7].Value) + GlueVariableDefine.OffsetY,
                                 Convert.ToDouble(tbStandardX.Text),
                                 Convert.ToDouble(tbStandardY.Text),
                                 _dRatio);
 
-                            float[] drawArc = GluePathForXAndY.DrawArcNew(pS.X, pS.Y, pM.X, pM.Y, pE.X, pE.Y);
+                            float[] drawArc = DrawArcNew(pS.X, pS.Y, pM.X, pM.Y, pE.X, pE.Y);
                             if (dataGridView.Rows[i].Cells[3].Selected || dataGridView.Rows[i].Cells[4].Selected ||
                                 dataGridView.Rows[i].Cells[6].Selected || dataGridView.Rows[i].Cells[7].Selected)
                             {
@@ -1209,7 +1210,7 @@ namespace GluePathReadWrite
 
             float iStandardX = Convert.ToInt64(tbStandardX.Text);
             float iStandardY = Convert.ToInt64(tbStandardY.Text);
-            Point pH = GluePathForXAndY.TransformToPixels(0, 0,
+            Point pH = TransformToPixels(0, 0,
                 Convert.ToDouble(tbStandardX.Text),
                 Convert.ToDouble(tbStandardY.Text),
                 _dRatio);
@@ -1223,10 +1224,10 @@ namespace GluePathReadWrite
             for (int i = 0; i < dataGridView.RowCount; i++)
             {
                 isArc = false;
-                if (GluePathForXAndY.IsNumberic(dataGridView.Rows[i].Cells[3].Value) && GluePathForXAndY.IsNumberic(dataGridView.Rows[i].Cells[4].Value))
+                if (IsNumberic(dataGridView.Rows[i].Cells[3].Value) && IsNumberic(dataGridView.Rows[i].Cells[4].Value))
                 {
                     isArc = true;
-                    pT = GluePathForXAndY.TransformToPixels(
+                    pT = TransformToPixels(
                         Convert.ToDouble(dataGridView.Rows[i].Cells[3].Value) + GlueVariableDefine.OffsetX,
                         Convert.ToDouble(dataGridView.Rows[i].Cells[4].Value) + GlueVariableDefine.OffsetY,
                         Convert.ToDouble(tbStandardX.Text),
@@ -1251,9 +1252,9 @@ namespace GluePathReadWrite
                     }
                 }
 
-                if (GluePathForXAndY.IsNumberic(dataGridView.Rows[i].Cells[6].Value) && GluePathForXAndY.IsNumberic(dataGridView.Rows[i].Cells[7].Value))
+                if (IsNumberic(dataGridView.Rows[i].Cells[6].Value) && IsNumberic(dataGridView.Rows[i].Cells[7].Value))
                 {
-                    pT = GluePathForXAndY.TransformToPixels(
+                    pT = TransformToPixels(
                         Convert.ToDouble(dataGridView.Rows[i].Cells[6].Value) + GlueVariableDefine.OffsetX,
                         Convert.ToDouble(dataGridView.Rows[i].Cells[7].Value) + GlueVariableDefine.OffsetY,
                         Convert.ToDouble(tbStandardX.Text),
@@ -1366,7 +1367,7 @@ namespace GluePathReadWrite
                         strAppend.Append(dataGridView.RowCount + ",");
                     }
                     else if ((index == 3 || index == 4 || index == 6 || index == 7) &&
-                             GluePathForXAndY.IsNumberic(dataGridView.Rows[dataGridView.RowCount - 2].Cells[index].Value))
+                             IsNumberic(dataGridView.Rows[dataGridView.RowCount - 2].Cells[index].Value))
                     {
                         strAppend.Append(Convert.ToDouble(dataGridView.Rows[dataGridView.RowCount - 2].Cells[index].Value) + 0.3 + ",");
                     }
@@ -1395,7 +1396,7 @@ namespace GluePathReadWrite
                     strAppend.Append(rowIndex + 2 + ",");
                 }
                 else if ((i == 3 || i == 4 || i == 6 || i == 7) &&
-                         GluePathForXAndY.IsNumberic(dataGridView.Rows[rowIndex].Cells[i].Value))
+                         IsNumberic(dataGridView.Rows[rowIndex].Cells[i].Value))
                 {
                     strAppend.Append(Convert.ToDouble(dataGridView.Rows[rowIndex].Cells[i].Value) + 0.3 + ",");
                 }
@@ -1558,7 +1559,7 @@ namespace GluePathReadWrite
             {
                 if ((EnumLineType)dataGridView.Rows[i].Cells[1].Value == EnumLineType.Arc)
                 {
-                    double[] arcPoint = GluePathForXAndY.GetRotatedPoint(
+                    double[] arcPoint = GetRotatedPoint(
                         Convert.ToDouble(dataGridView.Rows[i].Cells[3].Value) + GlueVariableDefine.OffsetX,
                         Convert.ToDouble(dataGridView.Rows[i].Cells[4].Value) + GlueVariableDefine.OffsetY,
                         Convert.ToDouble(tbStandardX.Text),
@@ -1567,7 +1568,7 @@ namespace GluePathReadWrite
                     dataGridView.Rows[i].Cells[3].Value = arcPoint[0] - GlueVariableDefine.OffsetX;
                     dataGridView.Rows[i].Cells[4].Value = arcPoint[1] - GlueVariableDefine.OffsetY;
                 }
-                double[] linePoint = GluePathForXAndY.GetRotatedPoint(
+                double[] linePoint = GetRotatedPoint(
                     Convert.ToDouble(dataGridView.Rows[i].Cells[6].Value) + GlueVariableDefine.OffsetX,
                     Convert.ToDouble(dataGridView.Rows[i].Cells[7].Value) + GlueVariableDefine.OffsetY,
                     Convert.ToDouble(tbStandardX.Text),
@@ -1614,6 +1615,9 @@ namespace GluePathReadWrite
                 _dPictureBoxImageWidth = pictureBox.Image.Width;
                 _dPictureBoxImageHeight = pictureBox.Image.Height;
 
+                tbPixelsNumber.Text = _dPictureBoxImageWidth.ToString(CultureInfo.InvariantCulture);
+                tbPixelsNumberOther.Text = _dPictureBoxImageHeight.ToString(CultureInfo.InvariantCulture);
+
                 _graph = this.pictureBox.CreateGraphics();
             }
             this.Activate();
@@ -1645,10 +1649,13 @@ namespace GluePathReadWrite
 
         private void ToolStripMenuItem_Fit_Click(object sender, EventArgs e)
         {
-            SetPictureBox();
-            DMultiplyingG = 1;
-            DrawGuiPointNew();
-            DrawGuiLineNew();
+            if (pictureBox.Image != null)
+            {
+                SetPictureBox();
+                DMultiplyingG = 1;
+                DrawGuiPointNew();
+                DrawGuiLineNew();
+            }
         }
     }
 }

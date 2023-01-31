@@ -49,8 +49,6 @@
             this.label12 = new System.Windows.Forms.Label();
             this.lbPictureX = new System.Windows.Forms.Label();
             this.lbPictureY = new System.Windows.Forms.Label();
-            this.label11 = new System.Windows.Forms.Label();
-            this.label10 = new System.Windows.Forms.Label();
             this.label9 = new System.Windows.Forms.Label();
             this.tbPhyscialLength = new System.Windows.Forms.TextBox();
             this.label8 = new System.Windows.Forms.Label();
@@ -86,6 +84,8 @@
             this.ToolStripMenuItem_Insert = new System.Windows.Forms.ToolStripMenuItem();
             this.ToolStripMenuItem_Delete = new System.Windows.Forms.ToolStripMenuItem();
             this.ToolStripMenuItem_Clear = new System.Windows.Forms.ToolStripMenuItem();
+            this.tbPixelsNumberOther = new System.Windows.Forms.TextBox();
+            this.tbPhyscialLengthOther = new System.Windows.Forms.TextBox();
             ((System.ComponentModel.ISupportInitialize)(this.splitContainer1)).BeginInit();
             this.splitContainer1.Panel1.SuspendLayout();
             this.splitContainer1.Panel2.SuspendLayout();
@@ -196,6 +196,8 @@
             // 
             // panel1
             // 
+            this.panel1.Controls.Add(this.tbPhyscialLengthOther);
+            this.panel1.Controls.Add(this.tbPixelsNumberOther);
             this.panel1.Controls.Add(this.label13);
             this.panel1.Controls.Add(this.tbCompensationX);
             this.panel1.Controls.Add(this.tbCompensationY);
@@ -205,8 +207,6 @@
             this.panel1.Controls.Add(this.label12);
             this.panel1.Controls.Add(this.lbPictureX);
             this.panel1.Controls.Add(this.lbPictureY);
-            this.panel1.Controls.Add(this.label11);
-            this.panel1.Controls.Add(this.label10);
             this.panel1.Controls.Add(this.label9);
             this.panel1.Controls.Add(this.tbPhyscialLength);
             this.panel1.Controls.Add(this.label8);
@@ -324,24 +324,6 @@
             this.lbPictureY.TabIndex = 99;
             this.lbPictureY.Text = "0";
             // 
-            // label11
-            // 
-            this.label11.AutoSize = true;
-            this.label11.Location = new System.Drawing.Point(159, 114);
-            this.label11.Name = "label11";
-            this.label11.Size = new System.Drawing.Size(17, 12);
-            this.label11.TabIndex = 96;
-            this.label11.Text = "mm";
-            // 
-            // label10
-            // 
-            this.label10.AutoSize = true;
-            this.label10.Location = new System.Drawing.Point(159, 85);
-            this.label10.Name = "label10";
-            this.label10.Size = new System.Drawing.Size(17, 12);
-            this.label10.TabIndex = 95;
-            this.label10.Text = "pt";
-            // 
             // label9
             // 
             this.label9.AutoSize = true;
@@ -349,7 +331,7 @@
             this.label9.Name = "label9";
             this.label9.Size = new System.Drawing.Size(89, 12);
             this.label9.TabIndex = 94;
-            this.label9.Text = "长边物理长度：";
+            this.label9.Text = "图像物理长度：";
             // 
             // tbPhyscialLength
             // 
@@ -357,7 +339,7 @@
             this.tbPhyscialLength.Name = "tbPhyscialLength";
             this.tbPhyscialLength.Size = new System.Drawing.Size(43, 21);
             this.tbPhyscialLength.TabIndex = 93;
-            this.tbPhyscialLength.Text = "20";
+            this.tbPhyscialLength.Text = "0";
             this.tbPhyscialLength.Leave += new System.EventHandler(this.tbPhyscialLength_Leave);
             // 
             // label8
@@ -367,7 +349,7 @@
             this.label8.Name = "label8";
             this.label8.Size = new System.Drawing.Size(89, 12);
             this.label8.TabIndex = 92;
-            this.label8.Text = "长边像素数量：";
+            this.label8.Text = "图像像素数量：";
             // 
             // tbPixelsNumber
             // 
@@ -375,7 +357,7 @@
             this.tbPixelsNumber.Name = "tbPixelsNumber";
             this.tbPixelsNumber.Size = new System.Drawing.Size(43, 21);
             this.tbPixelsNumber.TabIndex = 91;
-            this.tbPixelsNumber.Text = "2448";
+            this.tbPixelsNumber.Text = "0";
             // 
             // label7
             // 
@@ -689,6 +671,22 @@
             this.ToolStripMenuItem_Clear.Text = "清除胶路";
             this.ToolStripMenuItem_Clear.Click += new System.EventHandler(this.ToolStripMenuItem_Clear_Click);
             // 
+            // tbPixelsNumberOther
+            // 
+            this.tbPixelsNumberOther.Location = new System.Drawing.Point(170, 79);
+            this.tbPixelsNumberOther.Name = "tbPixelsNumberOther";
+            this.tbPixelsNumberOther.Size = new System.Drawing.Size(43, 21);
+            this.tbPixelsNumberOther.TabIndex = 106;
+            this.tbPixelsNumberOther.Text = "0";
+            // 
+            // tbPhyscialLengthOther
+            // 
+            this.tbPhyscialLengthOther.Location = new System.Drawing.Point(170, 108);
+            this.tbPhyscialLengthOther.Name = "tbPhyscialLengthOther";
+            this.tbPhyscialLengthOther.Size = new System.Drawing.Size(43, 21);
+            this.tbPhyscialLengthOther.TabIndex = 107;
+            this.tbPhyscialLengthOther.Text = "0";
+            // 
             // FormGluePath
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(96F, 96F);
@@ -763,8 +761,6 @@
         private System.Windows.Forms.TextBox tbPhyscialLength;
         private System.Windows.Forms.Label label8;
         private System.Windows.Forms.TextBox tbPixelsNumber;
-        private System.Windows.Forms.Label label11;
-        private System.Windows.Forms.Label label10;
         private System.Windows.Forms.Label label15;
         private System.Windows.Forms.Label lbPhysicX;
         private System.Windows.Forms.Label lbPhysicY;
@@ -777,6 +773,8 @@
         private System.Windows.Forms.ContextMenuStrip cms_LoadPicture;
         private System.Windows.Forms.ToolStripMenuItem ToolStripMenuItem_LoadPic;
         private System.Windows.Forms.ToolStripMenuItem ToolStripMenuItem_Fit;
+        private System.Windows.Forms.TextBox tbPhyscialLengthOther;
+        private System.Windows.Forms.TextBox tbPixelsNumberOther;
     }
 }
 
