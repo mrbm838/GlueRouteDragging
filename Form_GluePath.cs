@@ -385,9 +385,16 @@ namespace GluePathReadWrite
                         {
                             dataGridView.Rows[_selectedRow].Cells[_selectedColumn].Value = Math.Round(e.X * _dRatio * dx - Convert.ToDouble(tbStandardX.Text) * dx, 3) - GlueVariableDefine.OffsetX;
                             dataGridView.Rows[_selectedRow].Cells[_selectedColumn + 1].Value = Math.Round(e.Y * _dRatio * dy - Convert.ToDouble(tbStandardY.Text) * dy, 3) - GlueVariableDefine.OffsetY;
+                            // ReSharper disable once PossibleInvalidCastException
+                            if (_selectedColumn == 3 && (EnumLineType)dataGridView.Rows[_selectedRow].Cells[1].Value == EnumLineType.Line)
+                            {
+                                dataGridView.Rows[_selectedRow].Cells[1].Value = EnumLineType.Arc;
+                                LineTypeCellStyleChange(_selectedRow, false, true);
+                                dataGridView.Rows[_selectedRow].Cells[5].Value = dataGridView.Rows[_selectedRow - 1].Cells[8].Value;
+                            }
                         }
                     }
-                    catch
+                    catch (Exception ex)
                     {
                         // ignored
                     }
