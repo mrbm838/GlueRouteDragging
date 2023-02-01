@@ -40,6 +40,8 @@
             this.splitter1 = new System.Windows.Forms.Splitter();
             this.chart = new System.Windows.Forms.DataVisualization.Charting.Chart();
             this.panel1 = new System.Windows.Forms.Panel();
+            this.tbPhyscialLengthOther = new System.Windows.Forms.TextBox();
+            this.tbPixelsNumberOther = new System.Windows.Forms.TextBox();
             this.label13 = new System.Windows.Forms.Label();
             this.tbCompensationX = new System.Windows.Forms.TextBox();
             this.tbCompensationY = new System.Windows.Forms.TextBox();
@@ -84,8 +86,6 @@
             this.ToolStripMenuItem_Insert = new System.Windows.Forms.ToolStripMenuItem();
             this.ToolStripMenuItem_Delete = new System.Windows.Forms.ToolStripMenuItem();
             this.ToolStripMenuItem_Clear = new System.Windows.Forms.ToolStripMenuItem();
-            this.tbPixelsNumberOther = new System.Windows.Forms.TextBox();
-            this.tbPhyscialLengthOther = new System.Windows.Forms.TextBox();
             ((System.ComponentModel.ISupportInitialize)(this.splitContainer1)).BeginInit();
             this.splitContainer1.Panel1.SuspendLayout();
             this.splitContainer1.Panel2.SuspendLayout();
@@ -240,6 +240,22 @@
             this.panel1.Name = "panel1";
             this.panel1.Size = new System.Drawing.Size(225, 494);
             this.panel1.TabIndex = 6;
+            // 
+            // tbPhyscialLengthOther
+            // 
+            this.tbPhyscialLengthOther.Location = new System.Drawing.Point(170, 108);
+            this.tbPhyscialLengthOther.Name = "tbPhyscialLengthOther";
+            this.tbPhyscialLengthOther.Size = new System.Drawing.Size(43, 21);
+            this.tbPhyscialLengthOther.TabIndex = 107;
+            this.tbPhyscialLengthOther.Text = "0";
+            // 
+            // tbPixelsNumberOther
+            // 
+            this.tbPixelsNumberOther.Location = new System.Drawing.Point(170, 79);
+            this.tbPixelsNumberOther.Name = "tbPixelsNumberOther";
+            this.tbPixelsNumberOther.Size = new System.Drawing.Size(43, 21);
+            this.tbPixelsNumberOther.TabIndex = 106;
+            this.tbPixelsNumberOther.Text = "0";
             // 
             // label13
             // 
@@ -474,14 +490,15 @@
             // 
             // tkBGlueWidth
             // 
+            this.tkBGlueWidth.LargeChange = 3;
             this.tkBGlueWidth.Location = new System.Drawing.Point(64, 267);
             this.tkBGlueWidth.Margin = new System.Windows.Forms.Padding(3, 1, 3, 1);
-            this.tkBGlueWidth.Maximum = 50;
+            this.tkBGlueWidth.Maximum = 20;
             this.tkBGlueWidth.Minimum = 1;
             this.tkBGlueWidth.Name = "tkBGlueWidth";
             this.tkBGlueWidth.Size = new System.Drawing.Size(129, 45);
             this.tkBGlueWidth.TabIndex = 80;
-            this.tkBGlueWidth.Value = 3;
+            this.tkBGlueWidth.Value = 4;
             this.tkBGlueWidth.ValueChanged += new System.EventHandler(this.tkbGlueWidth_ValueChanged);
             // 
             // label2
@@ -513,12 +530,15 @@
             // 
             // tkBTransparency
             // 
+            this.tkBTransparency.LargeChange = 25;
             this.tkBTransparency.Location = new System.Drawing.Point(64, 312);
             this.tkBTransparency.Margin = new System.Windows.Forms.Padding(3, 1, 3, 1);
             this.tkBTransparency.Maximum = 255;
             this.tkBTransparency.Name = "tkBTransparency";
             this.tkBTransparency.Size = new System.Drawing.Size(129, 45);
+            this.tkBTransparency.SmallChange = 5;
             this.tkBTransparency.TabIndex = 78;
+            this.tkBTransparency.TickFrequency = 5;
             this.tkBTransparency.Value = 255;
             this.tkBTransparency.ValueChanged += new System.EventHandler(this.tkBTransparency_ValueChanged);
             // 
@@ -670,22 +690,6 @@
             this.ToolStripMenuItem_Clear.Size = new System.Drawing.Size(124, 22);
             this.ToolStripMenuItem_Clear.Text = "清除胶路";
             this.ToolStripMenuItem_Clear.Click += new System.EventHandler(this.ToolStripMenuItem_Clear_Click);
-            // 
-            // tbPixelsNumberOther
-            // 
-            this.tbPixelsNumberOther.Location = new System.Drawing.Point(170, 79);
-            this.tbPixelsNumberOther.Name = "tbPixelsNumberOther";
-            this.tbPixelsNumberOther.Size = new System.Drawing.Size(43, 21);
-            this.tbPixelsNumberOther.TabIndex = 106;
-            this.tbPixelsNumberOther.Text = "0";
-            // 
-            // tbPhyscialLengthOther
-            // 
-            this.tbPhyscialLengthOther.Location = new System.Drawing.Point(170, 108);
-            this.tbPhyscialLengthOther.Name = "tbPhyscialLengthOther";
-            this.tbPhyscialLengthOther.Size = new System.Drawing.Size(43, 21);
-            this.tbPhyscialLengthOther.TabIndex = 107;
-            this.tbPhyscialLengthOther.Text = "0";
             // 
             // FormGluePath
             // 
